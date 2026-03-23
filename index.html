@@ -302,15 +302,52 @@
         .faq-item.active .faq-answer { max-height:400px; }
         .faq-answer-inner { padding:0 0 20px; color:var(--text-light); font-size:0.95rem; line-height:1.8; }
 
-        /* ===== CTA ===== */
-        .cta-section {
+        /* ===== CONTACT FORM ===== */
+        .contact-section {
             background: linear-gradient(135deg, var(--teal-dark), var(--primary-dark));
-            color:#fff; text-align:center; padding:80px 0;
+            color:#fff; padding:80px 0;
         }
-        .cta-section h2 { font-size:2.2rem; margin-bottom:16px; }
-        .cta-section p { font-size:1.1rem; opacity:0.9; max-width:600px; margin:0 auto 36px; }
-        .cta-section .btn-green { background:#fff; color:var(--primary); border-color:#fff; }
-        .cta-section .btn-green:hover { background:transparent; color:#fff; border-color:#fff; }
+        .contact-section .section-header h2 { color:#fff; }
+        .contact-section .section-header p { color:rgba(255,255,255,0.8); }
+        .contact-section .section-divider { background:var(--primary-light); }
+        .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:50px; align-items:start; }
+        .contact-info h3 { font-size:1.4rem; margin-bottom:20px; }
+        .contact-info-item { display:flex; align-items:flex-start; gap:16px; margin-bottom:24px; }
+        .contact-info-icon { width:48px; height:48px; border-radius:12px; background:rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0; }
+        .contact-info-item h4 { font-size:0.95rem; margin-bottom:4px; }
+        .contact-info-item p, .contact-info-item a { font-size:0.9rem; opacity:0.8; color:#fff; }
+        .contact-info-item a:hover { opacity:1; }
+        .contact-form-card { background:rgba(255,255,255,0.08); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.12); border-radius:var(--radius); padding:36px; }
+        .contact-form-card h3 { font-size:1.2rem; margin-bottom:24px; text-align:center; }
+        .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+        .form-group { margin-bottom:16px; }
+        .form-group label { display:block; font-size:0.85rem; margin-bottom:6px; opacity:0.9; font-weight:600; }
+        .form-group input, .form-group textarea, .form-group select {
+            width:100%; padding:12px 16px; border-radius:10px; border:1px solid rgba(255,255,255,0.2);
+            background:rgba(255,255,255,0.06); color:#fff; font-family:'Lato',sans-serif; font-size:0.95rem;
+            transition:var(--transition); outline:none;
+        }
+        .form-group input::placeholder, .form-group textarea::placeholder { color:rgba(255,255,255,0.4); }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color:var(--primary-light); background:rgba(255,255,255,0.1); }
+        .form-group textarea { resize:vertical; min-height:100px; }
+        .form-group select option { background:#1a1a1a; color:#fff; }
+        .form-submit { width:100%; padding:14px; border:none; border-radius:10px; background:var(--primary-light); color:#fff; font-family:'Archivo',sans-serif; font-weight:700; font-size:1rem; cursor:pointer; transition:var(--transition); display:flex; align-items:center; justify-content:center; gap:8px; }
+        .form-submit:hover { background:var(--primary); }
+        .form-submit:disabled { opacity:0.6; cursor:not-allowed; }
+        .form-alert { padding:12px 16px; border-radius:10px; margin-bottom:16px; font-size:0.9rem; display:none; }
+        .form-alert.success { background:rgba(69,186,1,0.2); border:1px solid rgba(69,186,1,0.4); }
+        .form-alert.error { background:rgba(220,53,69,0.2); border:1px solid rgba(220,53,69,0.4); }
+
+        /* ===== WHATSAPP FLOAT ===== */
+        .whatsapp-float {
+            position:fixed; bottom:28px; right:28px; z-index:9999;
+            width:60px; height:60px; border-radius:50%;
+            background:#25D366; color:#fff; font-size:1.8rem;
+            display:flex; align-items:center; justify-content:center;
+            box-shadow:0 4px 20px rgba(37,211,102,0.4);
+            transition:all 0.3s ease; text-decoration:none;
+        }
+        .whatsapp-float:hover { transform:scale(1.1); box-shadow:0 6px 28px rgba(37,211,102,0.6); }
 
         /* ===== FOOTER ===== */
         footer { background:#111; color:#ccc; padding:60px 0 0; }
@@ -348,6 +385,7 @@
             .products-grid { grid-template-columns:repeat(2,1fr); }
             .why-grid { grid-template-columns:repeat(2,1fr); }
             .footer-grid { grid-template-columns:1fr 1fr; }
+            .contact-grid { grid-template-columns:1fr; }
         }
         @media(max-width:768px) {
             .header-top .container { flex-direction:column; gap:10px; padding:14px 20px; }
@@ -376,6 +414,7 @@
             .why-grid { grid-template-columns:1fr; }
             .footer-grid { grid-template-columns:1fr; }
             .footer-bottom { flex-direction:column; text-align:center; }
+            .form-row { grid-template-columns:1fr; }
         }
     </style>
 </head>
@@ -416,6 +455,7 @@
                 <li><a href="#why-us">Hakkımızda</a></li>
                 <li><a href="#faq">SSS</a></li>
                 <li><a href="#contact">İletişim</a></li>
+                <li><a href="destek.html">Destek</a></li>
             </ul>
             <button class="mobile-toggle" onclick="document.getElementById('navMenu').classList.toggle('active')" aria-label="Menü">
                 <i class="fas fa-bars"></i>
@@ -717,14 +757,77 @@
         </div>
     </section>
 
-    <!-- CTA -->
-    <section class="cta-section" id="contact">
+    <!-- CONTACT -->
+    <section class="contact-section" id="contact">
         <div class="container">
-            <h2>Dijital Dönüşümünüze Bugün Başlayın</h2>
-            <p>Müze, arşiv ve kütüphane yönetim ihtiyaçlarınız için ücretsiz danışmanlık alın.</p>
-            <a href="tel:+903129112956" class="btn btn-green"><i class="fas fa-phone"></i> Hemen Arayın: +90 312 911 29 56</a>
+            <div class="section-header" style="text-align:center;margin-bottom:50px;">
+                <h2>Bize Ulaşın</h2>
+                <div class="section-divider" style="margin:12px auto 16px;"></div>
+                <p>Müze, arşiv ve kütüphane yönetim ihtiyaçlarınız için ücretsiz danışmanlık alın.</p>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <h3>İletişim Bilgileri</h3>
+                    <div class="contact-info-item">
+                        <div class="contact-info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div><h4>Adres</h4><p>2661/1. Sokak, Ankara 06810, Türkiye</p></div>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="contact-info-icon"><i class="fas fa-phone"></i></div>
+                        <div><h4>Telefon</h4><a href="tel:+903129112956">+90 312 911 29 56</a></div>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="contact-info-icon"><i class="fas fa-envelope"></i></div>
+                        <div><h4>E-posta</h4><a href="mailto:info@mirakil.com">info@mirakil.com</a></div>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="contact-info-icon"><i class="fab fa-whatsapp"></i></div>
+                        <div><h4>WhatsApp</h4><a href="https://wa.me/905319824672" target="_blank">+90 531 982 46 72</a></div>
+                    </div>
+                    <div style="margin-top:32px;">
+                        <a href="destek.html" class="btn" style="background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.25);"><i class="fas fa-headset"></i> Destek Talebi Oluştur</a>
+                    </div>
+                </div>
+                <div class="contact-form-card">
+                    <h3><i class="fas fa-paper-plane" style="margin-right:8px;"></i>Mesaj Gönderin</h3>
+                    <div class="form-alert success" id="contactSuccess">Mesajınız başarıyla gönderildi! En kısa sürede size dönüş yapacağız.</div>
+                    <div class="form-alert error" id="contactError">Bir hata oluştu. Lütfen tekrar deneyin.</div>
+                    <form id="contactForm" onsubmit="submitContact(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Ad Soyad *</label>
+                                <input type="text" id="cName" placeholder="Adınız Soyadınız" required>
+                            </div>
+                            <div class="form-group">
+                                <label>E-posta *</label>
+                                <input type="email" id="cEmail" placeholder="ornek@email.com" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Telefon</label>
+                                <input type="tel" id="cPhone" placeholder="+90 5XX XXX XX XX">
+                            </div>
+                            <div class="form-group">
+                                <label>Konu *</label>
+                                <input type="text" id="cSubject" placeholder="Konu başlığı" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Mesajınız *</label>
+                            <textarea id="cMessage" placeholder="Mesajınızı yazın..." required></textarea>
+                        </div>
+                        <button type="submit" class="form-submit" id="contactBtn"><i class="fas fa-paper-plane"></i> Gönder</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </section>
+
+    <!-- WhatsApp Float -->
+    <a href="https://wa.me/905319824672" target="_blank" class="whatsapp-float" title="WhatsApp ile iletişime geçin">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 
     <!-- FOOTER -->
     <footer>
@@ -852,6 +955,47 @@
             }
         });
     });
+
+    /* === CONTACT FORM === */
+    const SUPABASE_URL = 'https://myhsoingsoufkugiqmjj.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15aHNvaW5nc291Zmt1Z2lxbWpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyNTU3NjYsImV4cCI6MjA4OTgzMTc2Nn0.0Nnr0UBl5z9DhymkRKDda3DI20g2h1NJIeE5gLYK8LA';
+
+    async function submitContact(e) {
+        e.preventDefault();
+        var btn = document.getElementById('contactBtn');
+        var successEl = document.getElementById('contactSuccess');
+        var errorEl = document.getElementById('contactError');
+        successEl.style.display = 'none';
+        errorEl.style.display = 'none';
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gönderiliyor...';
+
+        try {
+            var res = await fetch(SUPABASE_URL + '/rest/v1/contact_submissions', {
+                method: 'POST',
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': 'Bearer ' + SUPABASE_KEY,
+                    'Content-Type': 'application/json',
+                    'Prefer': 'return=representation'
+                },
+                body: JSON.stringify({
+                    name: document.getElementById('cName').value,
+                    email: document.getElementById('cEmail').value,
+                    phone: document.getElementById('cPhone').value || null,
+                    subject: document.getElementById('cSubject').value,
+                    message: document.getElementById('cMessage').value
+                })
+            });
+            if (!res.ok) throw new Error('Hata');
+            successEl.style.display = 'block';
+            document.getElementById('contactForm').reset();
+        } catch(err) {
+            errorEl.style.display = 'block';
+        }
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Gönder';
+    }
     </script>
 </body>
 </html>

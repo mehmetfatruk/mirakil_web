@@ -344,6 +344,16 @@
             .footer-bottom { flex-direction:column; text-align:center; }
             .cta-buttons { flex-direction:column; align-items:center; }
         }
+        /* ===== WHATSAPP FLOAT ===== */
+        .whatsapp-float {
+            position:fixed; bottom:28px; right:28px; z-index:9999;
+            width:60px; height:60px; border-radius:50%;
+            background:#25D366; color:#fff; font-size:1.8rem;
+            display:flex; align-items:center; justify-content:center;
+            box-shadow:0 4px 20px rgba(37,211,102,0.4);
+            transition:all 0.3s ease; text-decoration:none;
+        }
+        .whatsapp-float:hover { transform:scale(1.1); box-shadow:0 6px 28px rgba(37,211,102,0.6); }
     </style>
 </head>
 <body>
@@ -383,6 +393,7 @@
                 <li><a href="index.html#why-us">Hakkımızda</a></li>
                 <li><a href="index.html#faq">SSS</a></li>
                 <li><a href="index.html#contact">İletişim</a></li>
+                <li><a href="destek.html">Destek</a></li>
             </ul>
             <button class="mobile-toggle" onclick="document.getElementById('navMenu').classList.toggle('active')" aria-label="Menü">
                 <i class="fas fa-bars"></i>
@@ -648,6 +659,11 @@
             </div>
         </div>
     </footer>
+
+    <!-- WhatsApp Float -->
+    <a href="https://wa.me/905319824672" target="_blank" class="whatsapp-float" title="WhatsApp ile iletişime geçin">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 
     <script>
     document.querySelectorAll('a[href^="#"]').forEach(a=>{

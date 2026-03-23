@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destek - Teknik Destek Talebi | MirAkıl</title>
+    <meta name="description" content="MirAkıl Veri İşleme teknik destek talebi oluşturun ve mevcut taleplerinizi takip edin.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2E7C01;
+            --primary-light: #45BA01;
+            --primary-dark: #1a5a00;
+            --teal: #709CA5;
+            --teal-dark: #253437;
+            --dark: #1a1a1a;
+            --text: #333;
+            --text-light: #666;
+            --bg: #fff;
+            --bg-light: #f7f8f6;
+            --border: #e0e0e0;
+            --radius: 20px;
+            --shadow: 0 5px 20px rgba(0,0,0,0.08);
+            --shadow-hover: 0 15px 40px rgba(0,0,0,0.12);
+            --transition: all 0.3s ease;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+        body { font-family:'Lato',sans-serif; color:var(--text); line-height:1.7; background:var(--bg); }
+        h1,h2,h3,h4,h5 { font-family:'Archivo',sans-serif; line-height:1.3; }
+        a { text-decoration:none; color:inherit; }
+        .container { max-width:1200px; margin:0 auto; padding:0 30px; }
+
+        /* ===== HEADER ===== */
+        .header-top {
+            background: #fff;
+            padding: 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .header-top .container {
+            display:flex; justify-content:space-between; align-items:center; min-height:70px;
+        }
+        .header-logo { display:flex; align-items:center; }
+        .header-logo img {
+            height: 50px;
+            width: auto;
+        }
+        .header-contact { display:flex; align-items:center; gap:28px; color:var(--text); font-size:0.88rem; }
+        .header-contact a { color:var(--text); display:flex; align-items:center; gap:8px; transition:color 0.2s; }
+        .header-contact a:hover { color:var(--primary); }
+        .header-contact i { color:var(--primary); }
+
+        /* NAV */
+        .main-nav {
+            background:#fff; border-bottom:1px solid var(--border);
+            position:sticky; top:0; z-index:1000;
+            box-shadow:0 2px 8px rgba(0,0,0,0.06);
+        }
+        .main-nav .container { display:flex; justify-content:center; align-items:center; }
+        .nav-menu { display:flex; list-style:none; }
+        .nav-menu li { position:relative; }
+        .nav-menu > li > a {
+            display:block; padding:18px 22px;
+            font-family:'Archivo',sans-serif; font-weight:600; font-size:0.9rem;
+            color:var(--text); text-transform:uppercase; letter-spacing:0.5px;
+            transition:var(--transition); border-bottom:3px solid transparent;
+        }
+        .nav-menu > li > a:hover, .nav-menu > li > a.active {
+            color:var(--primary); border-bottom-color:var(--primary);
+        }
+        .nav-dropdown {
+            position:absolute; top:100%; left:0; background:#fff;
+            min-width:240px; box-shadow:0 8px 24px rgba(0,0,0,0.12);
+            border-radius:0 0 12px 12px; opacity:0; visibility:hidden;
+            transform:translateY(-8px); transition:var(--transition); z-index:100; list-style:none;
+        }
+        .nav-menu li:hover .nav-dropdown { opacity:1; visibility:visible; transform:translateY(0); }
+        .nav-dropdown li a {
+            display:flex; align-items:center; gap:10px;
+            padding:12px 20px; font-size:0.88rem; color:var(--text); transition:var(--transition);
+        }
+        .nav-dropdown li a:hover { background:var(--bg-light); color:var(--primary); padding-left:28px; }
+        .nav-dropdown .dd-dot {
+            width:8px; height:8px; border-radius:50%; flex-shrink:0;
+        }
+        .mobile-toggle {
+            display:none; background:none; border:none; font-size:1.6rem;
+            cursor:pointer; padding:16px; color:var(--text);
+        }
+
+        /* BTN */
+        .btn {
+            display:inline-flex; align-items:center; gap:10px;
+            padding:14px 32px; border-radius:10px;
+            font-family:'Archivo',sans-serif; font-weight:600; font-size:0.95rem;
+            transition:var(--transition); border:2px solid transparent; cursor:pointer;
+        }
+        .btn-green { background:var(--primary-light); color:#fff; border-color:var(--primary-light); }
+        .btn-green:hover { background:var(--primary-dark); border-color:var(--primary-dark); }
+        .btn-outline-green { background:transparent; color:var(--primary); border-color:var(--primary); }
+        .btn-outline-green:hover { background:var(--primary); color:#fff; }
+
+        /* ===== PAGE HERO ===== */
+        .page-hero {
+            background: linear-gradient(135deg, var(--teal-dark) 0%, var(--primary-dark) 100%);
+            padding: 60px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .page-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(69,186,1,0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .page-hero h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        .page-hero-divider {
+            width: 60px;
+            height: 3px;
+            background: var(--primary-light);
+            margin: 16px auto 20px;
+            border-radius: 2px;
+        }
+        .page-hero p {
+            color: rgba(255,255,255,0.85);
+            font-size: 1.05rem;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* ===== TABS ===== */
+        .support-section {
+            padding: 60px 0 80px;
+            background: var(--bg-light);
+            min-height: 60vh;
+        }
+        .tabs-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .tabs-header {
+            display: flex;
+            background: #fff;
+            border-radius: 16px 16px 0 0;
+            overflow: hidden;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.04);
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 20px 24px;
+            font-family: 'Archivo', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--text-light);
+            background: #fff;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .tab-btn::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: transparent;
+            transition: var(--transition);
+        }
+        .tab-btn:hover {
+            color: var(--primary);
+            background: #fafffe;
+        }
+        .tab-btn.active {
+            color: var(--primary);
+            background: #fff;
+        }
+        .tab-btn.active::after {
+            background: var(--primary-light);
+        }
+        .tab-btn i {
+            font-size: 1.1rem;
+        }
+
+        .tab-content {
+            display: none;
+            background: #fff;
+            border-radius: 0 0 16px 16px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ===== FORM STYLES ===== */
+        .form-group {
+            margin-bottom: 24px;
+        }
+        .form-group label {
+            display: block;
+            font-family: 'Archivo', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+        .form-group label .required {
+            color: #e74c3c;
+            margin-left: 2px;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-family: 'Lato', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text);
+            background: #fff;
+            transition: var(--transition);
+            outline: none;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 4px rgba(69,186,1,0.1);
+        }
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #aaa;
+        }
+        .form-group textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+        .form-group select {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+            cursor: pointer;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 16px 32px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Archivo', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .submit-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(46,124,1,0.3);
+        }
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .submit-btn .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        .submit-btn.loading .spinner { display: inline-block; }
+        .submit-btn.loading .btn-text { display: none; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ===== TRACK FORM ===== */
+        .track-form-wrapper {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .track-form-wrapper .track-intro {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .track-form-wrapper .track-intro i {
+            font-size: 3rem;
+            color: var(--primary-light);
+            margin-bottom: 12px;
+        }
+        .track-form-wrapper .track-intro h3 {
+            font-size: 1.3rem;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+        .track-form-wrapper .track-intro p {
+            color: var(--text-light);
+            font-size: 0.92rem;
+        }
+
+        /* ===== TICKET DETAIL ===== */
+        .ticket-detail {
+            display: none;
+        }
+        .ticket-detail.visible {
+            display: block;
+        }
+        .ticket-back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: 'Archivo', sans-serif;
+            margin-bottom: 24px;
+            transition: var(--transition);
+        }
+        .ticket-back-btn:hover {
+            gap: 12px;
+            color: var(--primary-dark);
+        }
+        .ticket-card {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+        .ticket-card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .ticket-number {
+            font-family: 'Archivo', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--teal);
+            background: rgba(112,156,165,0.12);
+            padding: 6px 14px;
+            border-radius: 8px;
+            letter-spacing: 0.5px;
+        }
+        .ticket-subject {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 16px;
+        }
+        .ticket-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .ticket-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.88rem;
+            color: var(--text-light);
+        }
+        .ticket-meta-item i {
+            color: var(--primary);
+            width: 16px;
+            text-align: center;
+        }
+
+        /* Status badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-family: 'Archivo', sans-serif;
+            font-weight: 600;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .status-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        .status-open {
+            background: rgba(52,152,219,0.12);
+            color: #2980b9;
+        }
+        .status-open::before { background: #3498db; }
+        .status-in_progress {
+            background: rgba(243,156,18,0.12);
+            color: #e67e22;
+        }
+        .status-in_progress::before { background: #f39c12; }
+        .status-closed {
+            background: rgba(46,204,113,0.12);
+            color: #27ae60;
+        }
+        .status-closed::before { background: #2ecc71; }
+        .status-resolved {
+            background: rgba(155,89,182,0.12);
+            color: #8e44ad;
+        }
+        .status-resolved::before { background: #9b59b6; }
+
+        /* ===== REPLIES ===== */
+        .replies-section {
+            margin-bottom: 32px;
+        }
+        .replies-section h3 {
+            font-size: 1.1rem;
+            color: var(--dark);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .replies-section h3 i {
+            color: var(--primary);
+        }
+        .reply-item {
+            padding: 20px 24px;
+            border-radius: 14px;
+            margin-bottom: 16px;
+            position: relative;
+        }
+        .reply-customer {
+            background: #fff;
+            border: 1px solid var(--border);
+        }
+        .reply-admin {
+            background: linear-gradient(135deg, rgba(46,124,1,0.04), rgba(69,186,1,0.06));
+            border: 1px solid rgba(46,124,1,0.15);
+        }
+        .reply-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .reply-author {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .reply-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        .reply-customer .reply-avatar {
+            background: var(--teal);
+        }
+        .reply-admin .reply-avatar {
+            background: var(--primary);
+        }
+        .reply-author-name {
+            font-family: 'Archivo', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--dark);
+        }
+        .reply-admin .reply-author-name {
+            color: var(--primary-dark);
+        }
+        .reply-admin-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--primary);
+            background: rgba(46,124,1,0.1);
+            padding: 3px 10px;
+            border-radius: 6px;
+        }
+        .reply-date {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        .reply-message {
+            font-size: 0.92rem;
+            line-height: 1.7;
+            color: var(--text);
+            white-space: pre-wrap;
+        }
+        .no-replies {
+            text-align: center;
+            padding: 32px 20px;
+            color: var(--text-light);
+            font-size: 0.92rem;
+        }
+        .no-replies i {
+            font-size: 2rem;
+            color: var(--border);
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* Reply form */
+        .reply-form {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+        }
+        .reply-form h4 {
+            font-size: 1rem;
+            color: var(--dark);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .reply-form h4 i {
+            color: var(--primary);
+        }
+        .reply-form textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-family: 'Lato', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text);
+            background: #fff;
+            transition: var(--transition);
+            outline: none;
+            min-height: 100px;
+            resize: vertical;
+            margin-bottom: 16px;
+        }
+        .reply-form textarea:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 4px rgba(69,186,1,0.1);
+        }
+        .reply-form-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .reply-submit-btn {
+            padding: 12px 28px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Archivo', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .reply-submit-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+        .reply-submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .close-ticket-btn {
+            padding: 12px 28px;
+            background: transparent;
+            color: #e74c3c;
+            border: 2px solid #e74c3c;
+            border-radius: 10px;
+            font-family: 'Archivo', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .close-ticket-btn:hover {
+            background: #e74c3c;
+            color: #fff;
+        }
+        .close-ticket-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.visible {
+            display: flex;
+        }
+        .modal-box {
+            background: #fff;
+            border-radius: 20px;
+            padding: 48px 40px;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.2);
+            animation: modalIn 0.3s ease;
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .modal-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 2rem;
+            color: #fff;
+        }
+        .modal-box h3 {
+            font-size: 1.4rem;
+            color: var(--dark);
+            margin-bottom: 12px;
+        }
+        .modal-box p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+        .modal-ticket-number {
+            display: inline-block;
+            font-family: 'Archivo', sans-serif;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--primary);
+            background: rgba(46,124,1,0.08);
+            padding: 12px 28px;
+            border-radius: 12px;
+            margin: 16px 0 8px;
+            letter-spacing: 1px;
+        }
+        .modal-warning {
+            font-size: 0.82rem !important;
+            color: #e67e22 !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 4px;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 28px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .modal-actions .btn {
+            font-size: 0.88rem;
+            padding: 12px 24px;
+        }
+
+        /* ===== ALERT ===== */
+        .alert {
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+        .alert.visible {
+            display: flex;
+        }
+        .alert-error {
+            background: rgba(231,76,60,0.08);
+            border: 1px solid rgba(231,76,60,0.2);
+            color: #c0392b;
+        }
+        .alert-success {
+            background: rgba(46,204,113,0.08);
+            border: 1px solid rgba(46,204,113,0.2);
+            color: #27ae60;
+        }
+
+        /* ===== FOOTER ===== */
+        footer { background:#111; color:#ccc; padding:60px 0 0; }
+        .footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:40px; padding-bottom:40px; }
+        .footer-col h4 {
+            color:#fff; font-family:'Archivo',sans-serif; font-size:1rem;
+            margin-bottom:20px; padding-bottom:12px; position:relative;
+        }
+        .footer-col h4::after {
+            content:''; position:absolute; bottom:0; left:0; width:30px; height:2px; background:var(--primary-light);
+        }
+        .footer-about p { font-size:0.88rem; line-height:1.8; margin-bottom:20px; color:#999; }
+        .footer-contact-item {
+            display:flex; align-items:flex-start; gap:12px; margin-bottom:12px; font-size:0.88rem; color:#999;
+        }
+        .footer-contact-item i { color:var(--primary-light); margin-top:4px; width:16px; text-align:center; }
+        .footer-contact-item a { color:#999; transition:color 0.2s; }
+        .footer-contact-item a:hover { color:var(--primary-light); }
+        .footer-links { list-style:none; }
+        .footer-links li { margin-bottom:8px; }
+        .footer-links li a {
+            color:#999; font-size:0.88rem; transition:var(--transition);
+            display:flex; align-items:center; gap:6px;
+        }
+        .footer-links li a::before { content:'\203A'; color:var(--primary-light); font-weight:700; }
+        .footer-links li a:hover { color:var(--primary-light); padding-left:4px; }
+        .footer-bottom {
+            border-top:1px solid rgba(255,255,255,0.08); padding:20px 0;
+            display:flex; justify-content:space-between; align-items:center;
+            font-size:0.8rem; color:#555; flex-wrap:wrap; gap:12px;
+        }
+
+        /* ===== WHATSAPP ===== */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            z-index: 1500;
+        }
+        .whatsapp-float a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #25d366;
+            color: #fff;
+            font-size: 1.7rem;
+            box-shadow: 0 6px 20px rgba(37,211,102,0.4);
+            transition: var(--transition);
+        }
+        .whatsapp-float a:hover {
+            transform: scale(1.1) translateY(-4px);
+            box-shadow: 0 10px 30px rgba(37,211,102,0.5);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media(max-width:1024px) {
+            .footer-grid { grid-template-columns:1fr 1fr; }
+        }
+        @media(max-width:768px) {
+            .header-top .container { flex-direction:column; gap:10px; padding:14px 20px; }
+            .header-contact { gap:16px; font-size:0.82rem; }
+            .mobile-toggle { display:block; }
+            .nav-menu {
+                display:none; flex-direction:column; position:absolute;
+                top:100%; left:0; right:0; background:#fff;
+                box-shadow:0 8px 24px rgba(0,0,0,0.1);
+            }
+            .nav-menu.open { display:flex; }
+            .nav-menu > li > a { padding:14px 20px; text-align:center; }
+            .nav-dropdown {
+                position:static; opacity:1; visibility:visible;
+                transform:none; box-shadow:none; min-width:auto;
+                border-radius:0; background:var(--bg-light);
+            }
+            .main-nav .container { justify-content:space-between; }
+            .page-hero h1 { font-size: 1.8rem; }
+            .tab-content { padding: 24px; }
+            .form-row { grid-template-columns: 1fr; }
+            .tabs-header { flex-direction: column; }
+            .tab-btn { padding: 16px 20px; }
+            .ticket-card { padding: 20px; }
+            .ticket-card-header { flex-direction: column; }
+            .reply-form-actions { flex-direction: column; }
+            .reply-submit-btn, .close-ticket-btn { width: 100%; justify-content: center; }
+            .modal-box { padding: 32px 24px; }
+            .footer-grid { grid-template-columns:1fr; }
+            .footer-bottom { flex-direction:column; text-align:center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="header-top">
+        <div class="container">
+            <a href="index.html" class="header-logo">
+                <img src="assets/logo.png" alt="MirAkıl" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\'font-family:Archivo,sans-serif;font-weight:800;font-size:1.5rem;color:#2E7C01;\'>Mir</span><span style=\'font-family:Archivo,sans-serif;font-weight:800;font-size:1.5rem;color:#253437;\'>Akıl</span>'">
+            </a>
+            <div class="header-contact">
+                <a href="tel:+903129112956"><i class="fas fa-phone"></i> +90 312 911 29 56</a>
+                <a href="mailto:info@mirakil.com"><i class="fas fa-envelope"></i> info@mirakil.com</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- NAV -->
+    <nav class="main-nav">
+        <div class="container">
+            <button class="mobile-toggle" onclick="document.querySelector('.nav-menu').classList.toggle('open')">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="index.html">Ana Sayfa</a></li>
+                <li>
+                    <a href="#">Ürünler <i class="fas fa-chevron-down" style="font-size:0.65rem;margin-left:4px;"></i></a>
+                    <ul class="nav-dropdown">
+                        <li><a href="koha.html"><span class="dd-dot" style="background:#408540;"></span> Koha</a></li>
+                        <li><a href="dspace.html"><span class="dd-dot" style="background:#3b82a0;"></span> DSpace</a></li>
+                        <li><a href="vufind.html"><span class="dd-dot" style="background:#d2691e;"></span> VuFind</a></li>
+                        <li><a href="omeka.html"><span class="dd-dot" style="background:#c2493e;"></span> Omeka</a></li>
+                        <li><a href="moodle.html"><span class="dd-dot" style="background:#f7941d;"></span> Moodle</a></li>
+                        <li><a href="collectiveaccess.html"><span class="dd-dot" style="background:#7b2d8b;"></span> CollectiveAccess</a></li>
+                        <li><a href="ojs.html"><span class="dd-dot" style="background:#1e73be;"></span> OJS</a></li>
+                        <li><a href="indico.html"><span class="dd-dot" style="background:#3f51b5;"></span> Indico</a></li>
+                    </ul>
+                </li>
+                <li><a href="destek.html" class="active">Destek</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- PAGE HERO -->
+    <section class="page-hero">
+        <div class="container">
+            <h1><i class="fas fa-headset" style="margin-right:12px;opacity:0.8;"></i>Teknik Destek</h1>
+            <div class="page-hero-divider"></div>
+            <p>Yeni bir destek talebi oluşturun veya mevcut talebinizin durumunu takip edin.</p>
+        </div>
+    </section>
+
+    <!-- SUPPORT SECTION -->
+    <section class="support-section">
+        <div class="container">
+            <div class="tabs-container">
+                <!-- Tabs Header -->
+                <div class="tabs-header">
+                    <button class="tab-btn active" onclick="switchTab('new-ticket')">
+                        <i class="fas fa-plus-circle"></i> Yeni Destek Talebi
+                    </button>
+                    <button class="tab-btn" onclick="switchTab('track-ticket')">
+                        <i class="fas fa-search"></i> Ticket Takip
+                    </button>
+                </div>
+
+                <!-- Tab 1: New Ticket -->
+                <div id="tab-new-ticket" class="tab-content active">
+                    <div id="new-ticket-alert" class="alert"></div>
+                    <form id="newTicketForm" onsubmit="submitTicket(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Ad Soyad <span class="required">*</span></label>
+                                <input type="text" id="ticket-name" placeholder="Adınız ve soyadınız" required>
+                            </div>
+                            <div class="form-group">
+                                <label>E-posta <span class="required">*</span></label>
+                                <input type="email" id="ticket-email" placeholder="ornek@email.com" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Telefon</label>
+                                <input type="tel" id="ticket-phone" placeholder="+90 5XX XXX XX XX">
+                            </div>
+                            <div class="form-group">
+                                <label>Ürün <span class="required">*</span></label>
+                                <select id="ticket-product" required>
+                                    <option value="">Ürün seçiniz...</option>
+                                    <option value="Koha">Koha</option>
+                                    <option value="DSpace">DSpace</option>
+                                    <option value="VuFind">VuFind</option>
+                                    <option value="Omeka">Omeka</option>
+                                    <option value="Moodle">Moodle</option>
+                                    <option value="CollectiveAccess">CollectiveAccess</option>
+                                    <option value="OJS">OJS</option>
+                                    <option value="Indico">Indico</option>
+                                    <option value="Diğer">Diğer</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Konu <span class="required">*</span></label>
+                            <input type="text" id="ticket-subject" placeholder="Destek talebinizin konusu" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Açıklama <span class="required">*</span></label>
+                            <textarea id="ticket-description" placeholder="Sorununuzu veya talebinizi detaylı olarak açıklayınız..." required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn" id="submitTicketBtn">
+                            <span class="btn-text"><i class="fas fa-paper-plane"></i> Destek Talebi Oluştur</span>
+                            <span class="spinner"></span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Tab 2: Track Ticket -->
+                <div id="tab-track-ticket" class="tab-content">
+                    <div id="track-ticket-alert" class="alert"></div>
+
+                    <div id="track-form-view">
+                        <div class="track-form-wrapper">
+                            <div class="track-intro">
+                                <i class="fas fa-ticket-alt"></i>
+                                <h3>Ticket Durumu Sorgula</h3>
+                                <p>Destek talebinizin durumunu öğrenmek için e-posta adresinizi ve ticket numaranızı girin.</p>
+                            </div>
+                            <form onsubmit="trackTicket(event)">
+                                <div class="form-group">
+                                    <label>E-posta <span class="required">*</span></label>
+                                    <input type="email" id="track-email" placeholder="Kayıt e-posta adresiniz" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Ticket Numarası <span class="required">*</span></label>
+                                    <input type="text" id="track-number" placeholder="MRK-00001" required>
+                                </div>
+                                <button type="submit" class="submit-btn" id="trackTicketBtn">
+                                    <span class="btn-text"><i class="fas fa-search"></i> Sorgula</span>
+                                    <span class="spinner"></span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div id="ticket-detail-view" class="ticket-detail">
+                        <button class="ticket-back-btn" onclick="showTrackForm()">
+                            <i class="fas fa-arrow-left"></i> Geri Dön
+                        </button>
+
+                        <div class="ticket-card">
+                            <div class="ticket-card-header">
+                                <span class="ticket-number" id="detail-ticket-number"></span>
+                                <span class="status-badge" id="detail-status"></span>
+                            </div>
+                            <h3 class="ticket-subject" id="detail-subject"></h3>
+                            <div class="ticket-meta">
+                                <div class="ticket-meta-item">
+                                    <i class="fas fa-box"></i>
+                                    <span id="detail-product"></span>
+                                </div>
+                                <div class="ticket-meta-item">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span id="detail-date"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="replies-section">
+                            <h3><i class="fas fa-comments"></i> Yanıtlar</h3>
+                            <div id="replies-list"></div>
+                        </div>
+
+                        <div class="reply-form" id="reply-form-container">
+                            <h4><i class="fas fa-reply"></i> Yanıt Yaz</h4>
+                            <textarea id="reply-message" placeholder="Yanıtınızı buraya yazın..."></textarea>
+                            <div class="reply-form-actions">
+                                <button class="reply-submit-btn" onclick="sendReply()" id="replyBtn">
+                                    <i class="fas fa-paper-plane"></i> Yanıt Gönder
+                                </button>
+                                <button class="close-ticket-btn" onclick="closeTicket()" id="closeTicketBtn">
+                                    <i class="fas fa-times-circle"></i> Ticket'ı Kapat
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SUCCESS MODAL -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-box">
+            <div class="modal-icon">
+                <i class="fas fa-check"></i>
+            </div>
+            <h3>Destek Talebiniz Oluşturuldu!</h3>
+            <p>Talebiniz başarıyla kaydedildi. Ticket numaranız:</p>
+            <div class="modal-ticket-number" id="modal-ticket-number"></div>
+            <p class="modal-warning"><i class="fas fa-exclamation-triangle"></i> Bu numarayı kaydedin, takip için gereklidir.</p>
+            <div class="modal-actions">
+                <button class="btn btn-green" onclick="goToTrackFromModal()">
+                    <i class="fas fa-search"></i> Ticket Takibine Git
+                </button>
+                <button class="btn btn-outline-green" onclick="closeModal()">
+                    <i class="fas fa-times"></i> Kapat
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col footer-about">
+                    <h4>MirAkıl Veri İşleme</h4>
+                    <p>Müze, arşiv ve kütüphane yönetim sistemleri alanında yazılım, donanım, eğitim ve danışmanlık hizmetleri sunan teknoloji şirketi.</p>
+                    <div class="footer-contact-item"><i class="fas fa-map-marker-alt"></i><span>2661/1. Sokak, Ankara 06810, Türkiye</span></div>
+                    <div class="footer-contact-item"><i class="fas fa-phone"></i><a href="tel:+903129112956">+90 312 911 29 56</a></div>
+                    <div class="footer-contact-item"><i class="fas fa-envelope"></i><a href="mailto:info@mirakil.com">info@mirakil.com</a></div>
+                </div>
+                <div class="footer-col">
+                    <h4>Ürünler</h4>
+                    <ul class="footer-links">
+                        <li><a href="koha.html">Koha</a></li>
+                        <li><a href="vufind.html">VuFind</a></li>
+                        <li><a href="dspace.html">DSpace</a></li>
+                        <li><a href="omeka.html">Omeka</a></li>
+                        <li><a href="moodle.html">Moodle</a></li>
+                        <li><a href="collectiveaccess.html">CollectiveAccess</a></li>
+                        <li><a href="ojs.html">OJS</a></li>
+                        <li><a href="indico.html">Indico</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Hizmetler</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html#services">Kurulum ve Yapılandırma</a></li>
+                        <li><a href="index.html#services">Yazılım Geliştirme</a></li>
+                        <li><a href="index.html#services">Eğitim ve Danışmanlık</a></li>
+                        <li><a href="index.html#services">Veri Aktarımı</a></li>
+                        <li><a href="index.html#services">Teknik Destek</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Hızlı Erişim</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Ana Sayfa</a></li>
+                        <li><a href="index.html#products">Ürünler</a></li>
+                        <li><a href="index.html#services">Hizmetler</a></li>
+                        <li><a href="destek.html">Destek</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 MirAkıl Veri İşleme Yazılım Donanım Eğitim Danışmanlık Tic. Ltd. Şti. Tüm hakları saklıdır.</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WHATSAPP FLOAT -->
+    <div class="whatsapp-float">
+        <a href="https://wa.me/905319824672" target="_blank" rel="noopener noreferrer" title="WhatsApp ile iletişime geçin">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    </div>
+
+    <!-- SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+    const SUPABASE_URL = 'https://myhsoingsoufkugiqmjj.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15aHNvaW5nc291Zmt1Z2lxbWpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyNTU3NjYsImV4cCI6MjA4OTgzMTc2Nn0.0Nnr0UBl5z9DhymkRKDda3DI20g2h1NJIeE5gLYK8LA';
+
+    const headers = {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
+    };
+
+    // Current ticket tracking state
+    let currentTicketEmail = '';
+    let currentTicketNumber = '';
+    let currentTicketStatus = '';
+
+    /* ===== TAB SWITCHING ===== */
+    function switchTab(tab) {
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+        if (tab === 'new-ticket') {
+            document.querySelectorAll('.tab-btn')[0].classList.add('active');
+            document.getElementById('tab-new-ticket').classList.add('active');
+        } else {
+            document.querySelectorAll('.tab-btn')[1].classList.add('active');
+            document.getElementById('tab-track-ticket').classList.add('active');
+        }
+    }
+
+    /* ===== ALERTS ===== */
+    function showAlert(containerId, type, message) {
+        const alert = document.getElementById(containerId);
+        alert.className = 'alert alert-' + type + ' visible';
+        alert.innerHTML = '<i class="fas fa-' + (type === 'error' ? 'exclamation-circle' : 'check-circle') + '"></i> ' + message;
+    }
+
+    function hideAlert(containerId) {
+        const alert = document.getElementById(containerId);
+        alert.className = 'alert';
+        alert.innerHTML = '';
+    }
+
+    /* ===== SUBMIT NEW TICKET ===== */
+    async function submitTicket(e) {
+        e.preventDefault();
+        hideAlert('new-ticket-alert');
+
+        const btn = document.getElementById('submitTicketBtn');
+        btn.classList.add('loading');
+        btn.disabled = true;
+
+        const body = {
+            name: document.getElementById('ticket-name').value.trim(),
+            email: document.getElementById('ticket-email').value.trim(),
+            phone: document.getElementById('ticket-phone').value.trim() || null,
+            product: document.getElementById('ticket-product').value,
+            subject: document.getElementById('ticket-subject').value.trim(),
+            description: document.getElementById('ticket-description').value.trim(),
+            ticket_number: null
+        };
+
+        try {
+            const res = await fetch(SUPABASE_URL + '/rest/v1/tickets', {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(body)
+            });
+
+            if (!res.ok) {
+                const errData = await res.json().catch(() => null);
+                throw new Error(errData?.message || 'Bir hata oluştu. Lütfen tekrar deneyin.');
+            }
+
+            const data = await res.json();
+            const ticket = Array.isArray(data) ? data[0] : data;
+            const ticketNumber = ticket.ticket_number;
+
+            // Show success modal
+            document.getElementById('modal-ticket-number').textContent = ticketNumber;
+            document.getElementById('successModal').classList.add('visible');
+
+            // Store for potential tracking
+            currentTicketEmail = body.email;
+            currentTicketNumber = ticketNumber;
+
+            // Reset form
+            document.getElementById('newTicketForm').reset();
+
+        } catch (err) {
+            showAlert('new-ticket-alert', 'error', err.message);
+        } finally {
+            btn.classList.remove('loading');
+            btn.disabled = false;
+        }
+    }
+
+    /* ===== MODAL ===== */
+    function closeModal() {
+        document.getElementById('successModal').classList.remove('visible');
+    }
+
+    function goToTrackFromModal() {
+        closeModal();
+        switchTab('track-ticket');
+        document.getElementById('track-email').value = currentTicketEmail;
+        document.getElementById('track-number').value = currentTicketNumber;
+    }
+
+    /* ===== TRACK TICKET ===== */
+    async function trackTicket(e) {
+        e.preventDefault();
+        hideAlert('track-ticket-alert');
+
+        const btn = document.getElementById('trackTicketBtn');
+        btn.classList.add('loading');
+        btn.disabled = true;
+
+        const email = document.getElementById('track-email').value.trim();
+        const ticketNumber = document.getElementById('track-number').value.trim();
+
+        try {
+            const res = await fetch(SUPABASE_URL + '/rest/v1/rpc/get_ticket', {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({
+                    p_email: email,
+                    p_ticket_number: ticketNumber
+                })
+            });
+
+            if (!res.ok) {
+                const errData = await res.json().catch(() => null);
+                throw new Error(errData?.message || 'Ticket bulunamadı. Bilgilerinizi kontrol edin.');
+            }
+
+            const data = await res.json();
+            const ticket = Array.isArray(data) ? data[0] : data;
+
+            if (!ticket || (Array.isArray(data) && data.length === 0)) {
+                throw new Error('Bu bilgilerle eşleşen bir ticket bulunamadı.');
+            }
+
+            // Store state
+            currentTicketEmail = email;
+            currentTicketNumber = ticketNumber;
+            currentTicketStatus = ticket.status;
+
+            // Render ticket detail
+            renderTicketDetail(ticket);
+
+            // Fetch replies
+            await loadReplies();
+
+        } catch (err) {
+            showAlert('track-ticket-alert', 'error', err.message);
+        } finally {
+            btn.classList.remove('loading');
+            btn.disabled = false;
+        }
+    }
+
+    /* ===== RENDER TICKET DETAIL ===== */
+    function renderTicketDetail(ticket) {
+        document.getElementById('detail-ticket-number').textContent = ticket.ticket_number;
+        document.getElementById('detail-subject').textContent = ticket.subject;
+        document.getElementById('detail-product').textContent = ticket.product || '-';
+
+        // Format date
+        const date = new Date(ticket.created_at);
+        document.getElementById('detail-date').textContent = date.toLocaleDateString('tr-TR', {
+            year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+        });
+
+        // Status badge
+        const statusEl = document.getElementById('detail-status');
+        const statusLabels = {
+            'open': 'Açık',
+            'in_progress': 'İşlemde',
+            'closed': 'Kapatıldı',
+            'resolved': 'Çözüldü'
+        };
+        statusEl.className = 'status-badge status-' + ticket.status;
+        statusEl.textContent = statusLabels[ticket.status] || ticket.status;
+
+        // Show/hide close button
+        const closeBtn = document.getElementById('closeTicketBtn');
+        if (ticket.status === 'closed') {
+            closeBtn.style.display = 'none';
+            document.getElementById('reply-form-container').querySelector('h4').innerHTML = '<i class="fas fa-lock"></i> Bu ticket kapatılmıştır';
+            document.getElementById('reply-message').disabled = true;
+            document.getElementById('reply-message').placeholder = 'Kapatılmış ticketlara yanıt gönderilemez.';
+            document.getElementById('replyBtn').disabled = true;
+            document.getElementById('replyBtn').style.display = 'none';
+        } else {
+            closeBtn.style.display = 'flex';
+            document.getElementById('reply-form-container').querySelector('h4').innerHTML = '<i class="fas fa-reply"></i> Yanıt Yaz';
+            document.getElementById('reply-message').disabled = false;
+            document.getElementById('reply-message').placeholder = 'Yanıtınızı buraya yazın...';
+            document.getElementById('replyBtn').disabled = false;
+            document.getElementById('replyBtn').style.display = 'flex';
+        }
+
+        // Show detail view, hide form
+        document.getElementById('track-form-view').style.display = 'none';
+        document.getElementById('ticket-detail-view').classList.add('visible');
+    }
+
+    /* ===== LOAD REPLIES ===== */
+    async function loadReplies() {
+        const repliesList = document.getElementById('replies-list');
+        repliesList.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-light);"><i class="fas fa-spinner fa-spin" style="font-size:1.5rem;"></i></div>';
+
+        try {
+            const res = await fetch(SUPABASE_URL + '/rest/v1/rpc/get_ticket_replies', {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({
+                    p_email: currentTicketEmail,
+                    p_ticket_number: currentTicketNumber
+                })
+            });
+
+            if (!res.ok) throw new Error('Yanıtlar yüklenemedi.');
+
+            const replies = await res.json();
+
+            if (!replies || replies.length === 0) {
+                repliesList.innerHTML = '<div class="no-replies"><i class="fas fa-comment-slash"></i>Henüz yanıt bulunmamaktadır.</div>';
+                return;
+            }
+
+            repliesList.innerHTML = '';
+            replies.forEach(reply => {
+                const isAdmin = reply.is_admin || reply.author_type === 'admin';
+                const date = new Date(reply.created_at);
+                const formattedDate = date.toLocaleDateString('tr-TR', {
+                    year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                });
+
+                const authorName = isAdmin ? 'MirAkıl Destek' : (reply.author_name || 'Siz');
+                const initials = authorName.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+
+                const replyHTML = `
+                    <div class="reply-item ${isAdmin ? 'reply-admin' : 'reply-customer'}">
+                        <div class="reply-header">
+                            <div class="reply-author">
+                                <div class="reply-avatar">${initials}</div>
+                                <div>
+                                    <div class="reply-author-name">${escapeHtml(authorName)}</div>
+                                    ${isAdmin ? '<span class="reply-admin-label"><i class="fas fa-shield-alt"></i> MirAkıl Destek</span>' : ''}
+                                </div>
+                            </div>
+                            <span class="reply-date">${formattedDate}</span>
+                        </div>
+                        <div class="reply-message">${escapeHtml(reply.message)}</div>
+                    </div>
+                `;
+                repliesList.innerHTML += replyHTML;
+            });
+
+        } catch (err) {
+            repliesList.innerHTML = '<div class="no-replies"><i class="fas fa-exclamation-triangle" style="color:#e74c3c;"></i>' + err.message + '</div>';
+        }
+    }
+
+    /* ===== SEND REPLY ===== */
+    async function sendReply() {
+        const message = document.getElementById('reply-message').value.trim();
+        if (!message) return;
+
+        const btn = document.getElementById('replyBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gönderiliyor...';
+
+        try {
+            const res = await fetch(SUPABASE_URL + '/rest/v1/rpc/customer_reply', {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({
+                    p_email: currentTicketEmail,
+                    p_ticket_number: currentTicketNumber,
+                    p_message: message
+                })
+            });
+
+            if (!res.ok) {
+                const errData = await res.json().catch(() => null);
+                throw new Error(errData?.message || 'Yanıt gönderilemedi.');
+            }
+
+            document.getElementById('reply-message').value = '';
+            await loadReplies();
+
+        } catch (err) {
+            alert(err.message);
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-paper-plane"></i> Yanıt Gönder';
+        }
+    }
+
+    /* ===== CLOSE TICKET ===== */
+    async function closeTicket() {
+        if (!confirm('Bu ticket\'ı kapatmak istediğinize emin misiniz?')) return;
+
+        const btn = document.getElementById('closeTicketBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Kapatılıyor...';
+
+        try {
+            const res = await fetch(SUPABASE_URL + '/rest/v1/rpc/customer_close_ticket', {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({
+                    p_email: currentTicketEmail,
+                    p_ticket_number: currentTicketNumber
+                })
+            });
+
+            if (!res.ok) {
+                const errData = await res.json().catch(() => null);
+                throw new Error(errData?.message || 'Ticket kapatılamadı.');
+            }
+
+            // Refresh ticket view
+            currentTicketStatus = 'closed';
+            const statusEl = document.getElementById('detail-status');
+            statusEl.className = 'status-badge status-closed';
+            statusEl.textContent = 'Kapatıldı';
+
+            // Hide close button and disable reply
+            btn.style.display = 'none';
+            document.getElementById('reply-form-container').querySelector('h4').innerHTML = '<i class="fas fa-lock"></i> Bu ticket kapatılmıştır';
+            document.getElementById('reply-message').disabled = true;
+            document.getElementById('reply-message').placeholder = 'Kapatılmış ticketlara yanıt gönderilemez.';
+            document.getElementById('replyBtn').disabled = true;
+            document.getElementById('replyBtn').style.display = 'none';
+
+            await loadReplies();
+
+        } catch (err) {
+            alert(err.message);
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-times-circle"></i> Ticket\'ı Kapat';
+        }
+    }
+
+    /* ===== SHOW TRACK FORM ===== */
+    function showTrackForm() {
+        document.getElementById('track-form-view').style.display = 'block';
+        document.getElementById('ticket-detail-view').classList.remove('visible');
+        hideAlert('track-ticket-alert');
+    }
+
+    /* ===== UTILITY ===== */
+    function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
+    /* ===== URL PARAMS (deep linking) ===== */
+    document.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('tab') === 'track') {
+            switchTab('track-ticket');
+            if (params.get('email')) {
+                document.getElementById('track-email').value = params.get('email');
+            }
+            if (params.get('ticket')) {
+                document.getElementById('track-number').value = params.get('ticket');
+            }
+        }
+    });
+    </script>
+
+</body>
+</html>

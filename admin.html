@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MirAkıl - Admin Paneli</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2E7C01;
+            --primary-light: #45BA01;
+            --primary-dark: #1a5a00;
+            --teal: #709CA5;
+            --teal-dark: #253437;
+            --dark: #1a1a1a;
+            --text: #333;
+            --text-light: #666;
+            --bg: #fff;
+            --bg-light: #f7f8f6;
+            --border: #e0e0e0;
+            --radius: 20px;
+            --shadow: 0 5px 20px rgba(0,0,0,0.08);
+            --shadow-hover: 0 15px 40px rgba(0,0,0,0.12);
+            --transition: all 0.3s ease;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Lato', sans-serif;
+            color: var(--text);
+            line-height: 1.7;
+            background: var(--bg-light);
+            min-height: 100vh;
+        }
+        h1, h2, h3, h4, h5 { font-family: 'Archivo', sans-serif; line-height: 1.3; }
+        a { text-decoration: none; color: inherit; }
+
+        /* ===== LOGIN SCREEN ===== */
+        .login-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--teal-dark) 0%, #1a3a20 50%, var(--primary-dark) 100%);
+            padding: 20px;
+        }
+        .login-card {
+            background: #fff;
+            border-radius: var(--radius);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 50px 40px;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+        }
+        .login-card .logo-area {
+            margin-bottom: 32px;
+        }
+        .login-card .logo-area h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+        }
+        .login-card .logo-area h1 span {
+            color: var(--teal);
+        }
+        .login-card .logo-area p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-top: 6px;
+        }
+        .login-divider {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            margin: 0 auto 28px;
+            border-radius: 2px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            font-family: 'Archivo', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-family: 'Lato', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text);
+            background: var(--bg-light);
+            transition: var(--transition);
+            outline: none;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(46,124,1,0.1);
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Archivo', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(46,124,1,0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(46,124,1,0.4);
+        }
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-danger {
+            background: #dc3545;
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(46,124,1,0.05);
+        }
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 0.8rem;
+            border-radius: 8px;
+        }
+        .btn-full {
+            width: 100%;
+        }
+        .login-error {
+            background: #fff5f5;
+            color: #dc3545;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            margin-bottom: 16px;
+            border: 1px solid #f5c6cb;
+            display: none;
+        }
+        .login-error.show {
+            display: block;
+        }
+
+        /* ===== DASHBOARD ===== */
+        .dashboard {
+            display: none;
+            min-height: 100vh;
+        }
+        .dashboard.active {
+            display: block;
+        }
+        .dash-header {
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .dash-header-inner {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 68px;
+        }
+        .dash-header-title {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .dash-header-title h1 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .dash-header-title h1 span {
+            color: var(--teal);
+        }
+        .dash-header-title .admin-badge {
+            background: linear-gradient(135deg, var(--teal-dark), var(--teal));
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-family: 'Archivo', sans-serif;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-logout {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text-light);
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-family: 'Archivo', sans-serif;
+            font-weight: 600;
+            font-size: 0.82rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-logout:hover {
+            border-color: #dc3545;
+            color: #dc3545;
+            background: #fff5f5;
+        }
+
+        /* ===== TABS ===== */
+        .dash-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+        .tab-nav {
+            display: flex;
+            gap: 4px;
+            background: #fff;
+            border-radius: 16px;
+            padding: 6px;
+            box-shadow: var(--shadow);
+            margin-bottom: 28px;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 14px 24px;
+            background: transparent;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Archivo', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .tab-btn:hover {
+            color: var(--text);
+            background: var(--bg-light);
+        }
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(46,124,1,0.3);
+        }
+        .tab-btn .badge-count {
+            background: rgba(255,255,255,0.25);
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+        }
+        .tab-btn.active .badge-count {
+            background: rgba(255,255,255,0.3);
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ===== FILTER BAR ===== */
+        .filter-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .filter-bar span {
+            font-family: 'Archivo', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-right: 4px;
+        }
+        .filter-btn {
+            padding: 8px 18px;
+            border: 2px solid var(--border);
+            background: #fff;
+            border-radius: 10px;
+            font-family: 'Lato', sans-serif;
+            font-weight: 700;
+            font-size: 0.82rem;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .filter-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .filter-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+        }
+
+        /* ===== TABLE / CARD LIST ===== */
+        .data-table {
+            background: #fff;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        .table-header {
+            display: grid;
+            gap: 12px;
+            padding: 16px 24px;
+            background: var(--teal-dark);
+            color: #fff;
+            font-family: 'Archivo', sans-serif;
+            font-weight: 600;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+        .table-header.tickets-grid {
+            grid-template-columns: 80px 1fr 1fr 1.2fr 1fr 100px 120px;
+        }
+        .table-header.contacts-grid {
+            grid-template-columns: 1fr 1fr 1fr 1fr 2fr 120px;
+        }
+        .table-row {
+            display: grid;
+            gap: 12px;
+            padding: 16px 24px;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.88rem;
+        }
+        .table-row:hover {
+            background: var(--bg-light);
+        }
+        .table-row:last-child {
+            border-bottom: none;
+        }
+        .table-row.tickets-grid {
+            grid-template-columns: 80px 1fr 1fr 1.2fr 1fr 100px 120px;
+        }
+        .table-row.contacts-grid {
+            grid-template-columns: 1fr 1fr 1fr 1fr 2fr 120px;
+        }
+        .table-row .cell-ticket {
+            font-family: 'Archivo', sans-serif;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .table-row .cell-truncate {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* ===== STATUS BADGES ===== */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            font-family: 'Archivo', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+        .badge-open {
+            background: #e8f4fd;
+            color: #0277bd;
+        }
+        .badge-open::before {
+            content: '';
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: #0277bd;
+        }
+        .badge-in_progress {
+            background: #fff3e0;
+            color: #e65100;
+        }
+        .badge-in_progress::before {
+            content: '';
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: #e65100;
+        }
+        .badge-closed {
+            background: #f0f0f0;
+            color: #757575;
+        }
+        .badge-closed::before {
+            content: '';
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: #757575;
+        }
+
+        /* ===== TICKET DETAIL ===== */
+        .ticket-detail {
+            display: none;
+        }
+        .ticket-detail.active {
+            display: block;
+        }
+        .detail-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .detail-back {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: #fff;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1rem;
+            color: var(--text-light);
+        }
+        .detail-back:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(46,124,1,0.05);
+        }
+        .detail-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+        .detail-title span {
+            color: var(--primary);
+        }
+        .ticket-info-card {
+            background: #fff;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+        .ticket-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .info-item label {
+            display: block;
+            font-size: 0.75rem;
+            font-family: 'Archivo', sans-serif;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-light);
+            margin-bottom: 4px;
+        }
+        .info-item p {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        /* ===== REPLIES / CONVERSATION ===== */
+        .replies-section {
+            background: #fff;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+        .replies-section h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .replies-section h3 i {
+            color: var(--primary);
+        }
+        .replies-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 8px;
+            margin-bottom: 24px;
+        }
+        .replies-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        .replies-list::-webkit-scrollbar-track {
+            background: var(--bg-light);
+            border-radius: 3px;
+        }
+        .replies-list::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+        .reply-bubble {
+            max-width: 75%;
+            padding: 14px 18px;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            position: relative;
+        }
+        .reply-bubble .reply-meta {
+            font-size: 0.72rem;
+            margin-top: 8px;
+            opacity: 0.7;
+            font-weight: 700;
+        }
+        .reply-customer {
+            align-self: flex-start;
+            background: var(--bg-light);
+            color: var(--text);
+            border-bottom-left-radius: 4px;
+        }
+        .reply-admin {
+            align-self: flex-end;
+            background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+            color: var(--text);
+            border-bottom-right-radius: 4px;
+            border: 1px solid #c8e6c9;
+        }
+        .reply-admin .reply-meta {
+            text-align: right;
+        }
+        .no-replies {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        .no-replies i {
+            display: block;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            opacity: 0.3;
+        }
+
+        /* Reply Form */
+        .reply-form {
+            border-top: 2px solid var(--bg-light);
+            padding-top: 20px;
+        }
+        .reply-form h4 {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+        .reply-form textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-family: 'Lato', sans-serif;
+            font-size: 0.92rem;
+            color: var(--text);
+            background: var(--bg-light);
+            transition: var(--transition);
+            outline: none;
+            resize: vertical;
+            min-height: 100px;
+            margin-bottom: 14px;
+        }
+        .reply-form textarea:focus {
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(46,124,1,0.1);
+        }
+        .reply-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* ===== CONTACT DETAIL / EXPAND ===== */
+        .contact-expand {
+            display: none;
+            padding: 0 24px 20px;
+            background: var(--bg-light);
+        }
+        .contact-expand.show {
+            display: block;
+        }
+        .contact-expand-inner {
+            padding: 20px;
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        .contact-expand-inner h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+        .contact-expand-inner p {
+            font-size: 0.9rem;
+            color: var(--text);
+            line-height: 1.7;
+            white-space: pre-wrap;
+        }
+
+        /* ===== LOADING / EMPTY STATES ===== */
+        .loading-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .loading-state .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .loading-state p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--border);
+            margin-bottom: 16px;
+        }
+        .empty-state p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* ===== TOAST NOTIFICATION ===== */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 14px 24px;
+            border-radius: 12px;
+            color: #fff;
+            font-family: 'Archivo', sans-serif;
+            font-weight: 600;
+            font-size: 0.88rem;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            z-index: 9999;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .toast-success { background: var(--primary); }
+        .toast-error { background: #dc3545; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .table-header.tickets-grid,
+            .table-row.tickets-grid {
+                grid-template-columns: 70px 1fr 1fr 1fr 100px 110px;
+            }
+            .table-header.tickets-grid > div:nth-child(4),
+            .table-row.tickets-grid > div:nth-child(4) {
+                display: none;
+            }
+        }
+        @media (max-width: 768px) {
+            .dash-header-inner {
+                padding: 0 16px;
+                min-height: 58px;
+            }
+            .dash-header-title h1 {
+                font-size: 1.1rem;
+            }
+            .dash-header-title .admin-badge {
+                display: none;
+            }
+            .dash-container {
+                padding: 16px;
+            }
+            .tab-nav {
+                border-radius: 12px;
+                padding: 4px;
+            }
+            .tab-btn {
+                padding: 10px 12px;
+                font-size: 0.8rem;
+            }
+            .tab-btn .badge-count {
+                display: none;
+            }
+
+            /* Stack tables into cards on mobile */
+            .table-header {
+                display: none;
+            }
+            .table-row.tickets-grid,
+            .table-row.contacts-grid {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                padding: 16px 20px;
+            }
+            .table-row .cell-truncate {
+                white-space: normal;
+            }
+            .table-row .mobile-label {
+                display: inline;
+            }
+
+            .reply-bubble {
+                max-width: 90%;
+            }
+            .ticket-info-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .login-card {
+                padding: 36px 24px;
+            }
+            .filter-bar {
+                gap: 6px;
+            }
+            .filter-btn {
+                padding: 6px 12px;
+                font-size: 0.78rem;
+            }
+            .reply-actions {
+                flex-direction: column;
+            }
+            .reply-actions .btn {
+                width: 100%;
+            }
+        }
+        @media (max-width: 480px) {
+            .ticket-info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .mobile-label {
+            display: none;
+            font-family: 'Archivo', sans-serif;
+            font-weight: 600;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-light);
+            margin-right: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== LOGIN SCREEN ===== -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-card">
+            <div class="logo-area">
+                <h1>Mir<span>Akıl</span></h1>
+                <p>Yönetim Paneli</p>
+            </div>
+            <div class="login-divider"></div>
+            <div class="login-error" id="loginError">
+                <i class="fas fa-exclamation-circle"></i>
+                Geçersiz şifre. Lütfen tekrar deneyin.
+            </div>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i>&nbsp; Yönetici Şifresi</label>
+                    <input type="password" id="loginPassword" placeholder="Şifrenizi girin..." required autocomplete="current-password">
+                </div>
+                <button type="submit" class="btn btn-primary btn-full" id="loginBtn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Giriş
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===== DASHBOARD ===== -->
+    <div class="dashboard" id="dashboard">
+        <!-- Header -->
+        <div class="dash-header">
+            <div class="dash-header-inner">
+                <div class="dash-header-title">
+                    <h1>Mir<span>Akıl</span> Admin Paneli</h1>
+                    <span class="admin-badge"><i class="fas fa-shield-halved"></i>&nbsp; Admin</span>
+                </div>
+                <button class="btn-logout" onclick="handleLogout()">
+                    <i class="fas fa-right-from-bracket"></i>
+                    Çıkış
+                </button>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="dash-container">
+            <!-- Tabs Navigation -->
+            <div class="tab-nav">
+                <button class="tab-btn active" onclick="switchTab('tickets')" id="tabBtnTickets">
+                    <i class="fas fa-ticket"></i>
+                    Destek Talepleri
+                    <span class="badge-count" id="ticketCount">0</span>
+                </button>
+                <button class="tab-btn" onclick="switchTab('contacts')" id="tabBtnContacts">
+                    <i class="fas fa-envelope"></i>
+                    İletişim Formları
+                    <span class="badge-count" id="contactCount">0</span>
+                </button>
+            </div>
+
+            <!-- TAB 1: TICKETS LIST -->
+            <div class="tab-content active" id="tabTickets">
+                <!-- Filter Bar -->
+                <div class="filter-bar">
+                    <span><i class="fas fa-filter"></i> Filtre:</span>
+                    <button class="filter-btn active" onclick="filterTickets('all')" data-filter="all">Tümü</button>
+                    <button class="filter-btn" onclick="filterTickets('open')" data-filter="open">Açık</button>
+                    <button class="filter-btn" onclick="filterTickets('in_progress')" data-filter="in_progress">İşlemde</button>
+                    <button class="filter-btn" onclick="filterTickets('closed')" data-filter="closed">Kapalı</button>
+                </div>
+
+                <!-- Tickets Table -->
+                <div class="data-table" id="ticketsTable">
+                    <div class="table-header tickets-grid">
+                        <div>#</div>
+                        <div>Ad</div>
+                        <div>E-posta</div>
+                        <div>Konu</div>
+                        <div>Ürün</div>
+                        <div>Durum</div>
+                        <div>Tarih</div>
+                    </div>
+                    <div id="ticketsBody">
+                        <div class="loading-state">
+                            <div class="spinner"></div>
+                            <p>Yükleniyor...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TICKET DETAIL VIEW -->
+            <div class="ticket-detail" id="ticketDetail">
+                <div class="detail-header">
+                    <button class="detail-back" onclick="backToList()">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2 class="detail-title" id="detailTitle">Ticket <span>#---</span></h2>
+                </div>
+
+                <div class="ticket-info-card" id="detailInfo">
+                    <!-- Populated dynamically -->
+                </div>
+
+                <div class="replies-section">
+                    <h3><i class="fas fa-comments"></i> Yanıtlar</h3>
+                    <div class="replies-list" id="repliesList">
+                        <div class="loading-state">
+                            <div class="spinner"></div>
+                            <p>Yanıtlar yükleniyor...</p>
+                        </div>
+                    </div>
+
+                    <div class="reply-form" id="replyForm">
+                        <h4><i class="fas fa-reply"></i> Yanıt Yaz</h4>
+                        <textarea id="replyMessage" placeholder="Yanıtınızı buraya yazın..."></textarea>
+                        <div class="reply-actions">
+                            <button class="btn btn-primary" onclick="sendReply()" id="sendReplyBtn">
+                                <i class="fas fa-paper-plane"></i>
+                                Yanıt Gönder
+                            </button>
+                            <button class="btn btn-danger" onclick="closeTicket()" id="closeTicketBtn">
+                                <i class="fas fa-times-circle"></i>
+                                Ticket'ı Kapat
+                            </button>
+                            <button class="btn btn-outline" onclick="backToList()">
+                                <i class="fas fa-arrow-left"></i>
+                                Geri
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: CONTACTS -->
+            <div class="tab-content" id="tabContacts">
+                <div class="data-table" id="contactsTable">
+                    <div class="table-header contacts-grid">
+                        <div>Ad</div>
+                        <div>E-posta</div>
+                        <div>Telefon</div>
+                        <div>Konu</div>
+                        <div>Mesaj</div>
+                        <div>Tarih</div>
+                    </div>
+                    <div id="contactsBody">
+                        <div class="loading-state">
+                            <div class="spinner"></div>
+                            <p>Yükleniyor...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ===== CONFIGURATION =====
+        const SUPABASE_URL = 'https://myhsoingsoufkugiqmjj.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15aHNvaW5nc291Zmt1Z2lxbWpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyNTU3NjYsImV4cCI6MjA4OTgzMTc2Nn0.0Nnr0UBl5z9DhymkRKDda3DI20g2h1NJIeE5gLYK8LA';
+
+        const API_HEADERS = {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+            'Content-Type': 'application/json'
+        };
+
+        // ===== STATE =====
+        let allTickets = [];
+        let allContacts = [];
+        let currentFilter = 'all';
+        let currentTicket = null;
+
+        // ===== HELPERS =====
+        async function rpc(fnName, body) {
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fnName}`, {
+                method: 'POST',
+                headers: API_HEADERS,
+                body: JSON.stringify(body)
+            });
+            if (!res.ok) {
+                const err = await res.text();
+                throw new Error(err);
+            }
+            return res.json();
+        }
+
+        function getPassword() {
+            return sessionStorage.getItem('admin_password') || '';
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('tr-TR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function formatDateShort(dateStr) {
+            if (!dateStr) return '-';
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('tr-TR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+        }
+
+        function statusBadge(status) {
+            const map = {
+                'open': '<span class="badge badge-open">Açık</span>',
+                'in_progress': '<span class="badge badge-in_progress">İşlemde</span>',
+                'closed': '<span class="badge badge-closed">Kapalı</span>'
+            };
+            return map[status] || `<span class="badge">${status}</span>`;
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.className = 'toast toast-' + type + ' show';
+            toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${escapeHtml(message)}`;
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3500);
+        }
+
+        // ===== LOGIN =====
+        async function handleLogin(e) {
+            e.preventDefault();
+            const password = document.getElementById('loginPassword').value.trim();
+            const loginBtn = document.getElementById('loginBtn');
+            const loginError = document.getElementById('loginError');
+
+            if (!password) return;
+
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Doğrulanıyor...';
+            loginError.classList.remove('show');
+
+            try {
+                const result = await rpc('verify_admin', { p_password: password });
+                if (result === true) {
+                    sessionStorage.setItem('admin_password', password);
+                    showDashboard();
+                } else {
+                    loginError.classList.add('show');
+                }
+            } catch (err) {
+                loginError.textContent = 'Bağlantı hatası. Lütfen tekrar deneyin.';
+                loginError.classList.add('show');
+                console.error('Login error:', err);
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Giriş';
+            }
+        }
+
+        function handleLogout() {
+            sessionStorage.removeItem('admin_password');
+            document.getElementById('dashboard').classList.remove('active');
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('loginError').classList.remove('show');
+            allTickets = [];
+            allContacts = [];
+        }
+
+        function showDashboard() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('dashboard').classList.add('active');
+            loadTickets();
+            loadContacts();
+        }
+
+        // ===== AUTO-LOGIN CHECK =====
+        (function checkSession() {
+            const pw = sessionStorage.getItem('admin_password');
+            if (pw) {
+                rpc('verify_admin', { p_password: pw }).then(result => {
+                    if (result === true) {
+                        showDashboard();
+                    } else {
+                        sessionStorage.removeItem('admin_password');
+                    }
+                }).catch(() => {
+                    sessionStorage.removeItem('admin_password');
+                });
+            }
+        })();
+
+        // ===== TABS =====
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById('ticketDetail').classList.remove('active');
+
+            if (tab === 'tickets') {
+                document.getElementById('tabBtnTickets').classList.add('active');
+                document.getElementById('tabTickets').classList.add('active');
+            } else {
+                document.getElementById('tabBtnContacts').classList.add('active');
+                document.getElementById('tabContacts').classList.add('active');
+            }
+        }
+
+        // ===== TICKETS =====
+        async function loadTickets() {
+            const body = document.getElementById('ticketsBody');
+            body.innerHTML = '<div class="loading-state"><div class="spinner"></div><p>Yükleniyor...</p></div>';
+
+            try {
+                const data = await rpc('admin_get_tickets', { p_password: getPassword() });
+                allTickets = Array.isArray(data) ? data : [];
+                document.getElementById('ticketCount').textContent = allTickets.length;
+                renderTickets();
+            } catch (err) {
+                body.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Veriler yüklenirken hata oluştu.</p></div>';
+                console.error('Load tickets error:', err);
+            }
+        }
+
+        function renderTickets() {
+            const body = document.getElementById('ticketsBody');
+            let filtered = allTickets;
+
+            if (currentFilter !== 'all') {
+                filtered = allTickets.filter(t => t.status === currentFilter);
+            }
+
+            if (filtered.length === 0) {
+                body.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>Gösterilecek destek talebi bulunamadı.</p></div>';
+                return;
+            }
+
+            body.innerHTML = filtered.map(t => `
+                <div class="table-row tickets-grid" onclick="openTicket(${t.id})">
+                    <div class="cell-ticket">
+                        <span class="mobile-label">Ticket:</span>
+                        #${t.id}
+                    </div>
+                    <div class="cell-truncate">
+                        <span class="mobile-label">Ad:</span>
+                        ${escapeHtml(t.name)}
+                    </div>
+                    <div class="cell-truncate">
+                        <span class="mobile-label">E-posta:</span>
+                        ${escapeHtml(t.email)}
+                    </div>
+                    <div class="cell-truncate">
+                        <span class="mobile-label">Konu:</span>
+                        ${escapeHtml(t.subject)}
+                    </div>
+                    <div class="cell-truncate">
+                        <span class="mobile-label">Ürün:</span>
+                        ${escapeHtml(t.product || '-')}
+                    </div>
+                    <div>
+                        ${statusBadge(t.status)}
+                    </div>
+                    <div style="font-size:0.82rem;color:var(--text-light);">
+                        <span class="mobile-label">Tarih:</span>
+                        ${formatDateShort(t.created_at)}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterTickets(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.filter === filter);
+            });
+            renderTickets();
+        }
+
+        // ===== TICKET DETAIL =====
+        async function openTicket(ticketId) {
+            const ticket = allTickets.find(t => t.id === ticketId);
+            if (!ticket) return;
+            currentTicket = ticket;
+
+            // Hide list, show detail
+            document.getElementById('tabTickets').classList.remove('active');
+            document.getElementById('ticketDetail').classList.add('active');
+
+            // Set title
+            document.getElementById('detailTitle').innerHTML = `Ticket <span>#${ticket.id}</span>`;
+
+            // Ticket info
+            document.getElementById('detailInfo').innerHTML = `
+                <div class="ticket-info-grid">
+                    <div class="info-item">
+                        <label>Ad Soyad</label>
+                        <p>${escapeHtml(ticket.name)}</p>
+                    </div>
+                    <div class="info-item">
+                        <label>E-posta</label>
+                        <p>${escapeHtml(ticket.email)}</p>
+                    </div>
+                    <div class="info-item">
+                        <label>Konu</label>
+                        <p>${escapeHtml(ticket.subject)}</p>
+                    </div>
+                    <div class="info-item">
+                        <label>Ürün</label>
+                        <p>${escapeHtml(ticket.product || '-')}</p>
+                    </div>
+                    <div class="info-item">
+                        <label>Durum</label>
+                        <p>${statusBadge(ticket.status)}</p>
+                    </div>
+                    <div class="info-item">
+                        <label>Oluşturulma Tarihi</label>
+                        <p>${formatDate(ticket.created_at)}</p>
+                    </div>
+                </div>
+                ${ticket.message ? `
+                    <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border);">
+                        <div class="info-item">
+                            <label>İlk Mesaj</label>
+                            <p style="font-weight:400;line-height:1.7;white-space:pre-wrap;">${escapeHtml(ticket.message)}</p>
+                        </div>
+                    </div>
+                ` : ''}
+            `;
+
+            // Show/hide close button
+            const closeBtn = document.getElementById('closeTicketBtn');
+            if (ticket.status === 'closed') {
+                closeBtn.style.display = 'none';
+            } else {
+                closeBtn.style.display = 'inline-flex';
+            }
+
+            // Load replies
+            loadReplies(ticketId);
+        }
+
+        async function loadReplies(ticketId) {
+            const list = document.getElementById('repliesList');
+            list.innerHTML = '<div class="loading-state"><div class="spinner"></div><p>Yanıtlar yükleniyor...</p></div>';
+
+            try {
+                const data = await rpc('admin_get_ticket_replies', {
+                    p_password: getPassword(),
+                    p_ticket_id: ticketId
+                });
+                const replies = Array.isArray(data) ? data : [];
+
+                if (replies.length === 0) {
+                    list.innerHTML = '<div class="no-replies"><i class="fas fa-comment-slash"></i>Henüz yanıt bulunmuyor.</div>';
+                } else {
+                    list.innerHTML = replies.map(r => {
+                        const isAdmin = r.is_admin === true || r.sender_type === 'admin';
+                        return `
+                            <div class="reply-bubble ${isAdmin ? 'reply-admin' : 'reply-customer'}">
+                                <div>${escapeHtml(r.message)}</div>
+                                <div class="reply-meta">
+                                    ${isAdmin ? '<i class="fas fa-user-shield"></i> Admin' : '<i class="fas fa-user"></i> Müşteri'}
+                                    &nbsp;·&nbsp; ${formatDate(r.created_at)}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                    // Scroll to bottom
+                    list.scrollTop = list.scrollHeight;
+                }
+            } catch (err) {
+                list.innerHTML = '<div class="no-replies"><i class="fas fa-exclamation-triangle"></i>Yanıtlar yüklenirken hata oluştu.</div>';
+                console.error('Load replies error:', err);
+            }
+        }
+
+        async function sendReply() {
+            const message = document.getElementById('replyMessage').value.trim();
+            if (!message || !currentTicket) return;
+
+            const btn = document.getElementById('sendReplyBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gönderiliyor...';
+
+            try {
+                await rpc('admin_reply', {
+                    p_password: getPassword(),
+                    p_ticket_id: currentTicket.id,
+                    p_message: message
+                });
+                document.getElementById('replyMessage').value = '';
+                showToast('Yanıt başarıyla gönderildi.');
+                loadReplies(currentTicket.id);
+                // Refresh tickets to update status if changed
+                loadTickets();
+            } catch (err) {
+                showToast('Yanıt gönderilemedi. Lütfen tekrar deneyin.', 'error');
+                console.error('Send reply error:', err);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Yanıt Gönder';
+            }
+        }
+
+        async function closeTicket() {
+            if (!currentTicket) return;
+            if (!confirm('Bu ticket\'ı kapatmak istediğinizden emin misiniz?')) return;
+
+            const btn = document.getElementById('closeTicketBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Kapatılıyor...';
+
+            try {
+                await rpc('admin_close_ticket', {
+                    p_password: getPassword(),
+                    p_ticket_id: currentTicket.id
+                });
+                showToast('Ticket başarıyla kapatıldı.');
+                currentTicket.status = 'closed';
+                btn.style.display = 'none';
+                // Refresh ticket info
+                openTicket(currentTicket.id);
+                loadTickets();
+            } catch (err) {
+                showToast('Ticket kapatılamadı. Lütfen tekrar deneyin.', 'error');
+                console.error('Close ticket error:', err);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-times-circle"></i> Ticket\'ı Kapat';
+            }
+        }
+
+        function backToList() {
+            document.getElementById('ticketDetail').classList.remove('active');
+            document.getElementById('tabTickets').classList.add('active');
+            currentTicket = null;
+        }
+
+        // ===== CONTACTS =====
+        async function loadContacts() {
+            const body = document.getElementById('contactsBody');
+            body.innerHTML = '<div class="loading-state"><div class="spinner"></div><p>Yükleniyor...</p></div>';
+
+            try {
+                const data = await rpc('admin_get_contacts', { p_password: getPassword() });
+                allContacts = Array.isArray(data) ? data : [];
+                document.getElementById('contactCount').textContent = allContacts.length;
+                renderContacts();
+            } catch (err) {
+                body.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Veriler yüklenirken hata oluştu.</p></div>';
+                console.error('Load contacts error:', err);
+            }
+        }
+
+        function renderContacts() {
+            const body = document.getElementById('contactsBody');
+
+            if (allContacts.length === 0) {
+                body.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>Gösterilecek iletişim formu bulunamadı.</p></div>';
+                return;
+            }
+
+            body.innerHTML = allContacts.map((c, i) => `
+                <div class="table-row contacts-grid" onclick="toggleContact(${i})">
+                    <div class="cell-truncate">
+                        <span class="mobile-label">Ad:</span>
+                        ${escapeHtml(c.name)}
+                    </div>
+                    <div class="cell-truncate">
+                        <span class="mobile-label">E-posta:</span>
+                        ${escapeHtml(c.email)}
+                    </div>
+                    <div class="cell-truncate">
+                        <span class="mobile-label">Telefon:</span>
+                        ${escapeHtml(c.phone || '-')}
+                    </div>
+                    <div class="cell-truncate">
+                        <span class="mobile-label">Konu:</span>
+                        ${escapeHtml(c.subject || '-')}
+                    </div>
+                    <div class="cell-truncate">
+                        <span class="mobile-label">Mesaj:</span>
+                        ${escapeHtml((c.message || '').substring(0, 80))}${(c.message || '').length > 80 ? '...' : ''}
+                    </div>
+                    <div style="font-size:0.82rem;color:var(--text-light);">
+                        <span class="mobile-label">Tarih:</span>
+                        ${formatDateShort(c.created_at)}
+                    </div>
+                </div>
+                <div class="contact-expand" id="contactExpand${i}">
+                    <div class="contact-expand-inner">
+                        <h4><i class="fas fa-user"></i> ${escapeHtml(c.name)} - ${escapeHtml(c.subject || 'Konu belirtilmemiş')}</h4>
+                        <p style="margin-bottom:10px;"><strong>E-posta:</strong> ${escapeHtml(c.email)} ${c.phone ? '&nbsp;|&nbsp; <strong>Telefon:</strong> ' + escapeHtml(c.phone) : ''}</p>
+                        <p style="margin-bottom:6px;"><strong>Tarih:</strong> ${formatDate(c.created_at)}</p>
+                        <hr style="border:none;border-top:1px solid var(--border);margin:12px 0;">
+                        <h4>Mesaj</h4>
+                        <p>${escapeHtml(c.message)}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleContact(index) {
+            const el = document.getElementById('contactExpand' + index);
+            if (el) {
+                el.classList.toggle('show');
+            }
+        }
+    </script>
+</body>
+</html>
