@@ -1,6 +1,10 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { SmtpClient } from "https://deno.land/x/smtp@v0.7.0/mod.ts";
 
-const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY") || "";
+const SMTP_HOST = Deno.env.get("SMTP_HOST") || "smtp.yandex.com";
+const SMTP_PORT = parseInt(Deno.env.get("SMTP_PORT") || "465");
+const SMTP_USER = Deno.env.get("SMTP_USER") || "info@mirakil.com";
+const SMTP_PASS = Deno.env.get("SMTP_PASS") || "";
 const SITE_EMAIL = "info@mirakil.com";
 
 const corsHeaders = {
@@ -19,6 +23,24 @@ interface TicketPayload {
   reply_from?: string;
 }
 
+async function sendEmail(to: string, subject: string, html: string) {
+  const client = new SmtpClient();
+  await client.connectTLS({
+    hostname: SMTP_HOST,
+    port: SMTP_PORT,
+    username: SMTP_USER,
+    password: SMTP_PASS,
+  });
+  await client.send({
+    from: SMTP_USER,
+    to: to,
+    subject: subject,
+    content: "auto",
+    html: html,
+  });
+  await client.close();
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -27,19 +49,18 @@ serve(async (req) => {
   try {
     const payload: TicketPayload = await req.json();
 
-    if (!RESEND_API_KEY) {
+    if (!SMTP_PASS) {
       return new Response(
-        JSON.stringify({ error: "RESEND_API_KEY not configured" }),
+        JSON.stringify({ error: "SMTP credentials not configured" }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    const emails: Array<{ from: string; to: string; subject: string; html: string }> = [];
+    const emails: Array<{ to: string; subject: string; html: string }> = [];
 
     if (payload.type === "new_ticket") {
       // Email to customer
       emails.push({
-        from: "MirAkıl Destek <onboarding@resend.dev>",
         to: payload.customer_email,
         subject: `Destek Talebiniz Alındı - ${payload.ticket_number}`,
         html: `
@@ -66,9 +87,8 @@ serve(async (req) => {
         `,
       });
 
-      // Email to admin
+      // Email to admin (info@mirakil.com)
       emails.push({
-        from: "MirAkıl Sistem <onboarding@resend.dev>",
         to: SITE_EMAIL,
         subject: `Yeni Destek Talebi - ${payload.ticket_number}: ${payload.subject}`,
         html: `
@@ -90,7 +110,6 @@ serve(async (req) => {
     } else if (payload.type === "ticket_reply") {
       // Notify customer about admin reply
       emails.push({
-        from: "MirAkıl Destek <onboarding@resend.dev>",
         to: payload.customer_email,
         subject: `Destek Talebinize Yanıt - ${payload.ticket_number}`,
         html: `
@@ -115,26 +134,18 @@ serve(async (req) => {
       });
     }
 
-    // Send all emails via Resend
-    const results = await Promise.allSettled(
-      emails.map((email) =>
-        fetch("https://api.resend.com/emails", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${RESEND_API_KEY}`,
-          },
-          body: JSON.stringify(email),
-        })
-      )
-    );
+    // Send all emails via SMTP (Yandex)
+    const results = [];
+    for (const email of emails) {
+      try {
+        await sendEmail(email.to, email.subject, email.html);
+        results.push({ to: email.to, status: "sent" });
+      } catch (err) {
+        results.push({ to: email.to, status: "failed", error: (err as Error).message });
+      }
+    }
 
-    const statuses = results.map((r, i) => ({
-      to: emails[i].to,
-      status: r.status === "fulfilled" ? (r.value as Response).status : "failed",
-    }));
-
-    return new Response(JSON.stringify({ success: true, emails: statuses }), {
+    return new Response(JSON.stringify({ success: true, emails: results }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error) {
