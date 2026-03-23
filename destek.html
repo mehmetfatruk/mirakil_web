@@ -1195,6 +1195,22 @@
             document.getElementById('modal-ticket-number').textContent = ticketNumber;
             document.getElementById('successModal').classList.add('visible');
 
+            // Send email notification via Edge Function
+            try {
+                await fetch(SUPABASE_URL + '/functions/v1/send-ticket-email', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY },
+                    body: JSON.stringify({
+                        type: 'new_ticket',
+                        ticket_number: ticketNumber,
+                        customer_name: body.name,
+                        customer_email: body.email,
+                        subject: body.subject,
+                        description: body.description
+                    })
+                });
+            } catch(emailErr) { /* email is best-effort */ }
+
             // Store for potential tracking
             currentTicketEmail = body.email;
             currentTicketNumber = ticketNumber;

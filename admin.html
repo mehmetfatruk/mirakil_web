@@ -1334,6 +1334,24 @@
                     p_ticket_id: currentTicket.id,
                     p_message: message
                 });
+
+                // Send email notification to customer
+                try {
+                    await fetch(SUPABASE_URL + '/functions/v1/send-ticket-email', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY },
+                        body: JSON.stringify({
+                            type: 'ticket_reply',
+                            ticket_number: currentTicket.ticket_number,
+                            customer_name: currentTicket.name,
+                            customer_email: currentTicket.email,
+                            subject: currentTicket.subject,
+                            reply_message: message,
+                            reply_from: 'MirAkıl Destek'
+                        })
+                    });
+                } catch(emailErr) { /* email is best-effort */ }
+
                 document.getElementById('replyMessage').value = '';
                 showToast('Yanıt başarıyla gönderildi.');
                 loadReplies(currentTicket.id);
