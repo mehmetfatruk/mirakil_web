@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Koha - Entegre Kütüphane Otomasyon Sistemi | MirAkıl</title>
+    <meta name="description" content="Koha, kütüphaneler için açık kaynaklı entegre kütüphane otomasyon sistemidir. Kataloglama, ödünç verme, OPAC ve daha fazlası.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2E7C01;
+            --primary-light: #45BA01;
+            --primary-dark: #1a5a00;
+            --teal: #709CA5;
+            --teal-dark: #253437;
+            --dark: #1a1a1a;
+            --text: #333;
+            --text-light: #666;
+            --bg: #fff;
+            --bg-light: #f7f8f6;
+            --border: #e0e0e0;
+            --radius: 20px;
+            --shadow: 0 5px 20px rgba(0,0,0,0.08);
+            --shadow-hover: 0 15px 40px rgba(0,0,0,0.12);
+            --transition: all 0.3s ease;
+            --product: #408540;
+            --product-light: #e9f2e9;
+            --product-dark: #3a7d28;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+        body { font-family:'Lato',sans-serif; color:var(--text); line-height:1.7; background:var(--bg); }
+        h1,h2,h3,h4,h5 { font-family:'Archivo',sans-serif; line-height:1.3; }
+        a { text-decoration:none; color:inherit; }
+        .container { max-width:1200px; margin:0 auto; padding:0 30px; }
+
+        /* ===== HEADER ===== */
+        .header-top {
+            background: #fff;
+            padding: 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .header-top .container {
+            display:flex; justify-content:space-between; align-items:center; min-height:64px;
+        }
+        .header-logo { display:flex; align-items:center; gap:14px; }
+        .header-logo img {
+            height: 50px; width: auto;
+        }
+        .header-logo-text {
+            color:#fff; font-family:'Archivo',sans-serif; font-weight:700; font-size:1.6rem;
+        }
+        .header-logo-sub {
+            color: rgba(255,255,255,0.7); font-size:0.7rem; text-transform:uppercase; letter-spacing:1.5px;
+        }
+        .header-contact { display:flex; align-items:center; gap:28px; color:#333; font-size:0.9rem; }
+        .header-contact a { color:#333; display:flex; align-items:center; gap:8px; transition:opacity 0.2s; }
+        .header-contact a:hover { color:#2E7C01; }
+        .header-contact i { color:#2E7C01; }
+
+        /* NAV */
+        .main-nav {
+            background:#fff; border-bottom:1px solid var(--border);
+            position:sticky; top:0; z-index:1000;
+            box-shadow:0 2px 8px rgba(0,0,0,0.06);
+        }
+        .main-nav .container { display:flex; justify-content:center; align-items:center; }
+        .nav-menu { display:flex; list-style:none; }
+        .nav-menu li { position:relative; }
+        .nav-menu > li > a {
+            display:block; padding:18px 22px;
+            font-family:'Archivo',sans-serif; font-weight:600; font-size:0.9rem;
+            color:var(--text); text-transform:uppercase; letter-spacing:0.5px;
+            transition:var(--transition); border-bottom:3px solid transparent;
+        }
+        .nav-menu > li > a:hover, .nav-menu > li > a.active {
+            color:var(--product); border-bottom-color:var(--product);
+        }
+        .nav-dropdown {
+            position:absolute; top:100%; left:0; background:#fff;
+            min-width:240px; box-shadow:0 8px 24px rgba(0,0,0,0.12);
+            border-radius:0 0 12px 12px; opacity:0; visibility:hidden;
+            transform:translateY(-8px); transition:var(--transition); z-index:100; list-style:none;
+        }
+        .nav-menu li:hover .nav-dropdown { opacity:1; visibility:visible; transform:translateY(0); }
+        .nav-dropdown li a {
+            display:flex; align-items:center; gap:10px;
+            padding:12px 20px; font-size:0.88rem; color:var(--text); transition:var(--transition);
+        }
+        .nav-dropdown li a:hover { background:var(--bg-light); color:var(--product); padding-left:28px; }
+        .nav-dropdown .dd-dot {
+            width:8px; height:8px; border-radius:50%; flex-shrink:0;
+        }
+        .mobile-toggle {
+            display:none; background:none; border:none; font-size:1.6rem;
+            cursor:pointer; padding:16px; color:var(--text);
+        }
+
+        /* ===== PRODUCT HERO ===== */
+        .product-hero {
+            position:relative; min-height:400px; display:flex; align-items:center;
+            background: linear-gradient(135deg, #3a7d28, #408540, #5cb83c);
+            overflow:hidden;
+        }
+        .product-hero::before {
+            content:''; position:absolute; inset:0;
+            background: radial-gradient(ellipse at 30% 50%, rgba(255,255,255,0.1) 0%, transparent 60%),
+                        radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 50%);
+        }
+        .product-hero-pattern {
+            position:absolute; inset:0; opacity:0.05;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .product-hero .container {
+            position:relative; z-index:2; text-align:center; padding:80px 30px;
+        }
+        .product-hero-icon {
+            width:100px; height:100px; border-radius:24px;
+            background:rgba(255,255,255,0.15); backdrop-filter:blur(8px);
+            border:2px solid rgba(255,255,255,0.25);
+            display:flex; align-items:center; justify-content:center;
+            margin:0 auto 28px; font-size:2.8rem; color:#fff;
+        }
+        .product-hero h1 {
+            font-size:3.2rem; font-weight:800; color:#fff; margin-bottom:12px; letter-spacing:-1px;
+        }
+        .product-hero-subtitle {
+            font-size:1.2rem; color:rgba(255,255,255,0.9); font-weight:400;
+            letter-spacing:0.5px; margin-bottom:20px;
+        }
+        .product-hero-divider {
+            width:80px; height:3px; background:rgba(255,255,255,0.5); margin:0 auto 24px; border-radius:2px;
+        }
+        .product-hero p {
+            font-size:1.1rem; color:rgba(255,255,255,0.85); max-width:640px;
+            margin:0 auto; font-weight:300; line-height:1.8;
+        }
+        .product-hero-breadcrumb {
+            position:absolute; top:24px; left:30px; display:flex; align-items:center; gap:8px;
+            font-size:0.85rem; color:rgba(255,255,255,0.7); z-index:3;
+        }
+        .product-hero-breadcrumb a { color:rgba(255,255,255,0.7); transition:color 0.2s; }
+        .product-hero-breadcrumb a:hover { color:#fff; }
+
+        /* ===== BTN ===== */
+        .btn {
+            display:inline-flex; align-items:center; gap:10px;
+            padding:14px 32px; border-radius:10px;
+            font-family:'Archivo',sans-serif; font-weight:600; font-size:0.95rem;
+            transition:var(--transition); border:2px solid transparent; cursor:pointer;
+        }
+        .btn-product { background:var(--product); color:#fff; border-color:var(--product); }
+        .btn-product:hover { background:#fff; color:var(--product); }
+        .btn-outline-product { background:transparent; color:var(--product); border-color:var(--product); }
+        .btn-outline-product:hover { background:var(--product); color:#fff; }
+        .btn-green { background:var(--primary-light); color:#fff; border-color:var(--primary-light); }
+        .btn-green:hover { background:#fff; color:var(--primary); }
+        .btn-white { background:transparent; color:#fff; border-color:rgba(255,255,255,0.4); }
+        .btn-white:hover { background:#fff; color:var(--product); border-color:#fff; }
+
+        /* ===== SECTIONS ===== */
+        section { padding:80px 0; }
+        .section-header { text-align:center; margin-bottom:56px; }
+        .section-header h2 { font-size:2.4rem; font-weight:700; color:var(--dark); margin-bottom:8px; }
+        .section-divider { width:60px; height:3px; background:var(--product); margin:16px auto 20px; border-radius:2px; }
+        .section-header p { color:var(--text-light); font-size:1.05rem; max-width:640px; margin:0 auto; }
+
+        /* ===== OVERVIEW ===== */
+        .overview { background:var(--bg); }
+        .overview-content {
+            display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center;
+        }
+        .overview-text h2 {
+            font-size:2rem; font-weight:700; color:var(--dark); margin-bottom:20px;
+        }
+        .overview-text h2 span { color:var(--product); }
+        .overview-text p {
+            color:var(--text-light); font-size:1rem; line-height:1.9; margin-bottom:16px;
+        }
+        .overview-stats {
+            display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:32px;
+        }
+        .overview-stat {
+            background:var(--product-light); border-radius:16px; padding:24px 20px; text-align:center;
+        }
+        .overview-stat .stat-number {
+            font-family:'Archivo',sans-serif; font-size:2rem; font-weight:800; color:var(--product);
+        }
+        .overview-stat .stat-label {
+            font-size:0.85rem; color:var(--text-light); margin-top:4px;
+        }
+        .overview-visual {
+            display:flex; flex-direction:column; gap:20px;
+        }
+        .overview-visual-card {
+            background:var(--bg-light); border:1px solid var(--border); border-radius:var(--radius);
+            padding:28px; display:flex; align-items:flex-start; gap:18px;
+            transition:var(--transition);
+        }
+        .overview-visual-card:hover { border-color:var(--product); transform:translateX(6px); }
+        .overview-visual-card .ov-icon {
+            width:48px; height:48px; border-radius:12px; flex-shrink:0;
+            background:var(--product-light); color:var(--product);
+            display:flex; align-items:center; justify-content:center; font-size:1.2rem;
+        }
+        .overview-visual-card h4 { font-size:1rem; margin-bottom:6px; color:var(--dark); }
+        .overview-visual-card p { font-size:0.88rem; color:var(--text-light); line-height:1.6; }
+
+        /* ===== FEATURES ===== */
+        .features { background:var(--bg-light); }
+        .features-grid {
+            display:grid; grid-template-columns:repeat(4, 1fr); gap:24px;
+        }
+        .feature-card {
+            background:#fff; border:1px solid var(--border); border-radius:var(--radius);
+            padding:32px 24px; text-align:center; transition:var(--transition);
+            position:relative; overflow:hidden;
+        }
+        .feature-card::before {
+            content:''; position:absolute; top:0; left:0; right:0; height:4px;
+            background:var(--product); opacity:0; transition:opacity 0.3s;
+        }
+        .feature-card:hover { box-shadow:var(--shadow-hover); transform:translateY(-6px); }
+        .feature-card:hover::before { opacity:1; }
+        .feature-icon {
+            width:64px; height:64px; border-radius:16px; margin:0 auto 18px;
+            background:var(--product-light); color:var(--product);
+            display:flex; align-items:center; justify-content:center;
+            font-size:1.5rem; transition:var(--transition);
+        }
+        .feature-card:hover .feature-icon { transform:scale(1.1); }
+        .feature-card h3 { font-size:1.05rem; margin-bottom:10px; color:var(--dark); }
+        .feature-card p { color:var(--text-light); font-size:0.88rem; line-height:1.6; }
+
+        /* ===== WHY KOHA ===== */
+        .why-product { background:var(--bg); }
+        .why-product-grid {
+            display:grid; grid-template-columns:repeat(2, 1fr); gap:32px;
+        }
+        .why-product-card {
+            background:var(--bg-light); border-radius:var(--radius); padding:40px 32px;
+            display:flex; align-items:flex-start; gap:24px;
+            transition:var(--transition); border:1px solid transparent;
+        }
+        .why-product-card:hover { border-color:var(--product); transform:translateY(-4px); box-shadow:var(--shadow); }
+        .why-product-icon {
+            width:64px; height:64px; border-radius:50%; flex-shrink:0;
+            background:var(--product); color:#fff;
+            display:flex; align-items:center; justify-content:center;
+            font-size:1.4rem;
+        }
+        .why-product-card h3 { font-size:1.15rem; margin-bottom:10px; color:var(--dark); }
+        .why-product-card p { color:var(--text-light); font-size:0.92rem; line-height:1.7; }
+
+        /* ===== CTA ===== */
+        .cta-section {
+            background: linear-gradient(135deg, var(--teal-dark), var(--product-dark));
+            color:#fff; text-align:center; padding:80px 0;
+        }
+        .cta-section h2 { font-size:2.2rem; margin-bottom:16px; }
+        .cta-section p { font-size:1.1rem; opacity:0.9; max-width:600px; margin:0 auto 36px; }
+        .cta-buttons { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+        .cta-section .btn-green { background:#fff; color:var(--product); border-color:#fff; }
+        .cta-section .btn-green:hover { background:transparent; color:#fff; border-color:#fff; }
+
+        /* ===== FOOTER ===== */
+        footer { background:#111; color:#ccc; padding:60px 0 0; }
+        .footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:40px; padding-bottom:40px; }
+        .footer-col h4 {
+            color:#fff; font-family:'Archivo',sans-serif; font-size:1rem;
+            margin-bottom:20px; padding-bottom:12px; position:relative;
+        }
+        .footer-col h4::after {
+            content:''; position:absolute; bottom:0; left:0; width:30px; height:2px; background:var(--primary-light);
+        }
+        .footer-about p { font-size:0.88rem; line-height:1.8; margin-bottom:20px; color:#999; }
+        .footer-contact-item {
+            display:flex; align-items:flex-start; gap:12px; margin-bottom:12px; font-size:0.88rem; color:#999;
+        }
+        .footer-contact-item i { color:var(--primary-light); margin-top:4px; width:16px; text-align:center; }
+        .footer-contact-item a { color:#999; transition:color 0.2s; }
+        .footer-contact-item a:hover { color:var(--primary-light); }
+        .footer-links { list-style:none; }
+        .footer-links li { margin-bottom:8px; }
+        .footer-links li a {
+            color:#999; font-size:0.88rem; transition:var(--transition);
+            display:flex; align-items:center; gap:6px;
+        }
+        .footer-links li a::before { content:'\203A'; color:var(--primary-light); font-weight:700; }
+        .footer-links li a:hover { color:var(--primary-light); padding-left:4px; }
+        .footer-bottom {
+            border-top:1px solid rgba(255,255,255,0.08); padding:20px 0;
+            display:flex; justify-content:space-between; align-items:center;
+            font-size:0.8rem; color:#555; flex-wrap:wrap; gap:12px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media(max-width:1024px) {
+            .features-grid { grid-template-columns:repeat(2, 1fr); }
+            .overview-content { grid-template-columns:1fr; gap:40px; }
+            .why-product-grid { grid-template-columns:1fr; }
+            .footer-grid { grid-template-columns:1fr 1fr; }
+        }
+        @media(max-width:768px) {
+            .header-top .container { flex-direction:column; gap:10px; padding:14px 20px; }
+            .header-contact { gap:16px; font-size:0.8rem; }
+            .nav-menu {
+                display:none; flex-direction:column; width:100%; background:#fff;
+                position:absolute; top:100%; left:0; box-shadow:0 8px 20px rgba(0,0,0,0.1);
+            }
+            .nav-menu.active { display:flex; }
+            .nav-menu > li > a { padding:14px 24px; border-bottom:1px solid var(--border); }
+            .nav-dropdown { position:static; opacity:1; visibility:visible; transform:none; box-shadow:none; }
+            .mobile-toggle { display:block; }
+            .main-nav .container { justify-content:flex-end; }
+            .product-hero { min-height:auto; }
+            .product-hero h1 { font-size:2.2rem; }
+            .product-hero-breadcrumb { position:static; margin-bottom:16px; justify-content:center; }
+            .product-hero .container { padding:50px 30px 60px; }
+            .section-header h2 { font-size:1.8rem; }
+            .features-grid { grid-template-columns:1fr; }
+            .overview-stats { grid-template-columns:1fr 1fr; }
+            .footer-grid { grid-template-columns:1fr; }
+            .footer-bottom { flex-direction:column; text-align:center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div class="header-top">
+        <div class="container">
+            <a href="index.html" class="header-logo">
+                <img src="https://static.wixstatic.com/media/ef08d3_aa38de349e884624ac5924a9ed006f8d~mv2.png/v1/fill/w_282,h_60,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/ef08d3_aa38de349e884624ac5924a9ed006f8d~mv2.png" alt="MirAkıl Logo">
+            </a>
+            <div class="header-contact">
+                <a href="tel:+903129112956"><i class="fas fa-phone"></i> +90 312 911 29 56</a>
+                <a href="mailto:info@mirakil.com"><i class="fas fa-envelope"></i> info@mirakil.com</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAV -->
+    <nav class="main-nav">
+        <div class="container">
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Ana Sayfa</a></li>
+                <li>
+                    <a href="#" class="active">Ürünler <i class="fas fa-chevron-down" style="font-size:0.6rem;margin-left:4px;"></i></a>
+                    <ul class="nav-dropdown">
+                        <li><a href="koha.html"><span class="dd-dot" style="background:#408540;"></span> Koha</a></li>
+                        <li><a href="vufind.html"><span class="dd-dot" style="background:#619144;"></span> VuFind</a></li>
+                        <li><a href="dspace.html"><span class="dd-dot" style="background:#44a340;"></span> DSpace</a></li>
+                        <li><a href="omeka.html"><span class="dd-dot" style="background:#CD5C28;"></span> Omeka</a></li>
+                        <li><a href="moodle.html"><span class="dd-dot" style="background:#F98012;"></span> Moodle</a></li>
+                        <li><a href="collectiveaccess.html"><span class="dd-dot" style="background:#5b7e3d;"></span> CollectiveAccess</a></li>
+                        <li><a href="ojs.html"><span class="dd-dot" style="background:#002B5C;"></span> OJS</a></li>
+                        <li><a href="indico.html"><span class="dd-dot" style="background:#29ABE2;"></span> Indico</a></li>
+                    </ul>
+                </li>
+                <li><a href="index.html#services">Hizmetler</a></li>
+                <li><a href="index.html#why-us">Hakkımızda</a></li>
+                <li><a href="index.html#faq">SSS</a></li>
+                <li><a href="#contact">İletişim</a></li>
+            </ul>
+            <button class="mobile-toggle" onclick="document.getElementById('navMenu').classList.toggle('active')" aria-label="Menü">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- PRODUCT HERO -->
+    <section class="product-hero">
+        <div class="product-hero-pattern"></div>
+        <div class="container">
+            <div class="product-hero-breadcrumb">
+                <a href="index.html">Ana Sayfa</a>
+                <i class="fas fa-chevron-right" style="font-size:0.6rem;"></i>
+                <a href="index.html#products">Ürünler</a>
+                <i class="fas fa-chevron-right" style="font-size:0.6rem;"></i>
+                <span style="color:#fff;">Koha</span>
+            </div>
+            <div style="margin-bottom:16px;font-family:'Archivo',sans-serif;font-size:2.8rem;font-weight:800;color:#fff;letter-spacing:2px;text-shadow:0 2px 10px rgba(0,0,0,0.3);">KOHA</div>
+            <div class="product-hero-icon">
+                <i class="fas fa-book-open"></i>
+            </div>
+            <h1>Koha</h1>
+            <div class="product-hero-subtitle">Entegre Kütüphane Otomasyon Sistemi</div>
+            <div class="product-hero-divider"></div>
+            <p>Kütüphaneler için entegre bir kütüphane otomasyon sistemidir. Dünyanın en yaygın kullanılan açık kaynaklı kütüphane yönetim yazılımı ile koleksiyonlarınızı profesyonelce yönetin.</p>
+        </div>
+    </section>
+
+    <!-- GENEL BAKIŞ -->
+    <section class="overview" id="overview">
+        <div class="container">
+            <div class="overview-content">
+                <div class="overview-text">
+                    <h2><span>Koha</span> Hakkında Genel Bakış</h2>
+                    <p>Koha, 1999 yılında Yeni Zelanda'da geliştirilen ve günümüzde dünya genelinde binlerce kütüphane tarafından kullanılan, tamamen açık kaynaklı bir entegre kütüphane otomasyon sistemidir (ILS). GNU Genel Kamu Lisansı (GPL) altında dağıtılan Koha, lisans maliyeti olmaksızın kapsamlı kütüphane yönetim özellikleri sunar.</p>
+                    <p>MARC21 ve UNIMARC standartlarını tam olarak destekleyen Koha, kataloglama, ödünç verme, süreli yayın takibi, kullanıcı yönetimi ve çevrimiçi halk erişim kataloğu (OPAC) gibi temel kütüphane işlevlerinin tamamını karşılar. Web tabanlı arayüzü sayesinde herhangi bir tarayıcıdan erişilebilir ve yönetilebilir.</p>
+                    <p>Koha, küçük halk kütüphanelerinden büyük üniversite kütüphanelerine, okul kütüphanelerinden özel koleksiyonlara kadar her ölçekte kütüphaneye uyum sağlayabilen esnek yapısıyla öne çıkar. Aktif ve geniş bir geliştirici topluluğu ile sürekli güncellenmekte ve iyileştirilmektedir.</p>
+                    <div class="overview-stats">
+                        <div class="overview-stat">
+                            <div class="stat-number">20.000+</div>
+                            <div class="stat-label">Dünya Genelinde Kütüphane</div>
+                        </div>
+                        <div class="overview-stat">
+                            <div class="stat-number">25+</div>
+                            <div class="stat-label">Yıllık Geliştirme Deneyimi</div>
+                        </div>
+                        <div class="overview-stat">
+                            <div class="stat-number">100+</div>
+                            <div class="stat-label">Desteklenen Dil</div>
+                        </div>
+                        <div class="overview-stat">
+                            <div class="stat-number">GPL</div>
+                            <div class="stat-label">Açık Kaynak Lisansı</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="overview-visual">
+                    <div class="overview-visual-card">
+                        <div class="ov-icon"><i class="fas fa-university"></i></div>
+                        <div>
+                            <h4>Her Ölçekte Kütüphane</h4>
+                            <p>Halk, üniversite, okul ve özel kütüphaneler için ölçeklenebilir çözüm sunar.</p>
+                        </div>
+                    </div>
+                    <div class="overview-visual-card">
+                        <div class="ov-icon"><i class="fas fa-globe"></i></div>
+                        <div>
+                            <h4>Web Tabanlı Erişim</h4>
+                            <p>Tamamen web tabanlı arayüzü ile her yerden, her cihazdan erişim imkânı sağlar.</p>
+                        </div>
+                    </div>
+                    <div class="overview-visual-card">
+                        <div class="ov-icon"><i class="fas fa-code-branch"></i></div>
+                        <div>
+                            <h4>Aktif Geliştirici Topluluğu</h4>
+                            <p>Dünya genelinde yüzlerce geliştirici tarafından sürekli güncellenir ve iyileştirilir.</p>
+                        </div>
+                    </div>
+                    <div class="overview-visual-card">
+                        <div class="ov-icon"><i class="fas fa-plug"></i></div>
+                        <div>
+                            <h4>Geniş Entegrasyon</h4>
+                            <p>Z39.50, SRU/SRW, OAI-PMH ve REST API ile diğer sistemlerle entegre olur.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ÖZELLİKLER -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Özellikler</h2>
+                <div class="section-divider"></div>
+                <p>Koha, kütüphane yönetiminin tüm alanlarını kapsayan zengin özellik seti ile eksiksiz bir otomasyon çözümü sunar.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-tags"></i></div>
+                    <h3>Kataloglama ve MARC21</h3>
+                    <p>MARC21 ve UNIMARC standartlarında tam uyumlu kataloglama. Şablon desteği, yetki kayıtları ve toplu veri aktarımı ile hızlı ve doğru bibliyografik kayıt oluşturma.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-exchange-alt"></i></div>
+                    <h3>Ödünç Verme ve İade</h3>
+                    <p>Esnek ödünç verme kuralları, otomatik ceza hesaplama, yenileme ve rezervasyon yönetimi. Barkod ve RFID entegrasyonu ile hızlı işlem yapabilme imkânı.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-search"></i></div>
+                    <h3>OPAC Çevrimiçi Katalog</h3>
+                    <p>Kullanıcı dostu çevrimiçi halk erişim kataloğu. Gelişmiş arama, facet filtreleme, kitap kapağı görselleri, yorum ve puanlama özellikleri ile zengin kullanıcı deneyimi.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-newspaper"></i></div>
+                    <h3>Süreli Yayın Yönetimi</h3>
+                    <p>Dergi ve gazete abonelik takibi, sayı numaralama şablonları, eksik sayı kontrolü ve talep yönetimi. Süreli yayın koleksiyonlarının eksiksiz yönetimi.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-chart-bar"></i></div>
+                    <h3>Raporlama ve İstatistik</h3>
+                    <p>Önceden tanımlı ve özel SQL raporları oluşturma. Ödünç verme, koleksiyon ve kullanıcı istatistikleri ile kütüphane performansını detaylı olarak izleme.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-network-wired"></i></div>
+                    <h3>Z39.50/SRU Protokolleri</h3>
+                    <p>Z39.50 ve SRU/SRW protokolleri ile ulusal ve uluslararası kütüphane veritabanlarından kopya kataloglama. Kütüphanelerarası veri paylaşımı ve işbirliği.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-language"></i></div>
+                    <h3>Çok Dilli Arayüz</h3>
+                    <p>Türkçe dâhil 100'den fazla dilde kullanılabilir arayüz. Unicode desteği ile farklı alfabe ve karakter setlerinde sorunsuz çalışma. RTL dil desteği.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-users-cog"></i></div>
+                    <h3>Kullanıcı Yönetimi</h3>
+                    <p>Kapsamlı üye kayıt ve yönetim sistemi. Kullanıcı kategorileri, yetkilendirme, mesaj bildirimleri ve kendi hesap yönetimi ile verimli üye hizmetleri.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEDEN KOHA -->
+    <section class="why-product" id="why-koha">
+        <div class="container">
+            <div class="section-header">
+                <h2>Neden Koha?</h2>
+                <div class="section-divider"></div>
+                <p>Koha'yı tercih etmeniz için pek çok güçlü neden var. İşte kütüphaneniz için Koha'yı öne çıkaran avantajlar.</p>
+            </div>
+            <div class="why-product-grid">
+                <div class="why-product-card">
+                    <div class="why-product-icon"><i class="fas fa-lock-open"></i></div>
+                    <div>
+                        <h3>Sıfır Lisans Maliyeti</h3>
+                        <p>Koha, GNU GPL lisansı ile tamamen ücretsiz olarak dağıtılır. Ticari kütüphane otomasyon sistemlerinin aksine hiçbir lisans ücreti ödemezsiniz. Bütçenizi yazılım lisansı yerine koleksiyon geliştirme ve hizmet kalitesini artırmaya ayırabilirsiniz.</p>
+                    </div>
+                </div>
+                <div class="why-product-card">
+                    <div class="why-product-icon"><i class="fas fa-cogs"></i></div>
+                    <div>
+                        <h3>Tam Özelleştirilebilirlik</h3>
+                        <p>Açık kaynak yapısı sayesinde Koha, kurumunuzun ihtiyaçlarına göre tamamen özelleştirilebilir. Arayüz tasarımından iş akışlarına, raporlardan bildirim şablonlarına kadar her detayı kütüphanenize uyarlayabilirsiniz.</p>
+                    </div>
+                </div>
+                <div class="why-product-card">
+                    <div class="why-product-icon"><i class="fas fa-shield-alt"></i></div>
+                    <div>
+                        <h3>Bağımsızlık ve Güvenlik</h3>
+                        <p>Verileriniz tamamen sizin kontrolünüzde kalır. Herhangi bir firmaya bağımlı kalmadan sisteminizi yönetebilir, istediğiniz zaman hizmet sağlayıcınızı değiştirebilirsiniz. Açık kaynak topluluğu güvenlik açıklarını hızla tespit eder ve giderir.</p>
+                    </div>
+                </div>
+                <div class="why-product-card">
+                    <div class="why-product-icon"><i class="fas fa-certificate"></i></div>
+                    <div>
+                        <h3>Uluslararası Standart Uyumu</h3>
+                        <p>MARC21, UNIMARC, Z39.50, SRU/SRW, OAI-PMH, Dublin Core ve EDIFACT gibi uluslararası kütüphane standartlarına tam uyum sağlar. Bu sayede diğer kütüphane sistemleri ve veritabanları ile sorunsuz entegrasyon mümkündür.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section" id="contact">
+        <div class="container">
+            <h2>Koha ile Kütüphanenizi Dijitalleştirin</h2>
+            <p>Koha kurulumu, özelleştirme ve eğitim hizmetlerimiz hakkında bilgi almak için bizimle iletişime geçin.</p>
+            <div class="cta-buttons">
+                <a href="tel:+903129112956" class="btn btn-green"><i class="fas fa-phone"></i> Hemen Arayın: +90 312 911 29 56</a>
+                <a href="mailto:info@mirakil.com" class="btn btn-white"><i class="fas fa-envelope"></i> E-posta Gönderin</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col footer-about">
+                    <h4>MirAkıl Veri İşleme</h4>
+                    <p>Müze, arşiv ve kütüphane yönetim sistemleri alanında yazılım, donanım, eğitim ve danışmanlık hizmetleri sunan teknoloji şirketi.</p>
+                    <div class="footer-contact-item"><i class="fas fa-map-marker-alt"></i><span>2661/1. Sokak, Ankara 06810, Türkiye</span></div>
+                    <div class="footer-contact-item"><i class="fas fa-phone"></i><a href="tel:+903129112956">+90 312 911 29 56</a></div>
+                    <div class="footer-contact-item"><i class="fas fa-envelope"></i><a href="mailto:info@mirakil.com">info@mirakil.com</a></div>
+                </div>
+                <div class="footer-col">
+                    <h4>Ürünler</h4>
+                    <ul class="footer-links">
+                        <li><a href="koha.html">Koha</a></li>
+                        <li><a href="vufind.html">VuFind</a></li>
+                        <li><a href="dspace.html">DSpace</a></li>
+                        <li><a href="omeka.html">Omeka</a></li>
+                        <li><a href="moodle.html">Moodle</a></li>
+                        <li><a href="collectiveaccess.html">CollectiveAccess</a></li>
+                        <li><a href="ojs.html">OJS</a></li>
+                        <li><a href="indico.html">Indico</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Hizmetler</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html#services">Kurulum ve Yapılandırma</a></li>
+                        <li><a href="index.html#services">Yazılım Geliştirme</a></li>
+                        <li><a href="index.html#services">Eğitim ve Danışmanlık</a></li>
+                        <li><a href="index.html#services">Hosting ve Bakım</a></li>
+                        <li><a href="index.html#services">Teknik Destek</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Hızlı Erişim</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Ana Sayfa</a></li>
+                        <li><a href="index.html#products">Ürünler</a></li>
+                        <li><a href="index.html#services">Hizmetler</a></li>
+                        <li><a href="index.html#why-us">Hakkımızda</a></li>
+                        <li><a href="index.html#faq">SSS</a></li>
+                        <li><a href="#contact">İletişim</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 MirAkıl Veri İşleme Yazılım Donanım Eğitim Danışmanlık Tic. Ltd. Şti. Tüm hakları saklıdır.</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+        a.addEventListener('click',function(e){
+            const t=document.querySelector(this.getAttribute('href'));
+            if(t){e.preventDefault();const h=document.querySelector('.main-nav').offsetHeight;
+            window.scrollTo({top:t.offsetTop-h,behavior:'smooth'});
+            document.getElementById('navMenu').classList.remove('active');}
+        });
+    });
+    </script>
+</body>
+</html>

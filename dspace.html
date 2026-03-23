@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSpace - Dijital Arşiv ve Kurumsal İçerik Yönetim Sistemi | MirAkıl</title>
+    <meta name="description" content="DSpace dijital arşiv ve kurumsal içerik yönetim sistemi. Akademik kurumlar için açık erişim arşivi, Dublin Core metadata, OAI-PMH protokolü desteği.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --brand: #92c644;
+            --brand-light: #a8d65a;
+            --brand-dark: #6e9a2e;
+            --brand-bg: #f2f8e6;
+            --primary: #2E7C01;
+            --primary-light: #45BA01;
+            --primary-dark: #1a5a00;
+            --teal: #709CA5;
+            --teal-dark: #253437;
+            --dark: #1a1a1a;
+            --text: #333;
+            --text-light: #666;
+            --bg: #fff;
+            --bg-light: #f7f8f6;
+            --border: #e0e0e0;
+            --radius: 20px;
+            --shadow: 0 5px 20px rgba(0,0,0,0.08);
+            --shadow-hover: 0 15px 40px rgba(0,0,0,0.12);
+            --transition: all 0.3s ease;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+        body { font-family:'Lato',sans-serif; color:var(--text); line-height:1.7; background:var(--bg); }
+        h1,h2,h3,h4,h5 { font-family:'Archivo',sans-serif; line-height:1.3; }
+        a { text-decoration:none; color:inherit; }
+        .container { max-width:1200px; margin:0 auto; padding:0 30px; }
+
+        /* ===== HEADER ===== */
+        .header-top {
+            background: #fff;
+            padding: 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .header-top .container {
+            display:flex; justify-content:space-between; align-items:center; min-height:64px;
+        }
+        .header-logo { display:flex; align-items:center; gap:14px; }
+        .header-logo img {
+            height: 50px; width: auto;
+        }
+        .header-logo-text {
+            color:#fff; font-family:'Archivo',sans-serif; font-weight:700; font-size:1.6rem;
+        }
+        .header-logo-sub {
+            color: rgba(255,255,255,0.7); font-size:0.7rem; text-transform:uppercase; letter-spacing:1.5px;
+        }
+        .header-contact { display:flex; align-items:center; gap:28px; color:#333; font-size:0.9rem; }
+        .header-contact a { color:#333; display:flex; align-items:center; gap:8px; transition:opacity 0.2s; }
+        .header-contact a:hover { color:#2E7C01; }
+        .header-contact i { color:#2E7C01; }
+
+        /* NAV */
+        .main-nav {
+            background:#fff; border-bottom:1px solid var(--border);
+            position:sticky; top:0; z-index:1000;
+            box-shadow:0 2px 8px rgba(0,0,0,0.06);
+        }
+        .main-nav .container { display:flex; justify-content:center; align-items:center; }
+        .nav-menu { display:flex; list-style:none; }
+        .nav-menu li { position:relative; }
+        .nav-menu > li > a {
+            display:block; padding:18px 22px;
+            font-family:'Archivo',sans-serif; font-weight:600; font-size:0.9rem;
+            color:var(--text); text-transform:uppercase; letter-spacing:0.5px;
+            transition:var(--transition); border-bottom:3px solid transparent;
+        }
+        .nav-menu > li > a:hover, .nav-menu > li > a.active {
+            color:var(--brand); border-bottom-color:var(--brand);
+        }
+        .nav-dropdown {
+            position:absolute; top:100%; left:0; background:#fff;
+            min-width:240px; box-shadow:0 8px 24px rgba(0,0,0,0.12);
+            border-radius:0 0 12px 12px; opacity:0; visibility:hidden;
+            transform:translateY(-8px); transition:var(--transition); z-index:100; list-style:none;
+        }
+        .nav-menu li:hover .nav-dropdown { opacity:1; visibility:visible; transform:translateY(0); }
+        .nav-dropdown li a {
+            display:flex; align-items:center; gap:10px;
+            padding:12px 20px; font-size:0.88rem; color:var(--text); transition:var(--transition);
+        }
+        .nav-dropdown li a:hover { background:var(--bg-light); color:var(--brand); padding-left:28px; }
+        .nav-dropdown .dd-dot {
+            width:8px; height:8px; border-radius:50%; flex-shrink:0;
+        }
+        .mobile-toggle {
+            display:none; background:none; border:none; font-size:1.6rem;
+            cursor:pointer; padding:16px; color:var(--text);
+        }
+
+        /* ===== HERO ===== */
+        .product-hero {
+            background: linear-gradient(135deg, var(--brand-dark), var(--brand), var(--brand-light));
+            padding: 80px 0;
+            min-height: 400px;
+            text-align: center;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        .product-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .product-hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .product-hero .container { position: relative; z-index: 2; }
+        .product-hero-icon {
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.25);
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 28px;
+            font-size: 2.8rem;
+        }
+        .product-hero h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+        }
+        .product-hero .subtitle {
+            font-size: 1.3rem;
+            font-weight: 300;
+            opacity: 0.92;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* BTN */
+        .btn {
+            display:inline-flex; align-items:center; gap:10px;
+            padding:14px 32px; border-radius:10px;
+            font-family:'Archivo',sans-serif; font-weight:600; font-size:0.95rem;
+            transition:var(--transition); border:2px solid transparent; cursor:pointer;
+        }
+        .btn-brand { background:var(--brand); color:#fff; border-color:var(--brand); }
+        .btn-brand:hover { background:#fff; color:var(--brand); }
+        .btn-outline-brand { background:transparent; color:var(--brand); border-color:var(--brand); }
+        .btn-outline-brand:hover { background:var(--brand); color:#fff; }
+        .btn-white { background:#fff; color:var(--brand); border-color:#fff; }
+        .btn-white:hover { background:transparent; color:#fff; border-color:#fff; }
+        .btn-green { background:var(--brand); color:#fff; border-color:var(--brand); }
+        .btn-green:hover { background:#fff; color:var(--brand); }
+
+        /* ===== SECTIONS ===== */
+        section { padding:80px 0; }
+        .section-header { text-align:center; margin-bottom:56px; }
+        .section-header h2 { font-size:2.4rem; font-weight:700; color:var(--dark); margin-bottom:8px; }
+        .section-divider { width:60px; height:3px; background:var(--brand); margin:16px auto 20px; border-radius:2px; }
+        .section-header p { color:var(--text-light); font-size:1.05rem; max-width:640px; margin:0 auto; }
+
+        /* ===== OVERVIEW ===== */
+        .overview { background:var(--bg); }
+        .overview-content {
+            max-width: 880px;
+            margin: 0 auto;
+        }
+        .overview-content p {
+            font-size: 1.08rem;
+            color: var(--text-light);
+            line-height: 1.9;
+            margin-bottom: 20px;
+        }
+        .overview-content p:last-child { margin-bottom: 0; }
+        .overview-highlight {
+            background: var(--brand-bg);
+            border-left: 4px solid var(--brand);
+            padding: 24px 28px;
+            border-radius: 0 12px 12px 0;
+            margin: 32px 0;
+            font-size: 1.02rem;
+            color: var(--text);
+            line-height: 1.8;
+        }
+
+        /* ===== FEATURES ===== */
+        .features { background: var(--bg-light); }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+        .feature-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px 24px;
+            text-align: center;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: var(--brand);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .feature-card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-6px);
+        }
+        .feature-card:hover::before { opacity: 1; }
+        .feature-icon {
+            width: 68px;
+            height: 68px;
+            background: var(--brand-bg);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 18px;
+            font-size: 1.6rem;
+            color: var(--brand);
+            transition: var(--transition);
+        }
+        .feature-card:hover .feature-icon {
+            background: var(--brand);
+            color: #fff;
+            transform: scale(1.08);
+        }
+        .feature-card h3 {
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        .feature-card p {
+            font-size: 0.88rem;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* ===== WHY SECTION ===== */
+        .why-product { background: var(--bg); }
+        .why-product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+        }
+        .why-product-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 36px 28px;
+            text-align: center;
+            transition: var(--transition);
+        }
+        .why-product-card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-4px);
+            border-color: var(--brand);
+        }
+        .why-product-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: var(--brand);
+        }
+        .why-product-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        .why-product-card p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        /* ===== CTA ===== */
+        .cta-section {
+            background: linear-gradient(135deg, var(--teal-dark), var(--primary-dark));
+            color:#fff; text-align:center; padding:80px 0;
+        }
+        .cta-section h2 { font-size:2.2rem; margin-bottom:16px; }
+        .cta-section p { font-size:1.1rem; opacity:0.9; max-width:600px; margin:0 auto 36px; }
+        .cta-buttons { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+        .cta-section .btn-white { background:transparent; color:#fff; border-color:rgba(255,255,255,0.4); }
+        .cta-section .btn-white:hover { background:#fff; color:var(--brand); border-color:#fff; }
+
+        /* ===== FOOTER ===== */
+        footer { background:#111; color:#ccc; padding:60px 0 0; }
+        .footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:40px; padding-bottom:40px; }
+        .footer-col h4 {
+            color:#fff; font-family:'Archivo',sans-serif; font-size:1rem;
+            margin-bottom:20px; padding-bottom:12px; position:relative;
+        }
+        .footer-col h4::after {
+            content:''; position:absolute; bottom:0; left:0; width:30px; height:2px; background:var(--primary-light);
+        }
+        .footer-about p { font-size:0.88rem; line-height:1.8; margin-bottom:20px; color:#999; }
+        .footer-contact-item {
+            display:flex; align-items:flex-start; gap:12px; margin-bottom:12px; font-size:0.88rem; color:#999;
+        }
+        .footer-contact-item i { color:var(--primary-light); margin-top:4px; width:16px; text-align:center; }
+        .footer-contact-item a { color:#999; transition:color 0.2s; }
+        .footer-contact-item a:hover { color:var(--primary-light); }
+        .footer-links { list-style:none; }
+        .footer-links li { margin-bottom:8px; }
+        .footer-links li a {
+            color:#999; font-size:0.88rem; transition:var(--transition);
+            display:flex; align-items:center; gap:6px;
+        }
+        .footer-links li a::before { content:'\203A'; color:var(--primary-light); font-weight:700; }
+        .footer-links li a:hover { color:var(--primary-light); padding-left:4px; }
+        .footer-bottom {
+            border-top:1px solid rgba(255,255,255,0.08); padding:20px 0;
+            display:flex; justify-content:space-between; align-items:center;
+            font-size:0.8rem; color:#555; flex-wrap:wrap; gap:12px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media(max-width:1024px) {
+            .features-grid { grid-template-columns:repeat(2,1fr); }
+            .why-product-grid { grid-template-columns:repeat(2,1fr); }
+            .footer-grid { grid-template-columns:1fr 1fr; }
+        }
+        @media(max-width:768px) {
+            .header-top .container { flex-direction:column; gap:10px; padding:14px 20px; }
+            .header-contact { gap:16px; font-size:0.8rem; }
+            .nav-menu {
+                display:none; flex-direction:column; width:100%; background:#fff;
+                position:absolute; top:100%; left:0; box-shadow:0 8px 20px rgba(0,0,0,0.1);
+            }
+            .nav-menu.active { display:flex; }
+            .nav-menu > li > a { padding:14px 24px; border-bottom:1px solid var(--border); }
+            .nav-dropdown { position:static; opacity:1; visibility:visible; transform:none; box-shadow:none; }
+            .mobile-toggle { display:block; }
+            .main-nav .container { justify-content:flex-end; }
+            .product-hero { padding:60px 0; }
+            .product-hero h1 { font-size:2.2rem; }
+            .product-hero .subtitle { font-size:1.05rem; }
+            .product-hero-icon { width:80px; height:80px; font-size:2.2rem; }
+            .section-header h2 { font-size:1.8rem; }
+            .features-grid { grid-template-columns:1fr; }
+            .why-product-grid { grid-template-columns:1fr; }
+            .footer-grid { grid-template-columns:1fr; }
+            .footer-bottom { flex-direction:column; text-align:center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div class="header-top">
+        <div class="container">
+            <a href="index.html" class="header-logo">
+                <img src="https://static.wixstatic.com/media/ef08d3_aa38de349e884624ac5924a9ed006f8d~mv2.png/v1/fill/w_282,h_60,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/ef08d3_aa38de349e884624ac5924a9ed006f8d~mv2.png" alt="MirAkıl Logo">
+            </a>
+            <div class="header-contact">
+                <a href="tel:+903129112956"><i class="fas fa-phone"></i> +90 312 911 29 56</a>
+                <a href="mailto:info@mirakil.com"><i class="fas fa-envelope"></i> info@mirakil.com</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAV -->
+    <nav class="main-nav">
+        <div class="container">
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Ana Sayfa</a></li>
+                <li>
+                    <a href="#" class="active">Ürünler <i class="fas fa-chevron-down" style="font-size:0.6rem;margin-left:4px;"></i></a>
+                    <ul class="nav-dropdown">
+                        <li><a href="koha.html"><span class="dd-dot" style="background:#4a9b32;"></span> Koha</a></li>
+                        <li><a href="vufind.html"><span class="dd-dot" style="background:#619144;"></span> VuFind</a></li>
+                        <li><a href="dspace.html"><span class="dd-dot" style="background:#92c644;"></span> DSpace</a></li>
+                        <li><a href="omeka.html"><span class="dd-dot" style="background:#CD5C28;"></span> Omeka</a></li>
+                        <li><a href="moodle.html"><span class="dd-dot" style="background:#F98012;"></span> Moodle</a></li>
+                        <li><a href="collectiveaccess.html"><span class="dd-dot" style="background:#5b7e3d;"></span> CollectiveAccess</a></li>
+                        <li><a href="ojs.html"><span class="dd-dot" style="background:#002B5C;"></span> OJS</a></li>
+                        <li><a href="indico.html"><span class="dd-dot" style="background:#29ABE2;"></span> Indico</a></li>
+                    </ul>
+                </li>
+                <li><a href="index.html#services">Hizmetler</a></li>
+                <li><a href="index.html#why-us">Hakkımızda</a></li>
+                <li><a href="index.html#faq">SSS</a></li>
+                <li><a href="#contact">İletişim</a></li>
+            </ul>
+            <button class="mobile-toggle" onclick="document.getElementById('navMenu').classList.toggle('active')" aria-label="Menü">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="product-hero">
+        <div class="container">
+            <div class="product-hero-icon">
+                <i class="fas fa-database"></i>
+            </div>
+            <div style="margin-bottom:20px;">
+                <svg width="200" height="70" viewBox="0 0 200 70" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M40 8 Q100 -8 160 8" stroke="#92c644" stroke-width="5" fill="none" stroke-linecap="round"/>
+                    <text x="100" y="52" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="bold" font-size="36" fill="#ffffff">DSpace</text>
+                </svg>
+            </div>
+            <h1>DSpace</h1>
+            <p class="subtitle">Dijital Arşiv ve Kurumsal İçerik Yönetim Sistemi</p>
+        </div>
+    </section>
+
+    <!-- GENEL BAKIŞ -->
+    <section class="overview" id="overview">
+        <div class="container">
+            <div class="section-header">
+                <h2>Genel Bakış</h2>
+                <div class="section-divider"></div>
+                <p>Akademik kurumlar için dijital arşiv ve kurumsal içerik yönetim sistemi sağlar.</p>
+            </div>
+            <div class="overview-content">
+                <p>DSpace, dünya genelinde 3.000'den fazla kurum tarafından kullanılan, açık kaynaklı bir dijital arşiv ve kurumsal içerik yönetim platformudur. MIT ve Hewlett-Packard iş birliğiyle geliştirilen DSpace, üniversiteler, araştırma merkezleri ve kamu kurumları tarafından akademik çıktıların dijital ortamda korunması, düzenlenmesi ve erişime sunulması amacıyla tercih edilmektedir.</p>
+
+                <div class="overview-highlight">
+                    <strong><i class="fas fa-lightbulb" style="color:var(--brand);margin-right:8px;"></i>Neden DSpace?</strong><br>
+                    DSpace, kurumsal açık erişim arşivi oluşturmak isteyen akademik kuruluşlar için en güvenilir ve en yaygın kullanılan çözümdür. Uluslararası metadata standartlarına tam uyumluluk, güçlü arama altyapısı ve esnek yapılandırma seçenekleri sunar.
+                </div>
+
+                <p>Tezler, makaleler, araştırma verileri, konferans bildirileri, teknik raporlar, görsel ve işitsel materyaller gibi her türlü dijital içerik DSpace ile arşivlenebilir. Sistem, Dublin Core metadata standardını temel alarak içeriklerin uluslararası düzeyde keşfedilebilir ve paylaşılabilir olmasını garanti eder.</p>
+
+                <p>DSpace, OAI-PMH (Open Archives Initiative Protocol for Metadata Harvesting) protokolünü destekleyerek kurumunuzun dijital arşivini Google Scholar, BASE, OpenAIRE ve diğer akademik arama motorları tarafından taranabilir hale getirir. DOI (Digital Object Identifier) entegrasyonu sayesinde her dijital nesneye benzersiz ve kalıcı bir tanımlayıcı atanabilir.</p>
+
+                <p>MirAkıl olarak DSpace'in kurulumu, yapılandırması, özelleştirilmesi, veri göçü ve sürekli teknik desteği konularında kapsamlı hizmetler sunuyoruz. Kurumunuzun ihtiyaçlarına uygun olarak DSpace altyapısını en verimli şekilde yapılandırıyoruz.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ÖZELLİKLER -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Özellikler</h2>
+                <div class="section-divider"></div>
+                <p>DSpace'in sunduğu güçlü özelliklerle dijital arşiv yönetimini en üst düzeye taşıyın.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-unlock-alt"></i></div>
+                    <h3>Kurumsal Açık Erişim Arşivi</h3>
+                    <p>Üniversite ve araştırma kurumlarının akademik çıktılarını açık erişime sunarak bilginin serbestçe paylaşılmasını sağlar.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-tags"></i></div>
+                    <h3>Dublin Core Metadata</h3>
+                    <p>Uluslararası Dublin Core metadata standardını destekleyerek dijital nesnelerin yapılandırılmış ve standart biçimde tanımlanmasını sağlar.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-exchange-alt"></i></div>
+                    <h3>OAI-PMH Protokolü</h3>
+                    <p>Açık Arşiv Girişimi protokolü ile metadata hasat desteği sunarak arşivinizin küresel akademik ağlarda keşfedilmesini sağlar.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-fingerprint"></i></div>
+                    <h3>DOI Tanımlayıcılar</h3>
+                    <p>Dijital Object Identifier entegrasyonu ile her dijital nesneye benzersiz, kalıcı ve uluslararası geçerlilikte tanımlayıcı atar.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-search-plus"></i></div>
+                    <h3>Gelişmiş Arama</h3>
+                    <p>Apache Solr tabanlı güçlü arama motoru ile tam metin arama, filtreleme ve fasetli navigasyon özellikleri sunar.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-chart-bar"></i></div>
+                    <h3>İstatistik ve Raporlama</h3>
+                    <p>İndirme sayıları, görüntülenme oranları ve kullanım analizleri ile arşivinizin etkisini detaylı olarak ölçümler.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-plug"></i></div>
+                    <h3>REST API</h3>
+                    <p>Kapsamlı REST API desteği ile DSpace'i diğer kurumsal sistemler, portallar ve uygulamalarla entegre edebilirsiniz.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-file-alt"></i></div>
+                    <h3>Çoklu Dosya Formatı Desteği</h3>
+                    <p>PDF, Word, görüntü, video, ses dosyaları ve veri setleri dahil olmak üzere her türlü dijital formatı destekler.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEDEN DSPACE -->
+    <section class="why-product" id="why">
+        <div class="container">
+            <div class="section-header">
+                <h2>Neden DSpace?</h2>
+                <div class="section-divider"></div>
+                <p>DSpace'i tercih etmeniz için en önemli nedenler.</p>
+            </div>
+            <div class="why-product-grid">
+                <div class="why-product-card">
+                    <div class="why-product-icon"><i class="fas fa-globe-americas"></i></div>
+                    <h3>Dünya Çapında Kabul Görmüş Platform</h3>
+                    <p>3.000'den fazla kurumun güvendiği DSpace, dijital arşiv alanında dünyanın en yaygın kullanılan açık kaynaklı çözümüdür. Güçlü topluluk desteği ile sürekli geliştirilmektedir.</p>
+                </div>
+                <div class="why-product-card">
+                    <div class="why-product-icon"><i class="fas fa-award"></i></div>
+                    <h3>Uluslararası Standart Uyumluluğu</h3>
+                    <p>Dublin Core, OAI-PMH, SWORD, DOI ve ORCID gibi uluslararası standartlara tam uyum ile kurumunuzun dijital arşivini küresel akademik ekosisteme entegre eder.</p>
+                </div>
+                <div class="why-product-card">
+                    <div class="why-product-icon"><i class="fas fa-lock-open"></i></div>
+                    <h3>Açık Kaynak ve Ücretsiz</h3>
+                    <p>Lisans maliyeti olmadan kurumunuz için tam özellikli bir dijital arşiv sistemi kurabilirsiniz. Açık kaynak yapısı sayesinde ihtiyaçlarınıza göre özelleştirilebilir.</p>
+                </div>
+                <div class="why-product-card">
+                    <div class="why-product-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Uzun Vadeli Dijital Koruma</h3>
+                    <p>Dijital içeriklerin uzun vadeli korunması ve erişilebilirliğinin sürdürülmesi için gelişmiş saklama stratejileri ve format dönüştürme özellikleri sunar.</p>
+                </div>
+                <div class="why-product-card">
+                    <div class="why-product-icon"><i class="fas fa-cogs"></i></div>
+                    <h3>Esnek ve Ölçeklenebilir Mimari</h3>
+                    <p>Küçük koleksiyonlardan milyonlarca dijital nesneye kadar ölçeklenebilen yapısı ile her büyüklükteki kurumun ihtiyacını karşılar. Topluluk, koleksiyon ve öğe hiyerarşisi ile içeriğinizi düzenleyin.</p>
+                </div>
+                <div class="why-product-card">
+                    <div class="why-product-icon"><i class="fas fa-eye"></i></div>
+                    <h3>Akademik Görünürlük Artışı</h3>
+                    <p>Google Scholar, BASE, OpenAIRE ve CORE gibi akademik arama motorları tarafından otomatik olarak taranarak kurumunuzun araştırma çıktılarının görünürlüğünü artırır.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section" id="contact">
+        <div class="container">
+            <h2>DSpace ile Dijital Arşivinizi Kurun</h2>
+            <p>Kurumunuzun akademik çıktılarını dijital ortamda koruyun, düzenleyin ve dünyayla paylaşın. Ücretsiz danışmanlık için bize ulaşın.</p>
+            <div class="cta-buttons">
+                <a href="tel:+903129112956" class="btn btn-white"><i class="fas fa-phone"></i> +90 312 911 29 56</a>
+                <a href="mailto:info@mirakil.com" class="btn btn-white"><i class="fas fa-envelope"></i> info@mirakil.com</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col footer-about">
+                    <h4>MirAkıl Veri İşleme</h4>
+                    <p>Müze, arşiv ve kütüphane yönetim sistemleri alanında yazılım, donanım, eğitim ve danışmanlık hizmetleri sunan teknoloji şirketi.</p>
+                    <div class="footer-contact-item"><i class="fas fa-map-marker-alt"></i><span>2661/1. Sokak, Ankara 06810, Türkiye</span></div>
+                    <div class="footer-contact-item"><i class="fas fa-phone"></i><a href="tel:+903129112956">+90 312 911 29 56</a></div>
+                    <div class="footer-contact-item"><i class="fas fa-envelope"></i><a href="mailto:info@mirakil.com">info@mirakil.com</a></div>
+                </div>
+                <div class="footer-col">
+                    <h4>Ürünler</h4>
+                    <ul class="footer-links">
+                        <li><a href="koha.html">Koha</a></li>
+                        <li><a href="vufind.html">VuFind</a></li>
+                        <li><a href="dspace.html">DSpace</a></li>
+                        <li><a href="omeka.html">Omeka</a></li>
+                        <li><a href="moodle.html">Moodle</a></li>
+                        <li><a href="collectiveaccess.html">CollectiveAccess</a></li>
+                        <li><a href="ojs.html">OJS</a></li>
+                        <li><a href="indico.html">Indico</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Hizmetler</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html#services">Kurulum ve Yapılandırma</a></li>
+                        <li><a href="index.html#services">Yazılım Geliştirme</a></li>
+                        <li><a href="index.html#services">Eğitim ve Danışmanlık</a></li>
+                        <li><a href="index.html#services">Hosting ve Bakım</a></li>
+                        <li><a href="index.html#services">Teknik Destek</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Hızlı Erişim</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Ana Sayfa</a></li>
+                        <li><a href="index.html#products">Ürünler</a></li>
+                        <li><a href="index.html#services">Hizmetler</a></li>
+                        <li><a href="index.html#why-us">Hakkımızda</a></li>
+                        <li><a href="index.html#faq">SSS</a></li>
+                        <li><a href="#contact">İletişim</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 MirAkıl Veri İşleme Yazılım Donanım Eğitim Danışmanlık Tic. Ltd. Şti. Tüm hakları saklıdır.</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+        a.addEventListener('click',function(e){
+            const t=document.querySelector(this.getAttribute('href'));
+            if(t){e.preventDefault();const h=document.querySelector('.main-nav').offsetHeight;
+            window.scrollTo({top:t.offsetTop-h,behavior:'smooth'});
+            document.getElementById('navMenu').classList.remove('active');}
+        });
+    });
+    </script>
+</body>
+</html>

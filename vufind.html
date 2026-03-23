@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VuFind - Kütüphane Arama Arayüzü | MirAkıl</title>
+    <meta name="description" content="VuFind ile kütüphane katalogları için kullanıcı dostu bir arama arayüzü. MirAkıl Veri İşleme - kurulum, özelleştirme ve destek hizmetleri.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2E7C01;
+            --primary-light: #45BA01;
+            --primary-dark: #1a5a00;
+            --teal: #709CA5;
+            --teal-dark: #253437;
+            --brand: #619144;
+            --brand-light: #7aad5c;
+            --brand-dark: #4e7536;
+            --brand-bg: #edf3e8;
+            --dark: #1a1a1a;
+            --text: #333;
+            --text-light: #666;
+            --bg: #fff;
+            --bg-light: #f7f8f6;
+            --border: #e0e0e0;
+            --radius: 20px;
+            --shadow: 0 5px 20px rgba(0,0,0,0.08);
+            --shadow-hover: 0 15px 40px rgba(0,0,0,0.12);
+            --transition: all 0.3s ease;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+        body { font-family:'Lato',sans-serif; color:var(--text); line-height:1.7; background:var(--bg); }
+        h1,h2,h3,h4,h5 { font-family:'Archivo',sans-serif; line-height:1.3; }
+        a { text-decoration:none; color:inherit; }
+        .container { max-width:1200px; margin:0 auto; padding:0 30px; }
+
+        /* ===== HEADER ===== */
+        .header-top {
+            background: #fff;
+            padding: 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .header-top .container {
+            display:flex; justify-content:space-between; align-items:center; min-height:64px;
+        }
+        .header-logo { display:flex; align-items:center; gap:14px; }
+        .header-logo img {
+            height: 50px; width: auto;
+        }
+        .header-logo-text {
+            color:#fff; font-family:'Archivo',sans-serif; font-weight:700; font-size:1.6rem;
+        }
+        .header-logo-sub {
+            color: rgba(255,255,255,0.7); font-size:0.7rem; text-transform:uppercase; letter-spacing:1.5px;
+        }
+        .header-contact { display:flex; align-items:center; gap:28px; color:#333; font-size:0.9rem; }
+        .header-contact a { color:#333; display:flex; align-items:center; gap:8px; transition:opacity 0.2s; }
+        .header-contact a:hover { color:#2E7C01; }
+        .header-contact i { color:#2E7C01; }
+
+        /* NAV */
+        .main-nav {
+            background:#fff; border-bottom:1px solid var(--border);
+            position:sticky; top:0; z-index:1000;
+            box-shadow:0 2px 8px rgba(0,0,0,0.06);
+        }
+        .main-nav .container { display:flex; justify-content:center; align-items:center; }
+        .nav-menu { display:flex; list-style:none; }
+        .nav-menu li { position:relative; }
+        .nav-menu > li > a {
+            display:block; padding:18px 22px;
+            font-family:'Archivo',sans-serif; font-weight:600; font-size:0.9rem;
+            color:var(--text); text-transform:uppercase; letter-spacing:0.5px;
+            transition:var(--transition); border-bottom:3px solid transparent;
+        }
+        .nav-menu > li > a:hover, .nav-menu > li > a.active {
+            color:var(--brand); border-bottom-color:var(--brand);
+        }
+        .nav-dropdown {
+            position:absolute; top:100%; left:0; background:#fff;
+            min-width:240px; box-shadow:0 8px 24px rgba(0,0,0,0.12);
+            border-radius:0 0 12px 12px; opacity:0; visibility:hidden;
+            transform:translateY(-8px); transition:var(--transition); z-index:100; list-style:none;
+        }
+        .nav-menu li:hover .nav-dropdown { opacity:1; visibility:visible; transform:translateY(0); }
+        .nav-dropdown li a {
+            display:flex; align-items:center; gap:10px;
+            padding:12px 20px; font-size:0.88rem; color:var(--text); transition:var(--transition);
+        }
+        .nav-dropdown li a:hover { background:var(--bg-light); color:var(--brand); padding-left:28px; }
+        .nav-dropdown .dd-dot {
+            width:8px; height:8px; border-radius:50%; flex-shrink:0;
+        }
+        .mobile-toggle {
+            display:none; background:none; border:none; font-size:1.6rem;
+            cursor:pointer; padding:16px; color:var(--text);
+        }
+
+        /* ===== HERO ===== */
+        .product-hero {
+            background: linear-gradient(135deg, var(--brand-dark), var(--brand), var(--brand-light));
+            padding: 80px 0 90px;
+            min-height: 400px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .product-hero::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.08) 0%, transparent 60%),
+                        radial-gradient(circle at 70% 80%, rgba(255,255,255,0.05) 0%, transparent 50%);
+        }
+        .product-hero .container { position: relative; z-index: 2; }
+        .product-hero-icon {
+            width: 100px; height: 100px; border-radius: 28px;
+            background: rgba(255,255,255,0.15); backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.25);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 28px; font-size: 2.8rem; color: #fff;
+        }
+        .product-hero h1 {
+            font-size: 3.2rem; font-weight: 800; color: #fff; margin-bottom: 12px; letter-spacing: -1px;
+        }
+        .product-hero .subtitle {
+            font-size: 1.2rem; color: rgba(255,255,255,0.85); font-weight: 300;
+            text-transform: uppercase; letter-spacing: 2px; margin-bottom: 24px;
+        }
+        .product-hero .desc {
+            font-size: 1.15rem; color: rgba(255,255,255,0.9); max-width: 640px;
+            margin: 0 auto; line-height: 1.8; font-weight: 300;
+        }
+        .hero-breadcrumb {
+            margin-bottom: 32px; font-size: 0.88rem; color: rgba(255,255,255,0.6);
+        }
+        .hero-breadcrumb a { color: rgba(255,255,255,0.7); transition: color 0.2s; }
+        .hero-breadcrumb a:hover { color: #fff; }
+
+        /* BTN */
+        .btn {
+            display:inline-flex; align-items:center; gap:10px;
+            padding:14px 32px; border-radius:10px;
+            font-family:'Archivo',sans-serif; font-weight:600; font-size:0.95rem;
+            transition:var(--transition); border:2px solid transparent; cursor:pointer;
+        }
+        .btn-brand { background:var(--brand); color:#fff; border-color:var(--brand); }
+        .btn-brand:hover { background:#fff; color:var(--brand); }
+        .btn-outline-brand { background:transparent; color:var(--brand); border-color:var(--brand); }
+        .btn-outline-brand:hover { background:var(--brand); color:#fff; }
+        .btn-green { background:var(--primary-light); color:#fff; border-color:var(--primary-light); }
+        .btn-green:hover { background:#fff; color:var(--primary); }
+        .btn-white { background:transparent; color:#fff; border-color:rgba(255,255,255,0.4); }
+        .btn-white:hover { background:#fff; color:var(--brand); border-color:#fff; }
+
+        /* ===== SECTIONS ===== */
+        section { padding:80px 0; }
+        .section-header { text-align:center; margin-bottom:56px; }
+        .section-header h2 { font-size:2.4rem; font-weight:700; color:var(--dark); margin-bottom:8px; }
+        .section-divider { width:60px; height:3px; background:var(--brand); margin:16px auto 20px; border-radius:2px; }
+        .section-header p { color:var(--text-light); font-size:1.05rem; max-width:640px; margin:0 auto; }
+
+        /* ===== OVERVIEW ===== */
+        .overview { background: var(--bg-light); }
+        .overview-content {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+        }
+        .overview-text h2 {
+            font-size: 2rem; font-weight: 700; color: var(--dark); margin-bottom: 20px;
+        }
+        .overview-text p {
+            color: var(--text-light); font-size: 1rem; line-height: 1.9; margin-bottom: 16px;
+        }
+        .overview-stats {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 32px;
+        }
+        .stat-card {
+            background: #fff; border-radius: 16px; padding: 24px 20px; text-align: center;
+            border: 1px solid var(--border); transition: var(--transition);
+        }
+        .stat-card:hover { border-color: var(--brand); transform: translateY(-2px); }
+        .stat-card .stat-number {
+            font-family: 'Archivo', sans-serif; font-size: 2rem; font-weight: 800; color: var(--brand);
+        }
+        .stat-card .stat-label { font-size: 0.82rem; color: var(--text-light); margin-top: 4px; }
+        .overview-visual {
+            display: flex; flex-direction: column; gap: 20px;
+        }
+        .overview-feature-card {
+            background: #fff; border-radius: 16px; padding: 24px; display: flex; gap: 16px;
+            align-items: flex-start; border: 1px solid var(--border); transition: var(--transition);
+        }
+        .overview-feature-card:hover { border-color: var(--brand); box-shadow: var(--shadow); }
+        .overview-feature-card .ofc-icon {
+            width: 48px; height: 48px; border-radius: 12px; background: var(--brand-bg);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; color: var(--brand); flex-shrink: 0;
+        }
+        .overview-feature-card h4 { font-size: 1rem; margin-bottom: 4px; color: var(--dark); }
+        .overview-feature-card p { font-size: 0.88rem; color: var(--text-light); }
+
+        /* ===== FEATURES ===== */
+        .features-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+        }
+        .feature-card {
+            background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
+            padding: 36px 24px; text-align: center; transition: var(--transition);
+            position: relative; overflow: hidden;
+        }
+        .feature-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+            background: var(--brand); transform: scaleX(0); transition: transform 0.3s;
+        }
+        .feature-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-6px); }
+        .feature-card:hover::before { transform: scaleX(1); }
+        .feature-card .fc-icon {
+            width: 68px; height: 68px; border-radius: 50%; margin: 0 auto 18px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; color: var(--brand); background: var(--brand-bg);
+            transition: var(--transition);
+        }
+        .feature-card:hover .fc-icon { background: var(--brand); color: #fff; }
+        .feature-card h3 { font-size: 1.05rem; margin-bottom: 10px; color: var(--dark); }
+        .feature-card p { font-size: 0.88rem; color: var(--text-light); line-height: 1.6; }
+
+        /* ===== WHY VUFIND ===== */
+        .why-product { background: var(--bg-light); }
+        .why-product-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
+        }
+        .why-product-card {
+            background: #fff; border-radius: var(--radius); padding: 40px 28px;
+            text-align: center; transition: var(--transition); border: 1px solid var(--border);
+            position: relative; overflow: hidden;
+        }
+        .why-product-card::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, var(--brand), var(--brand-light));
+            transform: scaleX(0); transition: transform 0.3s;
+        }
+        .why-product-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-4px); }
+        .why-product-card:hover::after { transform: scaleX(1); }
+        .why-product-card .wpc-icon {
+            width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 20px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem; color: var(--brand);
+            background: linear-gradient(135deg, var(--brand-bg), #dce8d2);
+        }
+        .why-product-card h3 { font-size: 1.1rem; margin-bottom: 10px; color: var(--dark); }
+        .why-product-card p { font-size: 0.9rem; color: var(--text-light); line-height: 1.7; }
+
+        /* ===== CTA ===== */
+        .cta-section {
+            background: linear-gradient(135deg, var(--teal-dark), var(--brand-dark));
+            color:#fff; text-align:center; padding:80px 0;
+        }
+        .cta-section h2 { font-size:2.2rem; margin-bottom:16px; }
+        .cta-section p { font-size:1.1rem; opacity:0.9; max-width:600px; margin:0 auto 36px; }
+        .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+        .cta-section .btn-green { background:#fff; color:var(--brand); border-color:#fff; }
+        .cta-section .btn-green:hover { background:transparent; color:#fff; border-color:#fff; }
+
+        /* ===== FOOTER ===== */
+        footer { background:#111; color:#ccc; padding:60px 0 0; }
+        .footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:40px; padding-bottom:40px; }
+        .footer-col h4 {
+            color:#fff; font-family:'Archivo',sans-serif; font-size:1rem;
+            margin-bottom:20px; padding-bottom:12px; position:relative;
+        }
+        .footer-col h4::after {
+            content:''; position:absolute; bottom:0; left:0; width:30px; height:2px; background:var(--primary-light);
+        }
+        .footer-about p { font-size:0.88rem; line-height:1.8; margin-bottom:20px; color:#999; }
+        .footer-contact-item {
+            display:flex; align-items:flex-start; gap:12px; margin-bottom:12px; font-size:0.88rem; color:#999;
+        }
+        .footer-contact-item i { color:var(--primary-light); margin-top:4px; width:16px; text-align:center; }
+        .footer-contact-item a { color:#999; transition:color 0.2s; }
+        .footer-contact-item a:hover { color:var(--primary-light); }
+        .footer-links { list-style:none; }
+        .footer-links li { margin-bottom:8px; }
+        .footer-links li a {
+            color:#999; font-size:0.88rem; transition:var(--transition);
+            display:flex; align-items:center; gap:6px;
+        }
+        .footer-links li a::before { content:'›'; color:var(--primary-light); font-weight:700; }
+        .footer-links li a:hover { color:var(--primary-light); padding-left:4px; }
+        .footer-bottom {
+            border-top:1px solid rgba(255,255,255,0.08); padding:20px 0;
+            display:flex; justify-content:space-between; align-items:center;
+            font-size:0.8rem; color:#555; flex-wrap:wrap; gap:12px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media(max-width:1024px) {
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .why-product-grid { grid-template-columns: repeat(2, 1fr); }
+            .overview-content { grid-template-columns: 1fr; gap: 40px; }
+            .footer-grid { grid-template-columns:1fr 1fr; }
+        }
+        @media(max-width:768px) {
+            .header-top .container { flex-direction:column; gap:10px; padding:14px 20px; }
+            .header-contact { gap:16px; font-size:0.8rem; }
+            .nav-menu {
+                display:none; flex-direction:column; width:100%; background:#fff;
+                position:absolute; top:100%; left:0; box-shadow:0 8px 20px rgba(0,0,0,0.1);
+            }
+            .nav-menu.active { display:flex; }
+            .nav-menu > li > a { padding:14px 24px; border-bottom:1px solid var(--border); }
+            .nav-dropdown { position:static; opacity:1; visibility:visible; transform:none; box-shadow:none; }
+            .mobile-toggle { display:block; }
+            .main-nav .container { justify-content:flex-end; }
+            .product-hero { padding: 60px 0 70px; }
+            .product-hero h1 { font-size: 2.2rem; }
+            .product-hero .subtitle { font-size: 1rem; }
+            .product-hero-icon { width: 80px; height: 80px; font-size: 2.2rem; }
+            .section-header h2 { font-size:1.8rem; }
+            .features-grid { grid-template-columns: 1fr; }
+            .why-product-grid { grid-template-columns: 1fr; }
+            .overview-stats { grid-template-columns: 1fr 1fr; }
+            .footer-grid { grid-template-columns:1fr; }
+            .footer-bottom { flex-direction:column; text-align:center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div class="header-top">
+        <div class="container">
+            <a href="index.html" class="header-logo">
+                <img src="https://static.wixstatic.com/media/ef08d3_aa38de349e884624ac5924a9ed006f8d~mv2.png/v1/fill/w_282,h_60,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/ef08d3_aa38de349e884624ac5924a9ed006f8d~mv2.png" alt="MirAkıl Logo">
+            </a>
+            <div class="header-contact">
+                <a href="tel:+903129112956"><i class="fas fa-phone"></i> +90 312 911 29 56</a>
+                <a href="mailto:info@mirakil.com"><i class="fas fa-envelope"></i> info@mirakil.com</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAV -->
+    <nav class="main-nav">
+        <div class="container">
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Ana Sayfa</a></li>
+                <li>
+                    <a href="#" class="active">Ürünler <i class="fas fa-chevron-down" style="font-size:0.6rem;margin-left:4px;"></i></a>
+                    <ul class="nav-dropdown">
+                        <li><a href="koha.html"><span class="dd-dot" style="background:#4a9b32;"></span> Koha</a></li>
+                        <li><a href="vufind.html"><span class="dd-dot" style="background:#619144;"></span> VuFind</a></li>
+                        <li><a href="dspace.html"><span class="dd-dot" style="background:#44a340;"></span> DSpace</a></li>
+                        <li><a href="omeka.html"><span class="dd-dot" style="background:#CD5C28;"></span> Omeka</a></li>
+                        <li><a href="moodle.html"><span class="dd-dot" style="background:#F98012;"></span> Moodle</a></li>
+                        <li><a href="collectiveaccess.html"><span class="dd-dot" style="background:#5b7e3d;"></span> CollectiveAccess</a></li>
+                        <li><a href="ojs.html"><span class="dd-dot" style="background:#002B5C;"></span> OJS</a></li>
+                        <li><a href="indico.html"><span class="dd-dot" style="background:#29ABE2;"></span> Indico</a></li>
+                    </ul>
+                </li>
+                <li><a href="index.html#services">Hizmetler</a></li>
+                <li><a href="index.html#why-us">Hakkımızda</a></li>
+                <li><a href="index.html#faq">SSS</a></li>
+                <li><a href="#contact">İletişim</a></li>
+            </ul>
+            <button class="mobile-toggle" onclick="document.getElementById('navMenu').classList.toggle('active')" aria-label="Menü">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="product-hero">
+        <div class="container">
+            <div class="hero-breadcrumb">
+                <a href="index.html">Ana Sayfa</a> &nbsp;/&nbsp; <a href="index.html#products">Ürünler</a> &nbsp;/&nbsp; VuFind
+            </div>
+            <div class="product-hero-icon">
+                <i class="fas fa-search"></i>
+            </div>
+            <img src="https://vufind.org/vufind/assets/images/vf-beta.png" alt="VuFind Logo" style="max-height:70px; margin-bottom:20px; background:rgba(255,255,255,0.9); padding:8px 16px; border-radius:8px;">
+            <h1>VuFind</h1>
+            <div class="subtitle">Kütüphane Arama Arayüzü</div>
+            <p class="desc">Kütüphane katalogları için kullanıcı dostu bir arama arayüzü sunar. Birden fazla kaynağı tek bir platformda birleştirerek bilgiye hızlı ve kolay erişim sağlar.</p>
+        </div>
+    </section>
+
+    <!-- GENEL BAKIS -->
+    <section class="overview">
+        <div class="container">
+            <div class="overview-content">
+                <div class="overview-text">
+                    <h2>VuFind Nedir?</h2>
+                    <p>VuFind, kütüphane kaynakları için geliştirilmiş açık kaynaklı bir keşif arayüzüdür. Villanova Üniversitesi tarafından başlatılan proje, dünya genelinde yüzlerce kütüphane ve bilgi merkezi tarafından aktif olarak kullanılmaktadır.</p>
+                    <p>VuFind, geleneksel kütüphane kataloglarının (OPAC) ötesine geçerek kullanıcılara modern ve sezgisel bir arama deneyimi sunar. Apache Solr arama motoru üzerine inşa edilen sistem, milyonlarca kaydı milisaniyeler içinde tarayarak ilgili sonuçları hızla getirir.</p>
+                    <p>Sistem; kütüphane katalogları, dijital arşivler, kurumsal depolar ve diğer bilgi kaynaklarını tek bir arayüz altında birleştirerek kullanıcıların tüm kaynaklara tek noktadan erişmesini mümkün kılar. Faceted (yönlü) arama, otomatik tamamlama, öneri sistemi ve kişiselleştirme özellikleriyle modern bir arama deneyimi sağlar.</p>
+                    <div class="overview-stats">
+                        <div class="stat-card">
+                            <div class="stat-number">500+</div>
+                            <div class="stat-label">Dünya Genelinde Kurulum</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">20+</div>
+                            <div class="stat-label">Desteklenen Dil</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">%100</div>
+                            <div class="stat-label">Açık Kaynak</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">PHP</div>
+                            <div class="stat-label">Laminas Framework</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="overview-visual">
+                    <div class="overview-feature-card">
+                        <div class="ofc-icon"><i class="fas fa-search-plus"></i></div>
+                        <div>
+                            <h4>Gelişmiş Arama Motoru</h4>
+                            <p>Apache Solr tabanlı güçlü indeksleme ve arama altyapısı ile milyonlarca kayıt arasında anlık sonuçlar.</p>
+                        </div>
+                    </div>
+                    <div class="overview-feature-card">
+                        <div class="ofc-icon"><i class="fas fa-layer-group"></i></div>
+                        <div>
+                            <h4>Birleşik Erişim</h4>
+                            <p>Farklı kütüphane sistemleri ve dijital kaynaklardan gelen verileri tek bir arayüzde birleştirir.</p>
+                        </div>
+                    </div>
+                    <div class="overview-feature-card">
+                        <div class="ofc-icon"><i class="fas fa-paint-brush"></i></div>
+                        <div>
+                            <h4>Esnek Özelleştirme</h4>
+                            <p>Tema sistemi ve modüler yapısı sayesinde kurumunuzun kimliğine uygun arayüz tasarımı.</p>
+                        </div>
+                    </div>
+                    <div class="overview-feature-card">
+                        <div class="ofc-icon"><i class="fas fa-plug"></i></div>
+                        <div>
+                            <h4>Kolay Entegrasyon</h4>
+                            <p>Koha, Alma, Symphony ve diğer ILS sistemleriyle sorunsuz entegrasyon desteği.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- OZELLIKLER -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Özellikler</h2>
+                <div class="section-divider"></div>
+                <p>VuFind, kütüphane kullanıcılarının bilgiye hızlı ve etkin bir şekilde erişmesini sağlayan kapsamlı özellikler sunar.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="fc-icon"><i class="fas fa-globe-americas"></i></div>
+                    <h3>Birleşik Katalog Arama</h3>
+                    <p>Birden fazla kütüphane kataloğunu ve dijital koleksiyonu tek bir arama noktasında birleştirerek kapsamlı sonuçlar sunar.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="fc-icon"><i class="fas fa-filter"></i></div>
+                    <h3>Faceted Arama ve Filtreleme</h3>
+                    <p>Yazar, konu, tarih, dil, format gibi çeşitli filtrelerle arama sonuçlarını daraltma ve yönlü navigasyon imkanı sağlar.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="fc-icon"><i class="fas fa-hand-pointer"></i></div>
+                    <h3>Kullanıcı Dostu Arayüz</h3>
+                    <p>Modern ve sezgisel tasarımı ile her seviyedeki kullanıcının kolayca arama yapabilmesini ve sonuçlara erişmesini sağlar.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="fc-icon"><i class="fas fa-project-diagram"></i></div>
+                    <h3>Çoklu Kaynak Entegrasyonu</h3>
+                    <p>Koha, Alma, EDS, Primo ve diğer ILS/keşif sistemleri ile sorunsuz entegrasyon kurarak tüm kaynakları birleştirir.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="fc-icon"><i class="fas fa-palette"></i></div>
+                    <h3>Özelleştirilebilir Temalar</h3>
+                    <p>Esnek tema sistemi sayesinde kurumunuzun kurumsal kimliğine uygun görsel tasarım ve arayüz düzenlemesi yapılabilir.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="fc-icon"><i class="fas fa-language"></i></div>
+                    <h3>Çok Dilli Destek</h3>
+                    <p>Türkçe dahil 20'den fazla dil desteği ile uluslararası kullanıcılar için çoklu dil arayüzü ve yerelleştirme seçenekleri sunar.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="fc-icon"><i class="fas fa-code"></i></div>
+                    <h3>API Entegrasyonu</h3>
+                    <p>RESTful API desteği sayesinde üçüncü parti uygulamalar ve mobil platformlarla veri alışverişi ve entegrasyon imkanı sağlar.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="fc-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <h3>Responsive Tasarım</h3>
+                    <p>Masaüstü, tablet ve mobil cihazlarda sorunsuz çalışan duyarlı arayüz tasarımı ile her yerden erişim kolaylığı sunar.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEDEN VUFIND -->
+    <section class="why-product" id="why-vufind">
+        <div class="container">
+            <div class="section-header">
+                <h2>Neden VuFind?</h2>
+                <div class="section-divider"></div>
+                <p>VuFind, kütüphanelerin dijital dönüşüm sürecinde arama ve keşif deneyimini üst seviyeye taşıyan güçlü bir çözümdür.</p>
+            </div>
+            <div class="why-product-grid">
+                <div class="why-product-card">
+                    <div class="wpc-icon"><i class="fas fa-rocket"></i></div>
+                    <h3>Yüksek Performans</h3>
+                    <p>Apache Solr arama motoru sayesinde milyonlarca kayıt arasında milisaniyeler içinde arama yaparak kullanıcılara hızlı sonuçlar sunar. Ölçeklenebilir mimarisi büyük koleksiyonlarda bile kesintisiz performans sağlar.</p>
+                </div>
+                <div class="why-product-card">
+                    <div class="wpc-icon"><i class="fas fa-lock-open"></i></div>
+                    <h3>Açık Kaynak Avantajı</h3>
+                    <p>Lisans maliyeti olmadan tam donanımlı bir keşif arayüzü sunar. Kaynak kodu açık olduğundan kurumunuzun ihtiyaçlarına göre özgürce özelleştirilebilir ve genişletilebilir.</p>
+                </div>
+                <div class="why-product-card">
+                    <div class="wpc-icon"><i class="fas fa-users"></i></div>
+                    <h3>Güçlü Topluluk</h3>
+                    <p>Dünya genelinde aktif bir geliştirici ve kullanıcı topluluğu tarafından desteklenir. Sürekli güncellenen belgeler, forumlar ve düzenli sürüm güncellemeleri ile güvenilir bir ekosistem sunar.</p>
+                </div>
+                <div class="why-product-card">
+                    <div class="wpc-icon"><i class="fas fa-puzzle-piece"></i></div>
+                    <h3>Modüler Mimari</h3>
+                    <p>Eklenti tabanlı modüler yapısı sayesinde ihtiyaç duyulan özellikleri kolayca ekleyebilir, gereksiz bileşenleri devre dışı bırakabilirsiniz. Laminas Framework altyapısı güçlü bir temel sağlar.</p>
+                </div>
+                <div class="why-product-card">
+                    <div class="wpc-icon"><i class="fas fa-sync-alt"></i></div>
+                    <h3>Kolay Göç ve Geçiş</h3>
+                    <p>Mevcut kütüphane sisteminizle yan yana çalışabilir. Koha, Alma veya diğer ILS sistemlerinizden veri çekme ve senkronizasyon süreçleri sorunsuz şekilde gerçekleştirilir.</p>
+                </div>
+                <div class="why-product-card">
+                    <div class="wpc-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Güvenlik ve Güvenilirlik</h3>
+                    <p>Düzenli güvenlik güncellemeleri, LDAP/Shibboleth kimlik doğrulama desteği ve güçlü erişim kontrol mekanizmaları ile verileriniz güvende kalır.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section" id="contact">
+        <div class="container">
+            <h2>VuFind ile Kütüphanenizi Keşfedilebilir Kılın</h2>
+            <p>VuFind kurulum, özelleştirme ve entegrasyon hizmetlerimiz hakkında bilgi almak için bizimle iletişime geçin.</p>
+            <div class="cta-buttons">
+                <a href="tel:+903129112956" class="btn btn-green"><i class="fas fa-phone"></i> Hemen Arayın: +90 312 911 29 56</a>
+                <a href="mailto:info@mirakil.com" class="btn btn-white"><i class="fas fa-envelope"></i> E-posta Gönderin</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col footer-about">
+                    <h4>MirAkıl Veri İşleme</h4>
+                    <p>Müze, arşiv ve kütüphane yönetim sistemleri alanında yazılım, donanım, eğitim ve danışmanlık hizmetleri sunan teknoloji şirketi.</p>
+                    <div class="footer-contact-item"><i class="fas fa-map-marker-alt"></i><span>2661/1. Sokak, Ankara 06810, Türkiye</span></div>
+                    <div class="footer-contact-item"><i class="fas fa-phone"></i><a href="tel:+903129112956">+90 312 911 29 56</a></div>
+                    <div class="footer-contact-item"><i class="fas fa-envelope"></i><a href="mailto:info@mirakil.com">info@mirakil.com</a></div>
+                </div>
+                <div class="footer-col">
+                    <h4>Ürünler</h4>
+                    <ul class="footer-links">
+                        <li><a href="koha.html">Koha</a></li>
+                        <li><a href="vufind.html">VuFind</a></li>
+                        <li><a href="dspace.html">DSpace</a></li>
+                        <li><a href="omeka.html">Omeka</a></li>
+                        <li><a href="moodle.html">Moodle</a></li>
+                        <li><a href="collectiveaccess.html">CollectiveAccess</a></li>
+                        <li><a href="ojs.html">OJS</a></li>
+                        <li><a href="indico.html">Indico</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Hizmetler</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html#services">Kurulum ve Yapılandırma</a></li>
+                        <li><a href="index.html#services">Yazılım Geliştirme</a></li>
+                        <li><a href="index.html#services">Eğitim ve Danışmanlık</a></li>
+                        <li><a href="index.html#services">Hosting ve Bakım</a></li>
+                        <li><a href="index.html#services">Teknik Destek</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Hızlı Erişim</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Ana Sayfa</a></li>
+                        <li><a href="index.html#products">Ürünler</a></li>
+                        <li><a href="index.html#services">Hizmetler</a></li>
+                        <li><a href="index.html#why-us">Hakkımızda</a></li>
+                        <li><a href="index.html#faq">SSS</a></li>
+                        <li><a href="#contact">İletişim</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 MirAkıl Veri İşleme Yazılım Donanım Eğitim Danışmanlık Tic. Ltd. Şti. Tüm hakları saklıdır.</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+        a.addEventListener('click',function(e){
+            const t=document.querySelector(this.getAttribute('href'));
+            if(t){e.preventDefault();const h=document.querySelector('.main-nav').offsetHeight;
+            window.scrollTo({top:t.offsetTop-h,behavior:'smooth'});
+            document.getElementById('navMenu').classList.remove('active');}
+        });
+    });
+    </script>
+</body>
+</html>
