@@ -1182,10 +1182,10 @@
             }
 
             body.innerHTML = filtered.map(t => `
-                <div class="table-row tickets-grid" onclick="openTicket(${t.id})">
+                <div class="table-row tickets-grid" onclick="openTicket('${t.id}')" style="cursor:pointer;">
                     <div class="cell-ticket">
                         <span class="mobile-label">Ticket:</span>
-                        #${t.id}
+                        ${escapeHtml(t.ticket_number || t.id)}
                     </div>
                     <div class="cell-truncate">
                         <span class="mobile-label">Ad:</span>
@@ -1233,7 +1233,7 @@
             document.getElementById('ticketDetail').classList.add('active');
 
             // Set title
-            document.getElementById('detailTitle').innerHTML = `Ticket <span>#${ticket.id}</span>`;
+            document.getElementById('detailTitle').innerHTML = `Ticket <span>${escapeHtml(ticket.ticket_number || ticket.id)}</span>`;
 
             // Ticket info
             document.getElementById('detailInfo').innerHTML = `
@@ -1263,11 +1263,11 @@
                         <p>${formatDate(ticket.created_at)}</p>
                     </div>
                 </div>
-                ${ticket.message ? `
+                ${ticket.description || ticket.message ? `
                     <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border);">
                         <div class="info-item">
-                            <label>İlk Mesaj</label>
-                            <p style="font-weight:400;line-height:1.7;white-space:pre-wrap;">${escapeHtml(ticket.message)}</p>
+                            <label>Açıklama</label>
+                            <p style="font-weight:400;line-height:1.7;white-space:pre-wrap;">${escapeHtml(ticket.description || ticket.message)}</p>
                         </div>
                     </div>
                 ` : ''}
