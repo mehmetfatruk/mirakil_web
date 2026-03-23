@@ -1019,7 +1019,9 @@
                 const err = await res.text();
                 throw new Error(err);
             }
-            return res.json();
+            const text = await res.text();
+            if (!text) return null;
+            try { return JSON.parse(text); } catch { return text; }
         }
 
         function getPassword() {
