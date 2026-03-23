@@ -1336,36 +1336,38 @@
                     p_ticket_id: currentTicket.id,
                     p_message: message
                 });
-
-                // Send email notification to customer
-                try {
-                    await fetch(SUPABASE_URL + '/functions/v1/send-ticket-email', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY },
-                        body: JSON.stringify({
-                            type: 'ticket_reply',
-                            ticket_number: currentTicket.ticket_number,
-                            customer_name: currentTicket.name,
-                            customer_email: currentTicket.email,
-                            subject: currentTicket.subject,
-                            reply_message: message,
-                            reply_from: 'MirAkıl Destek'
-                        })
-                    });
-                } catch(emailErr) { /* email is best-effort */ }
-
-                document.getElementById('replyMessage').value = '';
-                showToast('Yanıt başarıyla gönderildi.');
-                loadReplies(currentTicket.id);
-                // Refresh tickets to update status if changed
-                loadTickets();
             } catch (err) {
                 showToast('Yanıt gönderilemedi. Lütfen tekrar deneyin.', 'error');
                 console.error('Send reply error:', err);
-            } finally {
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fas fa-paper-plane"></i> Yanıt Gönder';
+                return;
             }
+
+            // Reply saved successfully
+            document.getElementById('replyMessage').value = '';
+            showToast('Yanıt başarıyla gönderildi.');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-paper-plane"></i> Yanıt Gönder';
+
+            // Refresh UI
+            loadReplies(currentTicket.id).catch(function(){});
+            loadTickets().catch(function(){});
+
+            // Send email notification (fire-and-forget)
+            fetch(SUPABASE_URL + '/functions/v1/send-ticket-email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY },
+                body: JSON.stringify({
+                    type: 'ticket_reply',
+                    ticket_number: currentTicket.ticket_number,
+                    customer_name: currentTicket.name,
+                    customer_email: currentTicket.email,
+                    subject: currentTicket.subject,
+                    reply_message: message,
+                    reply_from: 'MirAkıl Destek'
+                })
+            }).catch(function(){});
         }
 
         async function closeTicket() {
