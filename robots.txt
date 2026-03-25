@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin.html
+
+Sitemap: https://mehmetfatruk.github.io/mirakil_web/sitemap.xml

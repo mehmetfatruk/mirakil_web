@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MirAkıl - Müze, Arşiv ve Kütüphane Yönetim Çözümleri</title>
     <meta name="description" content="MirAkıl Veri İşleme - Koha, DSpace, VuFind, Omeka, Moodle ve daha fazlası ile müze, arşiv ve kütüphane yönetim sistemleri.">
+    <link rel="canonical" href="https://mehmetfatruk.github.io/mirakil_web/index.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="MirAkıl - Müze, Arşiv ve Kütüphane Yönetim Çözümleri">
+    <meta property="og:description" content="MirAkıl Veri İşleme - Koha, DSpace, VuFind, Omeka, Moodle ve daha fazlası ile müze, arşiv ve kütüphane yönetim sistemleri.">
+    <meta property="og:url" content="https://mehmetfatruk.github.io/mirakil_web/index.html">
+    <meta property="og:locale" content="tr_TR">
+    <meta property="og:site_name" content="MirAkıl Veri İşleme">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
@@ -419,6 +426,7 @@
     </style>
 </head>
 <body>
+    <a href="#products" class="skip-link" style="position:absolute;top:-40px;left:0;background:var(--primary);color:#fff;padding:8px 16px;z-index:10000;font-family:'Archivo',sans-serif;font-weight:600;border-radius:0 0 8px 0;transition:top 0.3s;" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">İçeriğe Atla</a>
 
     <!-- HEADER -->
     <div class="header-top">
@@ -795,26 +803,26 @@
                     <form id="contactForm" onsubmit="submitContact(event)">
                         <div class="form-row">
                             <div class="form-group">
-                                <label>Ad Soyad *</label>
+                                <label for="cName">Ad Soyad *</label>
                                 <input type="text" id="cName" placeholder="Adınız Soyadınız" required>
                             </div>
                             <div class="form-group">
-                                <label>E-posta *</label>
+                                <label for="cEmail">E-posta *</label>
                                 <input type="email" id="cEmail" placeholder="ornek@email.com" required>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label>Telefon</label>
+                                <label for="cPhone">Telefon</label>
                                 <input type="tel" id="cPhone" placeholder="+90 5XX XXX XX XX">
                             </div>
                             <div class="form-group">
-                                <label>Konu *</label>
+                                <label for="cSubject">Konu *</label>
                                 <input type="text" id="cSubject" placeholder="Konu başlığı" required>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Mesajınız *</label>
+                            <label for="cMessage">Mesajınız *</label>
                             <textarea id="cMessage" placeholder="Mesajınızı yazın..." required></textarea>
                         </div>
                         <button type="submit" class="form-submit" id="contactBtn"><i class="fas fa-paper-plane"></i> Gönder</button>
@@ -825,8 +833,8 @@
     </section>
 
     <!-- WhatsApp Float -->
-    <a href="https://wa.me/905319824672" target="_blank" class="whatsapp-float" title="WhatsApp ile iletişime geçin">
-        <i class="fab fa-whatsapp"></i>
+    <a href="https://wa.me/905319824672" target="_blank" class="whatsapp-float" title="WhatsApp ile iletişime geçin" aria-label="WhatsApp ile iletişime geçin">
+        <i class="fab fa-whatsapp" aria-hidden="true"></i>
     </a>
 
     <!-- FOOTER -->

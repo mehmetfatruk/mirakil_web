@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Destek - Teknik Destek Talebi | MirAkıl</title>
     <meta name="description" content="MirAkıl Veri İşleme teknik destek talebi oluşturun ve mevcut taleplerinizi takip edin.">
+    <link rel="canonical" href="https://mehmetfatruk.github.io/mirakil_web/destek.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Destek - Teknik Destek Talebi | MirAkıl">
+    <meta property="og:description" content="MirAkıl Veri İşleme teknik destek talebi oluşturun ve mevcut taleplerinizi takip edin.">
+    <meta property="og:url" content="https://mehmetfatruk.github.io/mirakil_web/destek.html">
+    <meta property="og:locale" content="tr_TR">
+    <meta property="og:site_name" content="MirAkıl Veri İşleme">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
@@ -846,6 +853,7 @@
     </style>
 </head>
 <body>
+    <a href="#tab-new-ticket" class="skip-link" style="position:absolute;top:-40px;left:0;background:var(--primary);color:#fff;padding:8px 16px;z-index:10000;font-family:'Archivo',sans-serif;font-weight:600;border-radius:0 0 8px 0;transition:top 0.3s;" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">İçeriğe Atla</a>
 
     <!-- HEADER -->
     <header class="header-top">
@@ -915,21 +923,21 @@
                     <form id="newTicketForm" onsubmit="submitTicket(event)">
                         <div class="form-row">
                             <div class="form-group">
-                                <label>Ad Soyad <span class="required">*</span></label>
+                                <label for="ticket-name">Ad Soyad <span class="required">*</span></label>
                                 <input type="text" id="ticket-name" placeholder="Adınız ve soyadınız" required>
                             </div>
                             <div class="form-group">
-                                <label>E-posta <span class="required">*</span></label>
+                                <label for="ticket-email">E-posta <span class="required">*</span></label>
                                 <input type="email" id="ticket-email" placeholder="ornek@email.com" required>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label>Telefon</label>
+                                <label for="ticket-phone">Telefon</label>
                                 <input type="tel" id="ticket-phone" placeholder="+90 5XX XXX XX XX">
                             </div>
                             <div class="form-group">
-                                <label>Ürün <span class="required">*</span></label>
+                                <label for="ticket-product">Ürün <span class="required">*</span></label>
                                 <select id="ticket-product" required>
                                     <option value="">Ürün seçiniz...</option>
                                     <option value="Koha">Koha</option>
@@ -945,11 +953,11 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Konu <span class="required">*</span></label>
+                            <label for="ticket-subject">Konu <span class="required">*</span></label>
                             <input type="text" id="ticket-subject" placeholder="Destek talebinizin konusu" required>
                         </div>
                         <div class="form-group">
-                            <label>Açıklama <span class="required">*</span></label>
+                            <label for="ticket-description">Açıklama <span class="required">*</span></label>
                             <textarea id="ticket-description" placeholder="Sorununuzu veya talebinizi detaylı olarak açıklayınız..." required></textarea>
                         </div>
                         <button type="submit" class="submit-btn" id="submitTicketBtn">
@@ -972,11 +980,11 @@
                             </div>
                             <form onsubmit="trackTicket(event)">
                                 <div class="form-group">
-                                    <label>E-posta <span class="required">*</span></label>
+                                    <label for="track-email">E-posta <span class="required">*</span></label>
                                     <input type="email" id="track-email" placeholder="Kayıt e-posta adresiniz" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Ticket Numarası <span class="required">*</span></label>
+                                    <label for="track-number">Ticket Numarası <span class="required">*</span></label>
                                     <input type="text" id="track-number" placeholder="MRK-00001" required>
                                 </div>
                                 <button type="submit" class="submit-btn" id="trackTicketBtn">
@@ -1106,8 +1114,8 @@
 
     <!-- WHATSAPP FLOAT -->
     <div class="whatsapp-float">
-        <a href="https://wa.me/905319824672" target="_blank" rel="noopener noreferrer" title="WhatsApp ile iletişime geçin">
-            <i class="fab fa-whatsapp"></i>
+        <a href="https://wa.me/905319824672" target="_blank" rel="noopener noreferrer" title="WhatsApp ile iletişime geçin" aria-label="WhatsApp ile iletişime geçin">
+            <i class="fab fa-whatsapp" aria-hidden="true"></i>
         </a>
     </div>
 
