@@ -202,6 +202,80 @@
         .section-divider { width:60px; height:3px; background:var(--product); margin:16px auto 20px; border-radius:2px; }
         .section-header p { color:var(--text-light); font-size:1.05rem; max-width:640px; margin:0 auto; }
 
+        /* ===== HERO CTA BUTTONS ===== */
+        .product-hero-cta {
+            display:flex; gap:14px; justify-content:center; flex-wrap:wrap;
+            margin-top:32px;
+        }
+        .product-hero-cta .btn {
+            padding:13px 26px; font-size:0.92rem;
+        }
+        .product-hero-cta .btn-demo {
+            background:#fff; color:var(--product); border-color:#fff;
+            box-shadow:0 8px 22px rgba(0,0,0,0.18);
+        }
+        .product-hero-cta .btn-demo:hover {
+            background:transparent; color:#fff; border-color:#fff;
+            transform:translateY(-2px);
+        }
+        .product-hero-cta .btn-ghost {
+            background:rgba(255,255,255,0.08); color:#fff;
+            border-color:rgba(255,255,255,0.45); backdrop-filter:blur(6px);
+        }
+        .product-hero-cta .btn-ghost:hover {
+            background:#fff; color:var(--product); border-color:#fff;
+            transform:translateY(-2px);
+        }
+
+        /* ===== STATS SECTION (separate, animated) ===== */
+        .product-stats {
+            background:#fff; padding:64px 0;
+            border-bottom:1px solid var(--border);
+        }
+        .product-stats-grid {
+            display:grid; grid-template-columns:repeat(4, 1fr); gap:8px;
+            max-width:1100px; margin:0 auto;
+        }
+        .pstat {
+            text-align:center; padding:8px 16px;
+            position:relative;
+        }
+        .pstat + .pstat::before {
+            content:''; position:absolute; left:0; top:18%; bottom:18%;
+            width:1px; background:var(--border);
+        }
+        .pstat-num {
+            display:block;
+            font-family:'Archivo',sans-serif; font-weight:800;
+            font-size:2.8rem; line-height:1; color:var(--dark);
+            letter-spacing:-1.5px;
+        }
+        .pstat-num .pstat-suffix,
+        .pstat-num .pstat-prefix {
+            color:var(--product); font-size:1.8rem; margin:0 2px;
+            display:inline-block; vertical-align:top;
+        }
+        .pstat-num .pstat-text {
+            color:var(--product); font-size:2.2rem;
+        }
+        .pstat-label {
+            display:block; margin-top:10px;
+            font-family:'Archivo',sans-serif; font-weight:600;
+            font-size:0.78rem; text-transform:uppercase; letter-spacing:1.4px;
+            color:var(--text-light);
+        }
+        @media(max-width:768px) {
+            .product-stats { padding:44px 0; }
+            .product-stats-grid { grid-template-columns:repeat(2, 1fr); gap:32px 8px; }
+            .pstat-num { font-size:2.2rem; }
+            .pstat-num .pstat-suffix, .pstat-num .pstat-prefix { font-size:1.5rem; }
+            .pstat-num .pstat-text { font-size:1.7rem; }
+            .pstat + .pstat::before { display:none; }
+            .pstat:nth-child(odd) + .pstat::before {
+                display:block; top:18%; bottom:18%;
+            }
+        }
+
         /* ===== OVERVIEW ===== */
         .overview { background:var(--bg); }
         .overview-content {
@@ -436,6 +510,10 @@
             <div class="product-hero-subtitle">Entegre Kütüphane Otomasyon Sistemi</div>
             <div class="product-hero-divider"></div>
             <p>Kütüphaneler için entegre bir kütüphane otomasyon sistemidir. Dünyanın en yaygın kullanılan açık kaynaklı kütüphane yönetim yazılımı ile koleksiyonlarınızı profesyonelce yönetin.</p>
+            <div class="product-hero-cta">
+                <a href="https://kohademo.tr/" target="_blank" rel="noopener" class="btn btn-demo"><i class="fas fa-external-link-alt"></i> Canlı Demoyu İncele</a>
+                <a href="#contact" class="btn btn-ghost"><i class="fas fa-paper-plane"></i> İletişime Geç</a>
+            </div>
         </div>
     </section>
 
@@ -448,24 +526,6 @@
                     <p>Koha, 1999 yılında Yeni Zelanda'da geliştirilen ve günümüzde dünya genelinde binlerce kütüphane tarafından kullanılan, tamamen açık kaynaklı bir entegre kütüphane otomasyon sistemidir (ILS). GNU Genel Kamu Lisansı (GPL) altında dağıtılan Koha, lisans maliyeti olmaksızın kapsamlı kütüphane yönetim özellikleri sunar.</p>
                     <p>MARC21 ve UNIMARC standartlarını tam olarak destekleyen Koha, kataloglama, ödünç verme, süreli yayın takibi, kullanıcı yönetimi ve çevrimiçi halk erişim kataloğu (OPAC) gibi temel kütüphane işlevlerinin tamamını karşılar. Web tabanlı arayüzü sayesinde herhangi bir tarayıcıdan erişilebilir ve yönetilebilir.</p>
                     <p>Koha, küçük halk kütüphanelerinden büyük üniversite kütüphanelerine, okul kütüphanelerinden özel koleksiyonlara kadar her ölçekte kütüphaneye uyum sağlayabilen esnek yapısıyla öne çıkar. Aktif ve geniş bir geliştirici topluluğu ile sürekli güncellenmekte ve iyileştirilmektedir.</p>
-                    <div class="overview-stats">
-                        <div class="overview-stat">
-                            <div class="stat-number">20.000+</div>
-                            <div class="stat-label">Dünya Genelinde Kütüphane</div>
-                        </div>
-                        <div class="overview-stat">
-                            <div class="stat-number">25+</div>
-                            <div class="stat-label">Yıllık Geliştirme Deneyimi</div>
-                        </div>
-                        <div class="overview-stat">
-                            <div class="stat-number">100+</div>
-                            <div class="stat-label">Desteklenen Dil</div>
-                        </div>
-                        <div class="overview-stat">
-                            <div class="stat-number">GPL</div>
-                            <div class="stat-label">Açık Kaynak Lisansı</div>
-                        </div>
-                    </div>
                 </div>
                 <div class="overview-visual reveal-stagger">
                     <div class="overview-visual-card">
@@ -496,6 +556,30 @@
                             <p>Z39.50, SRU/SRW, OAI-PMH ve REST API ile diğer sistemlerle entegre olur.</p>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- İSTATİSTİKLER -->
+    <section class="product-stats" aria-label="Koha istatistikleri">
+        <div class="container">
+            <div class="product-stats-grid reveal-stagger">
+                <div class="pstat">
+                    <span class="pstat-num" data-target="20000"><span class="pstat-value">0</span><span class="pstat-suffix">+</span></span>
+                    <span class="pstat-label">Dünya Genelinde Kütüphane</span>
+                </div>
+                <div class="pstat">
+                    <span class="pstat-num" data-target="25"><span class="pstat-value">0</span><span class="pstat-suffix">+</span></span>
+                    <span class="pstat-label">Yıllık Geliştirme Deneyimi</span>
+                </div>
+                <div class="pstat">
+                    <span class="pstat-num" data-target="100"><span class="pstat-value">0</span><span class="pstat-suffix">+</span></span>
+                    <span class="pstat-label">Desteklenen Dil</span>
+                </div>
+                <div class="pstat">
+                    <span class="pstat-num"><span class="pstat-text">GPL</span></span>
+                    <span class="pstat-label">Açık Kaynak Lisansı</span>
                 </div>
             </div>
         </div>
@@ -689,6 +773,42 @@
             });
         }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
         document.querySelectorAll('.reveal, .reveal-stagger').forEach(function(el){ io.observe(el); });
+    })();
+
+    /* === COUNTER ANIMATION === */
+    (function() {
+        var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        function fmt(n) {
+            return n >= 1000 ? n.toLocaleString('tr-TR') : n;
+        }
+        function animateCount(el, target) {
+            if (prefersReduced) { el.textContent = fmt(target); return; }
+            var dur = 1600, start = performance.now();
+            function tick(now) {
+                var p = Math.min((now - start) / dur, 1);
+                var eased = 1 - Math.pow(1 - p, 3);
+                el.textContent = fmt(Math.round(target * eased));
+                if (p < 1) requestAnimationFrame(tick);
+                else el.textContent = fmt(target);
+            }
+            requestAnimationFrame(tick);
+        }
+        if (!('IntersectionObserver' in window)) {
+            document.querySelectorAll('.pstat-num[data-target]').forEach(function(n){
+                n.querySelector('.pstat-value').textContent = fmt(parseInt(n.getAttribute('data-target'),10));
+            });
+            return;
+        }
+        var co = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (!entry.isIntersecting) return;
+                var num = entry.target;
+                var t = parseInt(num.getAttribute('data-target'), 10);
+                animateCount(num.querySelector('.pstat-value'), t);
+                co.unobserve(num);
+            });
+        }, { threshold: 0.5 });
+        document.querySelectorAll('.pstat-num[data-target]').forEach(function(n){ co.observe(n); });
     })();
     </script>
 </body>
