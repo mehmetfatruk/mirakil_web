@@ -279,6 +279,49 @@
         .btn-outline-green { background:transparent; color:var(--primary); border-color:var(--primary); }
         .btn-outline-green:hover { background:var(--primary); color:#fff; }
 
+        /* ===== STATS COUNTER STRIP ===== */
+        .stats-strip {
+            background:#fff; border-bottom:1px solid var(--border);
+            padding:48px 0;
+        }
+        .stats-grid {
+            display:grid; grid-template-columns:repeat(4, 1fr); gap:8px;
+            max-width:1100px; margin:0 auto;
+        }
+        .stat-cell {
+            text-align:center; padding:8px 16px;
+            position:relative;
+        }
+        .stat-cell + .stat-cell::before {
+            content:''; position:absolute; left:0; top:18%; bottom:18%;
+            width:1px; background:var(--border);
+        }
+        .stat-num {
+            display:block;
+            font-family:'Archivo',sans-serif; font-weight:800;
+            font-size:3rem; line-height:1; color:var(--navy);
+            letter-spacing:-1.5px;
+        }
+        .stat-num .stat-suffix {
+            color:var(--primary); font-size:2rem; margin-left:2px;
+            display:inline-block; vertical-align:top;
+        }
+        .stat-label {
+            display:block; margin-top:10px;
+            font-family:'Archivo',sans-serif; font-weight:600;
+            font-size:0.78rem; text-transform:uppercase; letter-spacing:1.4px;
+            color:var(--text-light);
+        }
+        @media(max-width:768px) {
+            .stats-grid { grid-template-columns:repeat(2, 1fr); gap:32px 8px; }
+            .stat-num { font-size:2.4rem; }
+            .stat-num .stat-suffix { font-size:1.6rem; }
+            .stat-cell + .stat-cell::before { display:none; }
+            .stat-cell:nth-child(odd) + .stat-cell::before {
+                display:block; top:18%; bottom:18%;
+            }
+        }
+
         /* ===== SECTIONS ===== */
         section { padding:80px 0; }
         .section-header { text-align:center; margin-bottom:56px; }
@@ -632,6 +675,30 @@
             <a href="collectiveaccess.html" class="hero-logo-item"><i class="fas fa-archive"></i>CA</a>
             <a href="ojs.html" class="hero-logo-item"><i class="fas fa-newspaper"></i>OJS</a>
             <a href="indico.html" class="hero-logo-item"><i class="fas fa-calendar-alt"></i>Indico</a>
+        </div>
+    </section>
+
+    <!-- STATS STRIP -->
+    <section class="stats-strip" aria-label="Şirket istatistikleri">
+        <div class="container">
+            <div class="stats-grid reveal-stagger">
+                <div class="stat-cell">
+                    <span class="stat-num" data-target="12"><span class="stat-value">0</span><span class="stat-suffix">+</span></span>
+                    <span class="stat-label">Yıllık Tecrübe</span>
+                </div>
+                <div class="stat-cell">
+                    <span class="stat-num" data-target="50"><span class="stat-value">0</span><span class="stat-suffix">+</span></span>
+                    <span class="stat-label">Kurumsal Müşteri</span>
+                </div>
+                <div class="stat-cell">
+                    <span class="stat-num" data-target="8"><span class="stat-value">0</span></span>
+                    <span class="stat-label">Açık Kaynak Platform</span>
+                </div>
+                <div class="stat-cell">
+                    <span class="stat-num"><span class="stat-value">7/24</span></span>
+                    <span class="stat-label">Teknik Destek</span>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -991,6 +1058,39 @@
             });
         }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
         document.querySelectorAll('.reveal, .reveal-stagger').forEach(function(el){ io.observe(el); });
+    })();
+
+    /* === COUNTER ANIMATION === */
+    (function() {
+        var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        function animateCount(el, target) {
+            if (prefersReduced) { el.textContent = target; return; }
+            var dur = 1400, start = performance.now();
+            function tick(now) {
+                var p = Math.min((now - start) / dur, 1);
+                var eased = 1 - Math.pow(1 - p, 3);
+                el.textContent = Math.round(target * eased);
+                if (p < 1) requestAnimationFrame(tick);
+                else el.textContent = target;
+            }
+            requestAnimationFrame(tick);
+        }
+        if (!('IntersectionObserver' in window)) {
+            document.querySelectorAll('.stat-num[data-target]').forEach(function(n){
+                n.querySelector('.stat-value').textContent = n.getAttribute('data-target');
+            });
+            return;
+        }
+        var co = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (!entry.isIntersecting) return;
+                var num = entry.target;
+                var t = parseInt(num.getAttribute('data-target'), 10);
+                animateCount(num.querySelector('.stat-value'), t);
+                co.unobserve(num);
+            });
+        }, { threshold: 0.5 });
+        document.querySelectorAll('.stat-num[data-target]').forEach(function(n){ co.observe(n); });
     })();
 
     /* === SLIDER === */
