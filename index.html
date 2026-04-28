@@ -279,6 +279,71 @@
         .btn-outline-green { background:transparent; color:var(--primary); border-color:var(--primary); }
         .btn-outline-green:hover { background:var(--primary); color:#fff; }
 
+        /* ===== STANDARDS MARQUEE ===== */
+        .standards {
+            background:var(--navy); color:#fff; padding:64px 0;
+            position:relative; overflow:hidden;
+        }
+        .standards::before {
+            content:''; position:absolute; inset:0;
+            background:
+                radial-gradient(500px 200px at 20% 0%, rgba(69,186,1,0.12), transparent 70%),
+                radial-gradient(500px 200px at 80% 100%, rgba(69,186,1,0.10), transparent 70%);
+            pointer-events:none;
+        }
+        .standards .container { position:relative; z-index:1; }
+        .standards-header {
+            text-align:center; margin-bottom:36px;
+        }
+        .standards-header .standards-eyebrow {
+            display:inline-block; font-family:'Archivo',sans-serif; font-weight:700;
+            font-size:0.72rem; text-transform:uppercase; letter-spacing:2px;
+            color:var(--primary-light); padding:6px 14px;
+            border:1px solid rgba(69,186,1,0.4); border-radius:999px;
+            margin-bottom:18px;
+        }
+        .standards-header h2 {
+            font-size:1.9rem; color:#fff; margin-bottom:10px;
+        }
+        .standards-header p {
+            color:rgba(255,255,255,0.65); font-size:0.98rem; max-width:620px;
+            margin:0 auto;
+        }
+        .marquee {
+            position:relative; overflow:hidden;
+            mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+            -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+        }
+        .marquee-track {
+            display:flex; gap:14px; width:max-content;
+            animation: marqueeScroll 40s linear infinite;
+        }
+        .marquee:hover .marquee-track { animation-play-state:paused; }
+        .marquee-chip {
+            flex-shrink:0;
+            display:inline-flex; align-items:center; gap:8px;
+            padding:11px 20px;
+            font-family:'Archivo',sans-serif; font-weight:600; font-size:0.88rem;
+            color:rgba(255,255,255,0.92); letter-spacing:0.3px;
+            background:rgba(255,255,255,0.05);
+            border:1px solid rgba(255,255,255,0.12);
+            border-radius:10px;
+            transition:var(--transition);
+        }
+        .marquee-chip i {
+            color:var(--primary-light); font-size:0.78rem;
+        }
+        .marquee-chip:hover {
+            background:rgba(69,186,1,0.12); border-color:rgba(69,186,1,0.45);
+        }
+        @keyframes marqueeScroll {
+            from { transform:translateX(0); }
+            to   { transform:translateX(-50%); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .marquee-track { animation:none; }
+        }
+
         /* ===== STATS COUNTER STRIP ===== */
         .stats-strip {
             background:#fff; border-bottom:1px solid var(--border);
@@ -871,6 +936,35 @@
         </div>
     </section>
 
+    <!-- STANDARDS MARQUEE -->
+    <section class="standards" aria-label="Desteklenen kütüphane standartları">
+        <div class="container">
+            <div class="standards-header reveal">
+                <span class="standards-eyebrow">Uluslararası Uyum</span>
+                <h2>Kütüphane &amp; Arşiv Standartlarına Tam Uyum</h2>
+                <p>Verilerinizin uluslararası katalog ve arşiv standartlarıyla kesintisiz çalışmasını sağlıyoruz.</p>
+            </div>
+        </div>
+        <div class="marquee" aria-hidden="true">
+            <div class="marquee-track" id="marqueeTrack">
+                <span class="marquee-chip"><i class="fas fa-check"></i> MARC21</span>
+                <span class="marquee-chip"><i class="fas fa-check"></i> MARCXML</span>
+                <span class="marquee-chip"><i class="fas fa-check"></i> Dublin Core</span>
+                <span class="marquee-chip"><i class="fas fa-check"></i> OAI-PMH</span>
+                <span class="marquee-chip"><i class="fas fa-check"></i> Z39.50</span>
+                <span class="marquee-chip"><i class="fas fa-check"></i> SRU/SRW</span>
+                <span class="marquee-chip"><i class="fas fa-check"></i> RDA</span>
+                <span class="marquee-chip"><i class="fas fa-check"></i> BIBFRAME</span>
+                <span class="marquee-chip"><i class="fas fa-check"></i> MODS</span>
+                <span class="marquee-chip"><i class="fas fa-check"></i> METS</span>
+                <span class="marquee-chip"><i class="fas fa-check"></i> EAD</span>
+                <span class="marquee-chip"><i class="fas fa-check"></i> ISO 2709</span>
+                <span class="marquee-chip"><i class="fas fa-check"></i> ISBD</span>
+                <span class="marquee-chip"><i class="fas fa-check"></i> RDF / Linked Data</span>
+            </div>
+        </div>
+    </section>
+
     <!-- FAQ -->
     <section id="faq">
         <div class="container">
@@ -1058,6 +1152,14 @@
             });
         }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
         document.querySelectorAll('.reveal, .reveal-stagger').forEach(function(el){ io.observe(el); });
+    })();
+
+    /* === MARQUEE: clone children for seamless loop === */
+    (function() {
+        var track = document.getElementById('marqueeTrack');
+        if (!track) return;
+        var clone = track.innerHTML;
+        track.innerHTML = clone + clone;
     })();
 
     /* === COUNTER ANIMATION === */
