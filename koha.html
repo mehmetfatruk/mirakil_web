@@ -24,6 +24,7 @@
             --primary-dark: #1a5a00;
             --teal: #709CA5;
             --teal-dark: #253437;
+            --navy: #0E2A2D;
             --dark: #1a1a1a;
             --text: #333;
             --text-light: #666;
@@ -34,9 +35,27 @@
             --shadow: 0 5px 20px rgba(0,0,0,0.08);
             --shadow-hover: 0 15px 40px rgba(0,0,0,0.12);
             --transition: all 0.3s ease;
+            --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
             --product: #408540;
             --product-light: #e9f2e9;
             --product-dark: #3a7d28;
+        }
+
+        /* ===== SCROLL REVEAL ===== */
+        .reveal { opacity:0; transform:translateY(28px); transition:opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out); }
+        .reveal.in { opacity:1; transform:translateY(0); }
+        .reveal-stagger > * { opacity:0; transform:translateY(20px); transition:opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out); }
+        .reveal-stagger.in > * { opacity:1; transform:translateY(0); }
+        .reveal-stagger.in > *:nth-child(1) { transition-delay:0.05s; }
+        .reveal-stagger.in > *:nth-child(2) { transition-delay:0.12s; }
+        .reveal-stagger.in > *:nth-child(3) { transition-delay:0.19s; }
+        .reveal-stagger.in > *:nth-child(4) { transition-delay:0.26s; }
+        .reveal-stagger.in > *:nth-child(5) { transition-delay:0.33s; }
+        .reveal-stagger.in > *:nth-child(6) { transition-delay:0.40s; }
+        .reveal-stagger.in > *:nth-child(7) { transition-delay:0.47s; }
+        .reveal-stagger.in > *:nth-child(8) { transition-delay:0.54s; }
+        @media (prefers-reduced-motion: reduce) {
+            .reveal, .reveal-stagger > * { opacity:1; transform:none; transition:none; }
         }
         * { margin:0; padding:0; box-sizing:border-box; }
         html { scroll-behavior:smooth; }
@@ -110,14 +129,21 @@
         /* ===== PRODUCT HERO ===== */
         .product-hero {
             position:relative; min-height:400px; display:flex; align-items:center;
-            background: linear-gradient(135deg, #3a7d28, #408540, #5cb83c);
+            background: linear-gradient(135deg, var(--product-dark), var(--product), #5cb83c);
             overflow:hidden;
         }
         .product-hero::before {
             content:''; position:absolute; inset:0;
-            background: radial-gradient(ellipse at 30% 50%, rgba(255,255,255,0.1) 0%, transparent 60%),
-                        radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 50%);
+            background: radial-gradient(ellipse at 30% 50%, rgba(255,255,255,0.14) 0%, transparent 60%),
+                        radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.10) 0%, transparent 50%);
+            animation: heroGlowProduct 16s ease-in-out infinite alternate;
         }
+        @keyframes heroGlowProduct {
+            0%   { transform:translate(0,0) scale(1); opacity:0.9; }
+            50%  { transform:translate(-2%,2%) scale(1.05); opacity:1; }
+            100% { transform:translate(2%,-2%) scale(1.02); opacity:0.92; }
+        }
+        @media (prefers-reduced-motion: reduce) { .product-hero::before { animation:none; } }
         .product-hero-pattern {
             position:absolute; inset:0; opacity:0.05;
             background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
@@ -417,7 +443,7 @@
     <section class="overview" id="overview">
         <div class="container">
             <div class="overview-content">
-                <div class="overview-text">
+                <div class="overview-text reveal">
                     <h2><span>Koha</span> Hakkında Genel Bakış</h2>
                     <p>Koha, 1999 yılında Yeni Zelanda'da geliştirilen ve günümüzde dünya genelinde binlerce kütüphane tarafından kullanılan, tamamen açık kaynaklı bir entegre kütüphane otomasyon sistemidir (ILS). GNU Genel Kamu Lisansı (GPL) altında dağıtılan Koha, lisans maliyeti olmaksızın kapsamlı kütüphane yönetim özellikleri sunar.</p>
                     <p>MARC21 ve UNIMARC standartlarını tam olarak destekleyen Koha, kataloglama, ödünç verme, süreli yayın takibi, kullanıcı yönetimi ve çevrimiçi halk erişim kataloğu (OPAC) gibi temel kütüphane işlevlerinin tamamını karşılar. Web tabanlı arayüzü sayesinde herhangi bir tarayıcıdan erişilebilir ve yönetilebilir.</p>
@@ -441,7 +467,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="overview-visual">
+                <div class="overview-visual reveal-stagger">
                     <div class="overview-visual-card">
                         <div class="ov-icon"><i class="fas fa-university"></i></div>
                         <div>
@@ -478,12 +504,12 @@
     <!-- ÖZELLİKLER -->
     <section class="features" id="features">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header reveal">
                 <h2>Özellikler</h2>
                 <div class="section-divider"></div>
                 <p>Koha, kütüphane yönetiminin tüm alanlarını kapsayan zengin özellik seti ile eksiksiz bir otomasyon çözümü sunar.</p>
             </div>
-            <div class="features-grid">
+            <div class="features-grid reveal-stagger">
                 <div class="feature-card">
                     <div class="feature-icon"><i class="fas fa-tags"></i></div>
                     <h3>Kataloglama ve MARC21</h3>
@@ -531,12 +557,12 @@
     <!-- NEDEN KOHA -->
     <section class="why-product" id="why-koha">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header reveal">
                 <h2>Neden Koha?</h2>
                 <div class="section-divider"></div>
                 <p>Koha'yı tercih etmeniz için pek çok güçlü neden var. İşte kütüphaneniz için Koha'yı öne çıkaran avantajlar.</p>
             </div>
-            <div class="why-product-grid">
+            <div class="why-product-grid reveal-stagger">
                 <div class="why-product-card">
                     <div class="why-product-icon"><i class="fas fa-lock-open"></i></div>
                     <div>
@@ -647,6 +673,23 @@
             document.getElementById('navMenu').classList.remove('active');}
         });
     });
+
+    /* === SCROLL REVEAL === */
+    (function() {
+        if (!('IntersectionObserver' in window)) {
+            document.querySelectorAll('.reveal, .reveal-stagger').forEach(function(el){ el.classList.add('in'); });
+            return;
+        }
+        var io = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in');
+                    io.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+        document.querySelectorAll('.reveal, .reveal-stagger').forEach(function(el){ io.observe(el); });
+    })();
     </script>
 </body>
 </html>
