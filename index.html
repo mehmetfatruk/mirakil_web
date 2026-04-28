@@ -24,6 +24,8 @@
             --primary-dark: #1a5a00;
             --teal: #709CA5;
             --teal-dark: #253437;
+            --navy: #0E2A2D;
+            --navy-soft: #1a3d40;
             --dark: #1a1a1a;
             --text: #333;
             --text-light: #666;
@@ -34,6 +36,24 @@
             --shadow: 0 5px 20px rgba(0,0,0,0.08);
             --shadow-hover: 0 15px 40px rgba(0,0,0,0.12);
             --transition: all 0.3s ease;
+            --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+
+        /* ===== SCROLL REVEAL ===== */
+        .reveal { opacity:0; transform:translateY(28px); transition:opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out); }
+        .reveal.in { opacity:1; transform:translateY(0); }
+        .reveal-stagger > * { opacity:0; transform:translateY(20px); transition:opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out); }
+        .reveal-stagger.in > * { opacity:1; transform:translateY(0); }
+        .reveal-stagger.in > *:nth-child(1) { transition-delay:0.05s; }
+        .reveal-stagger.in > *:nth-child(2) { transition-delay:0.12s; }
+        .reveal-stagger.in > *:nth-child(3) { transition-delay:0.19s; }
+        .reveal-stagger.in > *:nth-child(4) { transition-delay:0.26s; }
+        .reveal-stagger.in > *:nth-child(5) { transition-delay:0.33s; }
+        .reveal-stagger.in > *:nth-child(6) { transition-delay:0.40s; }
+        .reveal-stagger.in > *:nth-child(7) { transition-delay:0.47s; }
+        .reveal-stagger.in > *:nth-child(8) { transition-delay:0.54s; }
+        @media (prefers-reduced-motion: reduce) {
+            .reveal, .reveal-stagger > * { opacity:1; transform:none; transition:none; }
         }
         * { margin:0; padding:0; box-sizing:border-box; }
         html { scroll-behavior:smooth; }
@@ -101,7 +121,55 @@
 
         /* ===== HERO SLIDER ===== */
         .hero-slider {
-            position:relative; min-height:600px; overflow:hidden; background:var(--teal-dark);
+            position:relative; min-height:640px; overflow:hidden; background:var(--navy);
+        }
+        /* Animated grid pattern overlay */
+        .hero-slider::before {
+            content:''; position:absolute; inset:0; z-index:1; pointer-events:none;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 56px 56px;
+            mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, #000 30%, transparent 90%);
+            -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, #000 30%, transparent 90%);
+        }
+        /* Soft animated green glow */
+        .hero-slider::after {
+            content:''; position:absolute; inset:0; z-index:1; pointer-events:none;
+            background:
+                radial-gradient(600px 400px at 20% 30%, rgba(69,186,1,0.18), transparent 70%),
+                radial-gradient(700px 500px at 80% 70%, rgba(46,124,1,0.22), transparent 75%);
+            animation: heroGlow 14s ease-in-out infinite alternate;
+        }
+        @keyframes heroGlow {
+            0%   { transform:translate(0,0) scale(1); opacity:0.85; }
+            50%  { transform:translate(-3%,2%) scale(1.04); opacity:1; }
+            100% { transform:translate(2%,-2%) scale(1.02); opacity:0.9; }
+        }
+        @media (prefers-reduced-motion: reduce) { .hero-slider::after { animation:none; } }
+
+        /* Trust badge floating in hero */
+        .hero-trust-badge {
+            position:absolute; top:32px; right:32px; z-index:11;
+            display:flex; align-items:center; gap:14px;
+            padding:12px 20px 12px 16px;
+            background:rgba(255,255,255,0.08);
+            backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+            border:1px solid rgba(255,255,255,0.18);
+            border-radius:999px; color:#fff;
+            font-family:'Archivo',sans-serif; font-size:0.82rem; letter-spacing:0.4px;
+            opacity:0; transform:translateY(-12px);
+            animation: badgeIn 0.8s var(--ease-out) 0.4s forwards;
+        }
+        .hero-trust-badge .badge-num {
+            font-weight:800; font-size:1.05rem; color:var(--primary-light);
+        }
+        .hero-trust-badge .badge-sep {
+            width:1px; height:18px; background:rgba(255,255,255,0.25);
+        }
+        @keyframes badgeIn { to { opacity:1; transform:translateY(0); } }
+        @media (prefers-reduced-motion: reduce) {
+            .hero-trust-badge { opacity:1; transform:none; animation:none; }
         }
         .slider-track {
             display:flex; width:300%; height:100%; min-height:600px;
@@ -398,6 +466,12 @@
         @media(max-width:768px) {
             .header-top .container { flex-direction:column; gap:10px; padding:14px 20px; }
             .header-contact { gap:16px; font-size:0.8rem; }
+            .hero-trust-badge {
+                top:14px; right:50%; transform:translateX(50%);
+                font-size:0.72rem; padding:7px 14px; gap:10px;
+            }
+            .hero-trust-badge .badge-num { font-size:0.92rem; }
+            .hero-trust-badge .badge-sep { height:14px; }
             .nav-menu {
                 display:none; flex-direction:column; width:100%; background:#fff;
                 position:absolute; top:100%; left:0; box-shadow:0 8px 20px rgba(0,0,0,0.1);
@@ -475,6 +549,16 @@
     <!-- HERO SLIDER -->
     <section class="hero-slider" id="hero">
         <h1 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;">MirAkıl - Müze, Arşiv ve Kütüphane Yönetim Yazılımları</h1>
+
+        <!-- Trust badge -->
+        <div class="hero-trust-badge" aria-label="Güven göstergeleri">
+            <span><span class="badge-num">12+</span> Yıl</span>
+            <span class="badge-sep"></span>
+            <span><span class="badge-num">50+</span> Kurum</span>
+            <span class="badge-sep"></span>
+            <span><span class="badge-num">8</span> Platform</span>
+        </div>
+
         <div class="slider-track" id="sliderTrack">
             <!-- Slide 1 -->
             <div class="slide active">
@@ -554,12 +638,12 @@
     <!-- PRODUCTS -->
     <section class="products" id="products">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header reveal">
                 <h2>Ürünlerimiz</h2>
                 <div class="section-divider"></div>
                 <p>Mirakıl Veri İşleme, kütüphane, arşiv ve müze yönetimi alanlarında çeşitli açık kaynaklı yazılım çözümleri sunmaktadır.</p>
             </div>
-            <div class="products-grid">
+            <div class="products-grid reveal-stagger">
                 <!-- Koha -->
                 <a href="koha.html" class="product-card" style="--card-color:#408540;">
                     <div class="product-logo" style="background:#e9f2e9; color:#408540;">
@@ -647,12 +731,12 @@
     <!-- SERVICES -->
     <section class="services" id="services">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header reveal">
                 <h2>Hizmetlerimiz</h2>
                 <div class="section-divider"></div>
                 <p>Kurulum aşamasından bakım ve eğitim süreçlerine kadar tüm ihtiyaçlarınız için yanınızdayız.</p>
             </div>
-            <div class="services-grid">
+            <div class="services-grid reveal-stagger">
                 <div class="service-card">
                     <div class="service-icon"><i class="fas fa-cogs"></i></div>
                     <h3>Kurulum ve Yapılandırma</h3>
@@ -690,12 +774,12 @@
     <!-- WHY US -->
     <section class="why-us" id="why-us">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header reveal">
                 <h2>Neden MirAkıl?</h2>
                 <div class="section-divider"></div>
                 <p>Açık kaynak teknolojilerine hâkimiyetimiz ve sektördeki deneyimimizle güçlü çözümler sunuyoruz.</p>
             </div>
-            <div class="why-grid">
+            <div class="why-grid reveal-stagger">
                 <div class="why-card">
                     <div class="why-icon"><i class="fas fa-user-tie"></i></div>
                     <h3>Uzman Kadro</h3>
@@ -723,11 +807,11 @@
     <!-- FAQ -->
     <section id="faq">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header reveal">
                 <h2>Sıkça Sorulan Sorular</h2>
                 <div class="section-divider"></div>
             </div>
-            <div class="faq-list">
+            <div class="faq-list reveal">
                 <div class="faq-item">
                     <button class="faq-question" onclick="toggleFaq(this)">
                         Koha nedir ve neden tercih edilmelidir?
@@ -770,12 +854,12 @@
     <!-- CONTACT -->
     <section class="contact-section" id="contact">
         <div class="container">
-            <div class="section-header" style="text-align:center;margin-bottom:50px;">
+            <div class="section-header reveal" style="text-align:center;margin-bottom:50px;">
                 <h2>Bize Ulaşın</h2>
                 <div class="section-divider" style="margin:12px auto 16px;"></div>
                 <p>Müze, arşiv ve kütüphane yönetim ihtiyaçlarınız için ücretsiz danışmanlık alın.</p>
             </div>
-            <div class="contact-grid">
+            <div class="contact-grid reveal">
                 <div class="contact-info">
                     <h3>İletişim Bilgileri</h3>
                     <div class="contact-info-item">
@@ -892,6 +976,23 @@
     </footer>
 
     <script>
+    /* === SCROLL REVEAL === */
+    (function() {
+        if (!('IntersectionObserver' in window)) {
+            document.querySelectorAll('.reveal, .reveal-stagger').forEach(function(el){ el.classList.add('in'); });
+            return;
+        }
+        var io = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in');
+                    io.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+        document.querySelectorAll('.reveal, .reveal-stagger').forEach(function(el){ io.observe(el); });
+    })();
+
     /* === SLIDER === */
     let currentSlide = 0;
     const totalSlides = 3;
