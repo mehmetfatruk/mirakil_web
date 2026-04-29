@@ -28,6 +28,7 @@
             --primary-dark: #1a5a00;
             --teal: #709CA5;
             --teal-dark: #253437;
+            --navy: #0E2A2D;
             --dark: #1a1a1a;
             --text: #333;
             --text-light: #666;
@@ -38,6 +39,105 @@
             --shadow: 0 5px 20px rgba(0,0,0,0.08);
             --shadow-hover: 0 15px 40px rgba(0,0,0,0.12);
             --transition: all 0.3s ease;
+            --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+
+        /* ===== SCROLL REVEAL ===== */
+        .reveal { opacity:0; transform:translateY(28px); transition:opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out); }
+        .reveal.in { opacity:1; transform:translateY(0); }
+        .reveal-stagger > * { opacity:0; transform:translateY(20px); transition:opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out); }
+        .reveal-stagger.in > * { opacity:1; transform:translateY(0); }
+        .reveal-stagger.in > *:nth-child(1) { transition-delay:0.05s; }
+        .reveal-stagger.in > *:nth-child(2) { transition-delay:0.12s; }
+        .reveal-stagger.in > *:nth-child(3) { transition-delay:0.19s; }
+        .reveal-stagger.in > *:nth-child(4) { transition-delay:0.26s; }
+        .reveal-stagger.in > *:nth-child(5) { transition-delay:0.33s; }
+        .reveal-stagger.in > *:nth-child(6) { transition-delay:0.40s; }
+        .reveal-stagger.in > *:nth-child(7) { transition-delay:0.47s; }
+        .reveal-stagger.in > *:nth-child(8) { transition-delay:0.54s; }
+        @media (prefers-reduced-motion: reduce) {
+            .reveal, .reveal-stagger > * { opacity:1; transform:none; transition:none; }
+        }
+
+        /* Hero glow animation overlay */
+        .product-hero { isolation:isolate; }
+        .product-hero .hero-glow {
+            position:absolute; inset:0; pointer-events:none; z-index:1;
+            background:
+                radial-gradient(ellipse 600px 300px at 30% 30%, rgba(255,255,255,0.10), transparent 70%),
+                radial-gradient(ellipse 600px 300px at 80% 80%, rgba(255,255,255,0.08), transparent 70%);
+            animation: heroGlowProduct 16s ease-in-out infinite alternate;
+        }
+        @keyframes heroGlowProduct {
+            0%   { transform:translate(0,0) scale(1); opacity:0.9; }
+            50%  { transform:translate(-2%,2%) scale(1.05); opacity:1; }
+            100% { transform:translate(2%,-2%) scale(1.02); opacity:0.92; }
+        }
+        @media (prefers-reduced-motion: reduce) { .product-hero .hero-glow { animation:none; } }
+
+        /* Hero CTA buttons */
+        .product-hero-cta {
+            display:flex; gap:14px; justify-content:center; flex-wrap:wrap;
+            margin-top:32px; position:relative; z-index:2;
+        }
+        .product-hero-cta .btn { padding:13px 26px; font-size:0.92rem; }
+        .product-hero-cta .btn-demo {
+            background:#fff; color:var(--accent-dark); border-color:#fff;
+            box-shadow:0 8px 22px rgba(0,0,0,0.18);
+        }
+        .product-hero-cta .btn-demo:hover {
+            background:transparent; color:#fff; border-color:#fff;
+            transform:translateY(-2px);
+        }
+        .product-hero-cta .btn-ghost {
+            background:rgba(255,255,255,0.08); color:#fff;
+            border-color:rgba(255,255,255,0.45); backdrop-filter:blur(6px);
+        }
+        .product-hero-cta .btn-ghost:hover {
+            background:#fff; color:var(--accent-dark); border-color:#fff;
+            transform:translateY(-2px);
+        }
+
+        /* ===== STATS SECTION (separate, animated) ===== */
+        .product-stats {
+            background:#fff; padding:64px 0;
+            border-bottom:1px solid var(--border);
+        }
+        .product-stats-grid {
+            display:grid; grid-template-columns:repeat(4, 1fr); gap:8px;
+            max-width:1100px; margin:0 auto;
+        }
+        .pstat { text-align:center; padding:8px 16px; position:relative; }
+        .pstat + .pstat::before {
+            content:''; position:absolute; left:0; top:18%; bottom:18%;
+            width:1px; background:var(--border);
+        }
+        .pstat-num {
+            display:block;
+            font-family:'Archivo',sans-serif; font-weight:800;
+            font-size:2.8rem; line-height:1; color:var(--dark);
+            letter-spacing:-1.5px;
+        }
+        .pstat-num .pstat-suffix,
+        .pstat-num .pstat-prefix {
+            color:var(--accent-dark); font-size:1.8rem; margin:0 2px;
+            display:inline-block; vertical-align:top;
+        }
+        .pstat-num .pstat-text { color:var(--accent-dark); font-size:2.2rem; }
+        .pstat-label {
+            display:block; margin-top:10px;
+            font-family:'Archivo',sans-serif; font-weight:600;
+            font-size:0.78rem; text-transform:uppercase; letter-spacing:1.4px;
+            color:var(--text-light);
+        }
+        @media(max-width:768px) {
+            .product-stats { padding:44px 0; }
+            .product-stats-grid { grid-template-columns:repeat(2, 1fr); gap:32px 8px; }
+            .pstat-num { font-size:2.2rem; }
+            .pstat-num .pstat-suffix, .pstat-num .pstat-prefix { font-size:1.5rem; }
+            .pstat-num .pstat-text { font-size:1.7rem; }
+            .pstat + .pstat::before { display:none; }
+            .pstat:nth-child(odd) + .pstat::before { display:block; top:18%; bottom:18%; }
         }
         * { margin:0; padding:0; box-sizing:border-box; }
         html { scroll-behavior:smooth; }
@@ -200,6 +300,31 @@
         .overview-stat .stat-label {
             font-size:0.82rem; color:var(--text-light); text-transform:uppercase;
             letter-spacing:0.5px; font-weight:600;
+        }
+        /* Overview-visual fallback for callout cards (when used instead of stat grid) */
+        .overview-visual:has(.overview-callout) { display:flex; flex-direction:column; gap:18px; }
+        .overview-callout {
+            background:var(--bg-light); border:1px solid var(--border);
+            border-radius:var(--radius); padding:24px 26px;
+            display:flex; align-items:flex-start; gap:18px;
+            transition:var(--transition);
+        }
+        .overview-callout:hover {
+            border-color:var(--accent); transform:translateX(4px);
+            box-shadow:var(--shadow);
+        }
+        .overview-callout .callout-icon {
+            width:48px; height:48px; border-radius:12px; flex-shrink:0;
+            background:var(--accent-bg); color:var(--accent);
+            display:flex; align-items:center; justify-content:center;
+            font-size:1.2rem;
+        }
+        .overview-callout h4 {
+            font-family:'Archivo',sans-serif; font-size:1.05rem;
+            margin-bottom:6px; color:var(--dark);
+        }
+        .overview-callout p {
+            font-size:0.9rem; color:var(--text-light); line-height:1.7;
         }
 
         /* ===== FEATURES ===== */
@@ -391,6 +516,7 @@
 
     <!-- HERO -->
     <section class="product-hero">
+        <div class="hero-glow"></div>
         <div class="container">
             <div class="hero-breadcrumb">
                 <a href="index.html">Ana Sayfa</a> &nbsp;/&nbsp; <a href="index.html#products">Ürünler</a> &nbsp;/&nbsp; Indico
@@ -402,6 +528,10 @@
             <h1>Indico</h1>
             <div class="subtitle">Konferans ve Etkinlik Yönetim Sistemi</div>
             <p class="description">Akademik konferansların yönetimi ve organizasyonu için kullanılır.</p>
+            <div class="product-hero-cta">
+                <a href="https://konferansyonetimi.org/" target="_blank" rel="noopener" class="btn btn-demo"><i class="fas fa-external-link-alt"></i> Canlı Demoyu İncele</a>
+                <a href="#contact" class="btn btn-ghost"><i class="fas fa-paper-plane"></i> İletişime Geç</a>
+            </div>
         </div>
     </section>
 
@@ -409,7 +539,7 @@
     <section class="overview" id="overview">
         <div class="container">
             <div class="overview-content">
-                <div class="overview-text">
+                <div class="overview-text reveal">
                     <h2>Genel Bakış</h2>
                     <div class="section-divider" style="margin:16px 0 24px;"></div>
                     <p>Indico, CERN (Avrupa Nükleer Araştırma Merkezi) tarafından geliştirilen ve dünya genelinde akademik kurumlar, araştırma merkezleri ve üniversiteler tarafından yaygın olarak kullanılan açık kaynaklı bir konferans ve etkinlik yönetim sistemidir.</p>
@@ -419,27 +549,46 @@
                     </div>
                     <p>MirAkıl olarak, Indico'nun Türkiye'deki üniversiteler ve araştırma kurumları için kurulumu, yapılandırması, Türkçe lokalizasyonu ve teknik desteğini sağlıyoruz.</p>
                 </div>
-                <div class="overview-visual">
-                    <div class="overview-stat">
-                        <div class="stat-icon"><i class="fas fa-globe"></i></div>
-                        <div class="stat-value">300+</div>
-                        <div class="stat-label">Kurum</div>
+                <div class="overview-visual reveal">
+                    <div class="overview-callout">
+                        <div class="callout-icon"><i class="fas fa-microphone-alt"></i></div>
+                        <h4>CERN Kökenli Güven</h4>
+                        <p>Avrupa Nükleer Araştırma Merkezi tarafından 2004'ten beri geliştiriliyor — dünyanın en büyük bilimsel etkinlikleri Indico üzerinden yönetiliyor.</p>
                     </div>
-                    <div class="overview-stat">
-                        <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
-                        <div class="stat-value">20+</div>
-                        <div class="stat-label">Yıllık Geliştirme</div>
+                    <div class="overview-callout">
+                        <div class="callout-icon"><i class="fas fa-clipboard-list"></i></div>
+                        <h4>Uçtan Uca Etkinlik Yönetimi</h4>
+                        <p>Bildiri çağrısı, hakem değerlendirme, program oluşturma, kayıt ve oda rezervasyonu — tek platformda.</p>
                     </div>
-                    <div class="overview-stat">
-                        <div class="stat-icon"><i class="fas fa-users"></i></div>
-                        <div class="stat-value">1M+</div>
-                        <div class="stat-label">Etkinlik Yönetimi</div>
+                    <div class="overview-callout">
+                        <div class="callout-icon"><i class="fas fa-language"></i></div>
+                        <h4>Türkçe Lokalizasyon</h4>
+                        <p>MirAkıl tarafından Türkçe arayüz, e-posta şablonları ve destek hizmetleri ile tam yerelleştirme.</p>
                     </div>
-                    <div class="overview-stat">
-                        <div class="stat-icon"><i class="fas fa-code-branch"></i></div>
-                        <div class="stat-value">Açık</div>
-                        <div class="stat-label">Kaynak Kodlu</div>
-                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ISTATISTIKLER -->
+    <section class="product-stats" aria-label="Indico istatistikleri">
+        <div class="container">
+            <div class="product-stats-grid reveal-stagger">
+                <div class="pstat">
+                    <span class="pstat-num" data-target="300"><span class="pstat-value">0</span><span class="pstat-suffix">+</span></span>
+                    <span class="pstat-label">Dünya Genelinde Kurum</span>
+                </div>
+                <div class="pstat">
+                    <span class="pstat-num" data-target="20"><span class="pstat-value">0</span><span class="pstat-suffix">+</span></span>
+                    <span class="pstat-label">Yıllık Geliştirme</span>
+                </div>
+                <div class="pstat">
+                    <span class="pstat-num"><span class="pstat-text">1M+</span></span>
+                    <span class="pstat-label">Etkinlik Yönetildi</span>
+                </div>
+                <div class="pstat">
+                    <span class="pstat-num"><span class="pstat-text">MIT</span></span>
+                    <span class="pstat-label">Açık Kaynak Lisansı</span>
                 </div>
             </div>
         </div>
@@ -448,12 +597,12 @@
     <!-- OZELLIKLER -->
     <section class="features" id="features">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header reveal">
                 <h2>Özellikler</h2>
                 <div class="section-divider"></div>
                 <p>Indico, akademik etkinlik yönetiminin tüm aşamalarını kapsayan zengin özellik seti sunar.</p>
             </div>
-            <div class="features-grid">
+            <div class="features-grid reveal-stagger">
                 <div class="feature-card">
                     <div class="feature-icon"><i class="fas fa-tasks"></i></div>
                     <h3>Etkinlik Planlama</h3>
@@ -501,12 +650,12 @@
     <!-- NEDEN INDICO -->
     <section class="why-product" id="why-indico">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header reveal">
                 <h2>Neden Indico?</h2>
                 <div class="section-divider"></div>
                 <p>Akademik etkinlik yönetiminde Indico'yu tercih etmeniz için güçlü nedenler.</p>
             </div>
-            <div class="benefits-grid">
+            <div class="benefits-grid reveal-stagger">
                 <div class="benefit-card">
                     <div class="benefit-icon"><i class="fas fa-atom"></i></div>
                     <h3>CERN Tarafından Geliştirilmiş</h3>
@@ -619,6 +768,57 @@
             document.getElementById('navMenu').classList.remove('active');}
         });
     });
+
+    /* === SCROLL REVEAL === */
+    (function() {
+        if (!('IntersectionObserver' in window)) {
+            document.querySelectorAll('.reveal, .reveal-stagger').forEach(function(el){ el.classList.add('in'); });
+            return;
+        }
+        var io = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in');
+                    io.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+        document.querySelectorAll('.reveal, .reveal-stagger').forEach(function(el){ io.observe(el); });
+    })();
+
+    /* === COUNTER ANIMATION === */
+    (function() {
+        var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        function fmt(n) { return n >= 1000 ? n.toLocaleString('tr-TR') : n; }
+        function animateCount(el, target) {
+            if (prefersReduced) { el.textContent = fmt(target); return; }
+            var dur = 1600, start = performance.now();
+            function tick(now) {
+                var p = Math.min((now - start) / dur, 1);
+                var eased = 1 - Math.pow(1 - p, 3);
+                el.textContent = fmt(Math.round(target * eased));
+                if (p < 1) requestAnimationFrame(tick);
+                else el.textContent = fmt(target);
+            }
+            requestAnimationFrame(tick);
+        }
+        if (!('IntersectionObserver' in window)) {
+            document.querySelectorAll('.pstat-num[data-target]').forEach(function(n){
+                n.querySelector('.pstat-value').textContent = fmt(parseInt(n.getAttribute('data-target'),10));
+            });
+            return;
+        }
+        var co = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (!entry.isIntersecting) return;
+                var num = entry.target;
+                var t = parseInt(num.getAttribute('data-target'), 10);
+                animateCount(num.querySelector('.pstat-value'), t);
+                co.unobserve(num);
+            });
+        }, { threshold: 0.5 });
+        document.querySelectorAll('.pstat-num[data-target]').forEach(function(n){ co.observe(n); });
+    })();
     </script>
 </body>
 </html>
