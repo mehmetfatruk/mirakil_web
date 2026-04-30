@@ -829,7 +829,7 @@
                 top:100%; left:0; right:0; background:#fff;
                 box-shadow:0 8px 24px rgba(0,0,0,0.1);
             }
-            .nav-menu.open { display:flex; }
+            .nav-menu.active { display:flex; }
             .nav-menu > li > a { padding:14px 20px; text-align:center; }
             .nav-dropdown {
                 position:static; opacity:1; visibility:visible;
@@ -859,7 +859,7 @@
     <header class="header-top">
         <div class="container">
             <a href="index.html" class="header-logo">
-                <img src="assets/logo.png" alt="MirAkıl" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\'font-family:Archivo,sans-serif;font-weight:800;font-size:1.5rem;color:#2E7C01;\'>Mir</span><span style=\'font-family:Archivo,sans-serif;font-weight:800;font-size:1.5rem;color:#253437;\'>Akıl</span>'">
+                <img src="https://static.wixstatic.com/media/ef08d3_aa38de349e884624ac5924a9ed006f8d~mv2.png/v1/fill/w_282,h_60,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/ef08d3_aa38de349e884624ac5924a9ed006f8d~mv2.png" alt="MirAkıl Logo">
             </a>
             <div class="header-contact">
                 <a href="tel:+903129112956"><i class="fas fa-phone"></i> +90 312 911 29 56</a>
@@ -871,26 +871,30 @@
     <!-- NAV -->
     <nav class="main-nav">
         <div class="container">
-            <button class="mobile-toggle" onclick="document.querySelector('.nav-menu').classList.toggle('open')">
-                <i class="fas fa-bars"></i>
-            </button>
-            <ul class="nav-menu">
+            <ul class="nav-menu" id="navMenu">
                 <li><a href="index.html">Ana Sayfa</a></li>
                 <li>
-                    <a href="#">Ürünler <i class="fas fa-chevron-down" style="font-size:0.65rem;margin-left:4px;"></i></a>
+                    <a href="#">Ürünler <i class="fas fa-chevron-down" style="font-size:0.6rem;margin-left:4px;"></i></a>
                     <ul class="nav-dropdown">
                         <li><a href="koha.html"><span class="dd-dot" style="background:#408540;"></span> Koha</a></li>
-                        <li><a href="dspace.html"><span class="dd-dot" style="background:#3b82a0;"></span> DSpace</a></li>
-                        <li><a href="vufind.html"><span class="dd-dot" style="background:#d2691e;"></span> VuFind</a></li>
-                        <li><a href="omeka.html"><span class="dd-dot" style="background:#c2493e;"></span> Omeka</a></li>
-                        <li><a href="moodle.html"><span class="dd-dot" style="background:#f7941d;"></span> Moodle</a></li>
-                        <li><a href="collectiveaccess.html"><span class="dd-dot" style="background:#7b2d8b;"></span> CollectiveAccess</a></li>
-                        <li><a href="ojs.html"><span class="dd-dot" style="background:#1e73be;"></span> OJS</a></li>
-                        <li><a href="indico.html"><span class="dd-dot" style="background:#3f51b5;"></span> Indico</a></li>
+                        <li><a href="vufind.html"><span class="dd-dot" style="background:#619144;"></span> VuFind</a></li>
+                        <li><a href="dspace.html"><span class="dd-dot" style="background:#44a340;"></span> DSpace</a></li>
+                        <li><a href="omeka.html"><span class="dd-dot" style="background:#CD5C28;"></span> Omeka</a></li>
+                        <li><a href="moodle.html"><span class="dd-dot" style="background:#F98012;"></span> Moodle</a></li>
+                        <li><a href="collectiveaccess.html"><span class="dd-dot" style="background:#5b7e3d;"></span> CollectiveAccess</a></li>
+                        <li><a href="ojs.html"><span class="dd-dot" style="background:#002B5C;"></span> OJS</a></li>
+                        <li><a href="indico.html"><span class="dd-dot" style="background:#29ABE2;"></span> Indico</a></li>
                     </ul>
                 </li>
+                <li><a href="index.html#services">Hizmetler</a></li>
+                <li><a href="index.html#why-us">Hakkımızda</a></li>
+                <li><a href="index.html#faq">SSS</a></li>
+                <li><a href="index.html#contact">İletişim</a></li>
                 <li><a href="destek.html" class="active">Destek</a></li>
             </ul>
+            <button class="mobile-toggle" onclick="document.getElementById('navMenu').classList.toggle('active')" aria-label="Menü">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </nav>
 

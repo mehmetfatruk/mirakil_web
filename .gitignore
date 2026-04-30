@@ -1,0 +1,8 @@
+# Local Claude Code settings (may contain secrets/tokens)
+.claude/settings.local.json
+
+# Playwright MCP local artifacts
+.playwright-mcp/
+
+# Local test screenshots
+test-screenshots/

@@ -59,44 +59,7 @@
             .reveal, .reveal-stagger > * { opacity:1; transform:none; transition:none; }
         }
 
-        /* Hero glow animation overlay */
-        .product-hero { isolation:isolate; }
-        .product-hero .hero-glow {
-            position:absolute; inset:0; pointer-events:none; z-index:1;
-            background:
-                radial-gradient(ellipse 600px 300px at 30% 30%, rgba(255,255,255,0.10), transparent 70%),
-                radial-gradient(ellipse 600px 300px at 80% 80%, rgba(255,255,255,0.08), transparent 70%);
-            animation: heroGlowProduct 16s ease-in-out infinite alternate;
-        }
-        @keyframes heroGlowProduct {
-            0%   { transform:translate(0,0) scale(1); opacity:0.9; }
-            50%  { transform:translate(-2%,2%) scale(1.05); opacity:1; }
-            100% { transform:translate(2%,-2%) scale(1.02); opacity:0.92; }
-        }
-        @media (prefers-reduced-motion: reduce) { .product-hero .hero-glow { animation:none; } }
-
-        /* Hero CTA buttons */
-        .product-hero-cta {
-            display:flex; gap:14px; justify-content:center; flex-wrap:wrap;
-            margin-top:32px; position:relative; z-index:2;
-        }
-        .product-hero-cta .btn { padding:13px 26px; font-size:0.92rem; }
-        .product-hero-cta .btn-demo {
-            background:#fff; color:var(--accent-dark); border-color:#fff;
-            box-shadow:0 8px 22px rgba(0,0,0,0.18);
-        }
-        .product-hero-cta .btn-demo:hover {
-            background:transparent; color:#fff; border-color:#fff;
-            transform:translateY(-2px);
-        }
-        .product-hero-cta .btn-ghost {
-            background:rgba(255,255,255,0.08); color:#fff;
-            border-color:rgba(255,255,255,0.45); backdrop-filter:blur(6px);
-        }
-        .product-hero-cta .btn-ghost:hover {
-            background:#fff; color:var(--accent-dark); border-color:#fff;
-            transform:translateY(-2px);
-        }
+        /* hero CSS lives in canonical block below */
 
         /* ===== STATS SECTION (separate, animated) ===== */
         .product-stats {
@@ -153,7 +116,7 @@
             border-bottom: 1px solid #e0e0e0;
         }
         .header-top .container {
-            display:flex; justify-content:space-between; align-items:center; min-height:64px;
+            display:flex; justify-content:space-between; align-items:center; min-height:70px;
         }
         .header-logo { display:flex; align-items:center; gap:14px; }
         .header-logo img {
@@ -209,20 +172,35 @@
             cursor:pointer; padding:16px; color:var(--text);
         }
 
-        /* ===== HERO ===== */
+        /* ===== PRODUCT HERO (CANONICAL) ===== */
         .product-hero {
-            background: linear-gradient(135deg, #1a8fc2, var(--accent), var(--accent-light));
-            padding: 80px 0 70px; min-height:400px; text-align:center; position:relative; overflow:hidden;
+            position:relative; min-height:788px; display:flex; align-items:flex-start;
+            background: linear-gradient(135deg, var(--accent-dark), var(--accent), var(--accent-light));
+            overflow:hidden;
         }
+        .product-hero .container { width:100%; }
         .product-hero::before {
             content:''; position:absolute; inset:0;
-            background: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.08) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%);
+            background: radial-gradient(ellipse at 30% 50%, rgba(255,255,255,0.14) 0%, transparent 60%),
+                        radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.10) 0%, transparent 50%);
+            animation: heroGlowProduct 16s ease-in-out infinite alternate;
         }
-        .product-hero .container { position:relative; z-index:2; }
+        @keyframes heroGlowProduct {
+            0%   { transform:translate(0,0) scale(1); opacity:0.9; }
+            50%  { transform:translate(-2%,2%) scale(1.05); opacity:1; }
+            100% { transform:translate(2%,-2%) scale(1.02); opacity:0.92; }
+        }
+        @media (prefers-reduced-motion: reduce) { .product-hero::before { animation:none; } }
+        .product-hero-pattern {
+            position:absolute; inset:0; opacity:0.05;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .product-hero .container {
+            position:relative; z-index:2; text-align:center; padding:80px 30px;
+        }
         .product-hero-icon {
             width:100px; height:100px; border-radius:24px;
-            background:rgba(255,255,255,0.15); backdrop-filter:blur(10px);
+            background:rgba(255,255,255,0.15); backdrop-filter:blur(8px);
             border:2px solid rgba(255,255,255,0.25);
             display:flex; align-items:center; justify-content:center;
             margin:0 auto 28px; font-size:2.8rem; color:#fff;
@@ -230,18 +208,46 @@
         .product-hero h1 {
             font-size:3.2rem; font-weight:800; color:#fff; margin-bottom:12px; letter-spacing:-1px;
         }
-        .product-hero .subtitle {
-            font-size:1.2rem; color:rgba(255,255,255,0.9); font-weight:400; margin-bottom:20px;
+        .product-hero-subtitle {
+            font-size:1.2rem; color:rgba(255,255,255,0.9); font-weight:400;
+            letter-spacing:0.5px; margin-bottom:20px;
         }
-        .product-hero .description {
-            font-size:1.05rem; color:rgba(255,255,255,0.8); max-width:600px; margin:0 auto;
-            line-height:1.8; font-weight:300;
+        .product-hero-divider {
+            width:80px; height:3px; background:rgba(255,255,255,0.5); margin:0 auto 24px; border-radius:2px;
         }
-        .hero-breadcrumb {
-            margin-bottom:32px; font-size:0.88rem; color:rgba(255,255,255,0.7);
+        .product-hero p {
+            font-size:1.1rem; color:rgba(255,255,255,0.85); max-width:640px;
+            margin:0 auto; font-weight:300; line-height:1.8;
         }
-        .hero-breadcrumb a { color:rgba(255,255,255,0.7); transition:color 0.2s; }
-        .hero-breadcrumb a:hover { color:#fff; }
+        .product-hero-breadcrumb {
+            position:absolute; top:24px; left:30px; display:flex; align-items:center; gap:8px;
+            font-size:0.85rem; color:rgba(255,255,255,0.7); z-index:3;
+        }
+        .product-hero-breadcrumb a { color:rgba(255,255,255,0.7); transition:color 0.2s; }
+        .product-hero-breadcrumb a:hover { color:#fff; }
+        .product-hero-cta {
+            display:flex; gap:14px; justify-content:center; flex-wrap:wrap;
+            margin-top:32px;
+        }
+        .product-hero-cta .btn {
+            padding:13px 26px; font-size:0.92rem;
+        }
+        .product-hero-cta .btn-demo {
+            background:#fff; color:var(--accent-dark); border-color:#fff;
+            box-shadow:0 8px 22px rgba(0,0,0,0.18);
+        }
+        .product-hero-cta .btn-demo:hover {
+            background:transparent; color:#fff; border-color:#fff;
+            transform:translateY(-2px);
+        }
+        .product-hero-cta .btn-ghost {
+            background:rgba(255,255,255,0.08); color:#fff;
+            border-color:rgba(255,255,255,0.45); backdrop-filter:blur(6px);
+        }
+        .product-hero-cta .btn-ghost:hover {
+            background:#fff; color:var(--accent-dark); border-color:#fff;
+            transform:translateY(-2px);
+        }
 
         /* ===== BTN ===== */
         .btn {
@@ -442,10 +448,12 @@
             .nav-dropdown { position:static; opacity:1; visibility:visible; transform:none; box-shadow:none; }
             .mobile-toggle { display:block; }
             .main-nav .container { justify-content:flex-end; }
-            .product-hero { padding:50px 0 40px; }
+            .product-hero { min-height:auto; }
             .product-hero h1 { font-size:2.2rem; }
-            .product-hero .subtitle { font-size:1rem; }
+            .product-hero-subtitle { font-size:1rem; }
             .product-hero-icon { width:80px; height:80px; font-size:2.2rem; }
+            .product-hero-breadcrumb { position:static; margin-bottom:16px; justify-content:center; }
+            .product-hero .container { padding:50px 30px 60px; }
             .section-header h2 { font-size:1.8rem; }
             .features-grid { grid-template-columns:1fr; }
             .benefits-grid { grid-template-columns:1fr; }
@@ -514,20 +522,24 @@
         </div>
     </nav>
 
-    <!-- HERO -->
+    <!-- PRODUCT HERO -->
     <section class="product-hero">
-        <div class="hero-glow"></div>
+        <div class="product-hero-pattern"></div>
         <div class="container">
-            <div class="hero-breadcrumb">
-                <a href="index.html">Ana Sayfa</a> &nbsp;/&nbsp; <a href="index.html#products">Ürünler</a> &nbsp;/&nbsp; Indico
+            <div class="product-hero-breadcrumb">
+                <a href="index.html">Ana Sayfa</a>
+                <i class="fas fa-chevron-right" style="font-size:0.6rem;"></i>
+                <a href="index.html#products">Ürünler</a>
+                <i class="fas fa-chevron-right" style="font-size:0.6rem;"></i>
+                <span style="color:#fff;">Indico</span>
             </div>
             <div class="product-hero-icon">
                 <i class="fas fa-calendar-alt"></i>
             </div>
-            <img src="https://getindico.io/img/logos/indico_white.svg" alt="Indico Logo" style="max-height:50px; margin-bottom:20px;">
             <h1>Indico</h1>
-            <div class="subtitle">Konferans ve Etkinlik Yönetim Sistemi</div>
-            <p class="description">Akademik konferansların yönetimi ve organizasyonu için kullanılır.</p>
+            <div class="product-hero-subtitle">Konferans ve Etkinlik Yönetim Sistemi</div>
+            <div class="product-hero-divider"></div>
+            <p>CERN tarafından geliştirilen, akademik konferansların ve bilimsel etkinliklerin uçtan uca yönetimi için kullanılan açık kaynaklı bir platformdur.</p>
             <div class="product-hero-cta">
                 <a href="https://konferansyonetimi.org/" target="_blank" rel="noopener" class="btn btn-demo"><i class="fas fa-external-link-alt"></i> Canlı Demoyu İncele</a>
                 <a href="#contact" class="btn btn-ghost"><i class="fas fa-paper-plane"></i> İletişime Geç</a>
